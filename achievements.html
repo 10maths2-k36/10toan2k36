@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Chuyên Toán K36 - Thành Tích</title>
+<link href="css/style.css" rel="stylesheet"/>
+<style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .main-content {
+            flex: 1; 
+        }
+        .header-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 24px;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .header-left-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header-left-title img.header-class-logo {
+            height: 38px;
+            width: 38px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: rgba(128, 128, 128, 0.05);
+            padding: 2px;
+            border: 1px solid var(--border);
+            cursor: zoom-in;
+            transition: transform 0.2s ease;
+        }
+        .header-left-title img.header-class-logo:hover {
+            transform: scale(1.08);
+        }
+        .header-left-title h2 {
+            margin: 0;
+            font-size: 1.15rem;
+            color: var(--text-main);
+            letter-spacing: 0.5px;
+        }
+        .auth-nav-btn {
+            background: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 6px 14px;
+            border-radius: 99px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+        .auth-nav-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-1px);
+        }
+        .auth-nav-btn.logout-state {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+        .auth-nav-btn.logout-state:hover {
+            background: #ef4444;
+            color: #fff;
+        }
+        .custom-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .custom-modal-box {
+            background: var(--card-bg, #fff);
+            border: 1px solid var(--border, #ddd);
+            padding: 24px;
+            border-radius: 16px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+            animation: modalScaleIn 0.2s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+        @keyframes modalScaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .card-header-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 12px;
+        }
+        .card-header-box h2 {
+            margin: 0 0 4px 0;
+            border: none;
+            padding: 0;
+        }
+        .custom-file-upload {
+            border: 2px dashed var(--border);
+            background: rgba(128, 128, 128, 0.02);
+            padding: 14px;
+            text-align: center;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+        }
+        .custom-file-upload:hover {
+            border-color: var(--accent);
+            background: rgba(128, 128, 128, 0.05);
+        }
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 18px;
+            margin-top: 15px;
+        }
+        .achievement-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .achievement-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+        .achievement-img-wrap {
+            width: 100%;
+            height: 170px;
+            overflow: hidden;
+            background: rgba(128,128,128,0.05);
+            position: relative;
+            cursor: zoom-in;
+        }
+        .achievement-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        .achievement-img-wrap img:hover {
+            transform: scale(1.04);
+        }
+        .achievement-content {
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            justify-content: space-between;
+        }
+        .achievement-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border);
+            padding-top: 10px;
+            font-size: 0.8rem;
+            gap: 8px;
+        }
+        .action-btns {
+            display: flex;
+            gap: 6px;
+        }
+        .edit-btn {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .edit-btn:hover {
+            background: #3b82f6;
+            color: #fff;
+        }
+        .delete-btn {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .delete-btn:hover {
+            background: #ef4444;
+            color: #fff;
+        }
+        .item-checkbox {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            z-index: 10;
+            accent-color: var(--accent);
+        }
+        .batch-toolbar {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(128, 128, 128, 0.08);
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
+        }
+        .remove-preview-btn {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: none;
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .remove-preview-btn:hover {
+            background: #ef4444;
+            color: #fff;
+        }
+        #lightbox-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            cursor: zoom-out;
+        }
+        #lightbox-modal img {
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .site-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 30px;
+            border-top: 1px solid var(--border);
+            background: var(--card-bg);
+            flex-shrink: 0;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .footer-left-content {
+            text-align: left;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .footer-left-content p {
+            margin: 4px 0;
+        }
+        .footer-right-logos {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .footer-right-logos img.school-logo {
+            height: 55px;
+            width: auto;
+            object-fit: contain;
+            background: rgba(128, 128, 128, 0.05);
+            padding: 3px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            cursor: zoom-in;
+            transition: transform 0.2s ease;
+        }
+        .footer-right-logos img.class-logo {
+            height: 55px;
+            width: 55px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: rgba(128, 128, 128, 0.05);
+            padding: 3px;
+            border: 1px solid var(--border);
+            cursor: zoom-in;
+            transition: transform 0.2s ease;
+        }
+        .footer-right-logos img:hover, .footer-left-content img:hover {
+            transform: scale(1.08);
+        }
+    </style>
+    <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0284c7">
+</head>
+<body>
+<header class="header-nav">
+    <div class="logo">
+        <img alt="Logo 10 Toán 2 K36" class="header-logo-img" onclick="openLightbox('10_t2_logo.jpeg')" src="10_t2_logo.jpeg" title="Bấm để phóng to logo Lớp"/>
+        <h2>10 Toán 2 K36</h2>
+    </div>
+    <nav class="site-nav">
+        <a href="index.html"><i class="ri-home-4-line"></i> Trang Chủ</a>
+        <a href="members.html"><i class="ri-team-line"></i> Thành Viên</a>
+        <a href="achievements.html" class="active"><i class="ri-trophy-line"></i> Thành Tích</a>
+        <a href="gallery.html"><i class="ri-image-line"></i> Thư Viện</a>
+        <a href="about.html"><i class="ri-information-line"></i> Giới Thiệu</a>
+        <a href="feedback.html"><i class="ri-chat-settings-line"></i> Góp Ý</a>
+        <a href="solver.html"><i class="ri-book-open-line"></i> Giải Bài Tập AI</a>
+        <span class="nav-divider"></span>
+        <button class="nav-action-btn theme-btn" id="theme-toggle"><i class="ri-moon-line"></i> Giao diện</button>
+        <button class="nav-action-btn auth-nav-btn" id="auth-nav-btn" onclick="handleAuthNavAction()"><i class="ri-key-line"></i> Đăng nhập</button>
+        <button class="nav-action-btn fx-menu-btn" id="fx-toggle-btn" onclick="toggleMathEffects()"><i class="ri-magic-line"></i> Hiệu ứng: Bật</button>
+    </nav>
+</header>
+<main class="main-content">
+<section class="card">
+<div class="card-header-box" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+<h2 style="margin: 0 0 -5px 0; font-weight: 700; font-size: 1.5rem; color: var(--text-color);">🏆 Thành Tích</h2>
+<p style="margin: 0; color: var(--text-muted); font-size: 0.9rem;">Nơi lưu danh các giải thưởng, thành tích Toán học.</p>
+</div>
+<div style="display: flex; gap: 8px; align-items: center; justify-content: flex-end; width: 100%;">
+<button id="select-mode-btn" onclick="toggleSelectMode()" style="display: none; background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 8px 14px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                        + Chọn
+                    </button>
+<button id="btn-upload" onclick="openUploadModal()" style="display: none; background: var(--accent); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: transform 0.2s;">
+                        + Thêm thành tích
+                    </button>
+</div>
+<div class="batch-toolbar" id="batch-toolbar">
+<label style="display: flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer; color: var(--text-main); font-size: 0.9rem;">
+<input id="select-all" onchange="toggleSelectAll(this)" style="width: 18px; height: 18px; accent-color: var(--accent);" type="checkbox"/> Chọn tất cả (<span id="selected-count">0</span> đã chọn)
+                </label>
+<button onclick="confirmDeleteSelected()" style="background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600;">
+                    🗑️ Xóa đã chọn
+                </button>
+</div>
+<div id="empty-notice" style="padding: 30px; text-align: center; background: rgba(128,128,128,0.05); border-radius: 12px; border: 1px dashed var(--border); margin-top: 15px; color: var(--text-muted);">
+                [Hiện vẫn chưa có thành tích nào...]
+            </div>
+<div class="achievement-grid" id="achievement-grid"></div>
+</section>
+</main>
+<footer class="site-footer">
+<div class="footer-left-content">
+<p><strong>Lớp 10 Toán 2 - K36</strong></p>
+<p>Trường THPT Chuyên Bến Tre • Nơi lưu trữ kỷ niệm và thành tích học tập.</p>
+<p style="font-size: 0.8rem; margin-top: 6px; color: var(--text-muted);">© 2026 Designed by K36 Math Students.</p>
+</div>
+<div class="footer-right-logos">
+<img alt="Logo THPT Chuyên Bến Tre" class="school-logo" onclick="openLightbox('logocbt.png')" src="logocbt.png" title="Bấm để phóng to logo Trường"/>
+<img alt="Logo 10 Toán 2 K36" class="class-logo" onclick="openLightbox('10_t2_logo.jpeg')" src="10_t2_logo.jpeg" title="Bấm để phóng to logo Lớp"/>
+</div>
+</footer>
+<div class="custom-modal-overlay" id="terms-modal">
+<div class="custom-modal-box" style="max-width: 520px; text-align: left;">
+<div style="font-size: 1.5rem; text-align: center; margin-bottom: 5px;">📜</div>
+<h3 style="color: var(--text-main); margin: 0 0 5px 0; font-size: 1.15rem; text-align: center;">Điều khoản và Quy định sử dụng</h3>
+<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center; margin-bottom: 12px;">Vui lòng cuộn xuống dưới cùng để mở khóa nút đồng ý.</p>
+<div id="terms-scroll-box" style="height: 200px; overflow-y: auto; border: 1px solid var(--border); padding: 12px; border-radius: 8px; background: rgba(128,128,128,0.03); font-size: 0.83rem; line-height: 1.45; color: var(--text-main); margin-bottom: 15px;">
+<p><b>ĐIỀU KHOẢN VÀ QUY ĐỊNH ĐĂNG TẢI NỘI DUNG</b></p>
+<p>Khi truy cập, sử dụng và đăng tải nội dung vào khu vực nội bộ của website, thành viên đồng ý tuân thủ tuyệt đối các quy định về an toàn thông tin và văn hóa ứng xử trực tuyến. Cụ thể, các hành vi sau đây <b>bị nghiêm cấm tuyệt đối</b>:</p>
+<br/>
+<p><b>1. Đăng tải nội dung trái pháp luật và thuần phong mỹ tục:</b> Phát tán, chia sẻ hoặc lưu trữ hình ảnh, video, tài liệu có nội dung bạo lực, đồi trụy, phản động, xuyên tạc lịch sử, vi phạm pháp luật nước Cộng hòa Xã hội Chủ nghĩa Việt Nam hoặc trái với đạo đức xã hội và thuần phong mỹ tục.</p>
+<p><b>2. Xâm phạm quyền riêng tư và danh dự cá nhân:</b> Đăng tải hình ảnh, thông tin cá nhân, bài viết hoặc bình luận mang tính chất xúc phạm, lăng mạ, bôi nhọ danh dự, nhân phẩm của các thành viên trong lớp, thầy cô giáo hoặc bất kỳ cá nhân, tổ chức nào khác.</p>
+<p><b>3. Vi phạm bản quyền sở hữu trí tuệ:</b> Đăng tải các tài liệu học tập, sách, đề thi, phần mềm hoặc các sản phẩm sáng tạo thuộc bản quyền của tác giả, tổ chức khác mà chưa có sự cho phép hoặc trích nguồn rõ ràng.</p>
+<p><b>4. Phá hoại hệ thống và bảo mật website:</b> Cố ý thực hiện các hành vi xâm nhập trái phép, phá hoại mã nguồn, phát tán mã độc, can thiệp vào cơ sở dữ liệu chung, hoặc lợi dụng quyền hạn sau khi đăng nhập để xóa, chỉnh sửa, làm sai lệch dữ liệu học tập và hình ảnh kỷ niệm.</p>
+<p><b>5. Đăng tải thông tin sai lệch (Fake News):</b> Cố tình tạo ra, phát tán hoặc chia sẻ các thông tin giả mạo, sai sự thật liên quan đến hoạt động của lớp học hoặc nhà trường nhằm mục đích gây hoang mang, hiểu lầm.</p>
+<p><b>6. Lạm dụng không gian chung:</b> Đăng tải các nội dung rác, spam quảng cáo thương mại, nội dung không liên quan đến mục đích học tập và lưu trữ kỷ niệm chung.</p>
+<br/>
+<p><b>Hình thức xử lý:</b> Bất kỳ thành viên nào vi phạm các điều khoản trên sẽ bị thu hồi quyền truy cập khu vực nội bộ ngay lập tức, gỡ bỏ toàn bộ nội dung vi phạm, đồng thời chịu hoàn toàn trách nhiệm trước tập thể lớp và nhà trường.</p>
+</div>
+<div style="display: flex; gap: 10px;">
+<button onclick="closeTermsModal()" style="flex: 1; background: transparent; color: var(--text-main); border: 1px solid var(--border); padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Hủy</button>
+<button disabled="" id="agree-terms-btn" onclick="acceptTermsAndProceed()" style="flex: 1; background: #ccc; color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: 600; cursor: not-allowed;">Tôi đã đọc và Đồng ý</button>
+</div>
+</div>
+</div>
+<div class="custom-modal-overlay" id="login-modal">
+<div class="custom-modal-box">
+<div style="font-size: 2rem; margin-bottom: 8px;">🔐</div>
+<h3 style="color: var(--text-main); margin: 0 0 6px 0; font-size: 1.15rem;">Khu vực nội bộ lớp</h3>
+<p style="color: var(--text-muted); font-size: 0.85rem; margin: 0 0 16px 0;">Nhập mật khẩu để tiếp tục truy cập</p>
+<input id="modal-pass-input" onkeydown="if(event.key === 'Enter') submitLogin()" placeholder="Mật khẩu lớp..." style="width: 100%; background: var(--card-bg); border: 1px solid var(--border); padding: 10px 12px; border-radius: 10px; color: var(--text-main); outline: none; font-size: 0.95rem; box-sizing: border-box; margin-bottom: 12px;" type="password"/>
+<div id="modal-err" style="color: #ef4444; font-size: 0.8rem; margin-bottom: 12px; display: none;">Sai mật khẩu rồi bạn ơi!</div>
+<div style="display: flex; gap: 10px;">
+<button onclick="closeLoginModal()" style="flex: 1; background: transparent; color: var(--text-main); border: 1px solid var(--border); padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Hủy</button>
+<button onclick="submitLogin()" style="flex: 1; background: var(--accent); color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Xác nhận</button>
+</div>
+</div>
+</div>
+<div class="custom-modal-overlay" id="logout-modal">
+<div class="custom-modal-box">
+<div style="font-size: 2rem; margin-bottom: 8px;">⚠️</div>
+<h3 style="color: var(--text-main); margin: 0 0 8px 0; font-size: 1.15rem;">Xác nhận đăng xuất</h3>
+<p style="color: var(--text-muted); font-size: 0.9rem; margin: 0 0 20px 0;">Bạn có chắc chắn muốn đăng xuất khỏi khu vực nội bộ không?</p>
+<div style="display: flex; gap: 10px;">
+<button onclick="closeLogoutModal()" style="flex: 1; background: transparent; color: var(--text-main); border: 1px solid var(--border); padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Hủy</button>
+<button onclick="confirmLogout()" style="flex: 1; background: #ef4444; color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Đăng xuất</button>
+</div>
+</div>
+</div>
+<div class="custom-modal-overlay" id="upload-modal">
+<div class="custom-modal-box" style="text-align: left;">
+<h3 id="modal-title" style="color: var(--accent); margin-top: 0; margin-bottom: 12px; text-align: center;">🏆 Thêm Thành Tích Mới</h3>
+<div style="margin-bottom: 12px;">
+<label style="display: block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 6px;">Tên học sinh / Nhóm:</label>
+<input id="ach-student-name" placeholder="Ví dụ: Nguyễn Văn A..." style="width: 100%; background: var(--card-bg); border: 1px solid var(--border); padding: 10px; border-radius: 10px; color: var(--text-main); outline: none; font-size: 0.95rem; box-sizing: border-box;" type="text"/>
+</div>
+<div style="margin-bottom: 12px;">
+<label style="display: block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 6px;">Giải thưởng / Thành tích:</label>
+<input id="ach-title" placeholder="Ví dụ: Huy chương Vàng Olympic Toán..." style="width: 100%; background: var(--card-bg); border: 1px solid var(--border); padding: 10px; border-radius: 10px; color: var(--text-main); outline: none; font-size: 0.95rem; box-sizing: border-box;" type="text"/>
+</div>
+<div style="margin-bottom: 12px;">
+<label style="display: block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 6px;">Link báo chí / Nguồn ngoài (nếu có):</label>
+<input id="ach-link" placeholder="https://baochi.vn/bai-viet..." style="width: 100%; background: var(--card-bg); border: 1px solid var(--border); padding: 10px; border-radius: 10px; color: var(--text-main); outline: none; font-size: 0.95rem; box-sizing: border-box;" type="url"/>
+</div>
+<div style="margin-bottom: 12px;">
+<label style="display: block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 6px;">Hình ảnh minh họa / Giấy khen:</label>
+<input accept="image/*" id="file-input" onchange="previewFile(this)" style="display: none;" type="file"/>
+<label class="custom-file-upload" for="file-input">
+<div style="font-size: 1.4rem; margin-bottom: 2px;">📷</div>
+<div id="file-upload-text" style="font-weight: 600; color: var(--text-main); font-size: 0.9rem;">Bấm vào đây để chọn ảnh</div>
+</label>
+</div>
+<div id="preview-container" style="display: none; margin-bottom: 12px; padding: 6px; background: rgba(128,128,128,0.03); border-radius: 8px;">
+</div>
+<div style="margin-bottom: 12px;">
+<label style="display: block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 6px;">Mô tả chi tiết:</label>
+<textarea id="ach-desc" placeholder="Thông tin thêm về kỳ thi, cấp tổ chức..." style="width: 100%; height: 70px; background: var(--card-bg); border: 1px solid var(--border); padding: 8px; border-radius: 8px; color: var(--text-main); outline: none; resize: none; box-sizing: border-box;"></textarea>
+</div>
+<div style="display: flex; justify-content: flex-end; gap: 10px;">
+<button onclick="closeUploadModal()" style="flex: 1; background: transparent; color: var(--text-muted); border: 1px solid var(--border); padding: 10px; border-radius: 10px; cursor: pointer; font-weight: 600;">Hủy</button>
+<button onclick="submitAchievement()" style="flex: 1; background: var(--accent); color: #fff; border: none; padding: 10px; border-radius: 10px; cursor: pointer; font-weight: 600;">Lưu thành tích</button>
+</div>
+</div>
+</div>
+<div class="custom-modal-overlay" id="confirm-modal">
+<div class="custom-modal-box">
+<div style="font-size: 2rem; margin-bottom: 8px;">⚠️</div>
+<h3 style="color: var(--text-main); margin: 0 0 8px 0; font-size: 1.15rem;">Xác nhận xóa</h3>
+<p id="confirm-msg" style="color: var(--text-muted); font-size: 0.9rem; margin: 0 0 20px 0;">Bạn có chắc chắn muốn xóa mục này không?</p>
+<div style="display: flex; gap: 10px;">
+<button onclick="closeConfirmModal()" style="flex: 1; background: transparent; color: var(--text-main); border: 1px solid var(--border); padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Hủy</button>
+<button id="confirm-yes-btn" style="flex: 1; background: #ef4444; color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Xóa</button>
+</div>
+</div>
+</div>
+<div id="lightbox-modal" onclick="closeLightbox()">
+<img alt="Phóng to ảnh" id="lightbox-img" src=""/>
+</div>
+<script>
+        const CORRECT_PASS = "10toan2k36";
+        let selectedFileObj = null;
+        let editingId = null;
+        let isSelectMode = false;
+        let pendingAction = null;
+        const SUPABASE_URL = 'https://mwyjcrpwxpghieizswfa.supabase.co';
+        const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_9Ow2Q57vi9ArOtQRPr3bfw_olVCoAfD';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+        function formatDateTime(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            if (isNaN(date.getTime())) return dateString;
+            return date.toLocaleString('vi-VN', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+        }
+        window.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('class_unlocked') === 'true') {
+                updateAuthButtonState(true);
+            } else {
+                updateAuthButtonState(false);
+            }
+            loadAchievementsFromStorage();
+        });
+        function handleAuthNavAction() {
+            if (localStorage.getItem('class_unlocked') === 'true') {
+                document.getElementById('logout-modal').style.display = 'flex';
+            } else {
+                const modal = document.getElementById('terms-modal');
+                const scrollBox = document.getElementById('terms-scroll-box');
+                const agreeBtn = document.getElementById('agree-terms-btn');
+                modal.style.display = 'flex';
+                if (scrollBox) scrollBox.scrollTop = 0;
+                if (agreeBtn) {
+                    agreeBtn.disabled = true;
+                    agreeBtn.style.background = '#ccc';
+                    agreeBtn.style.cursor = 'not-allowed';
+                }
+            }
+        }
+        const termsScrollBox = document.getElementById('terms-scroll-box');
+        const agreeTermsBtn = document.getElementById('agree-terms-btn');
+        if (termsScrollBox) {
+            termsScrollBox.addEventListener('scroll', () => {
+                const isAtBottom = termsScrollBox.scrollHeight - termsScrollBox.scrollTop <= termsScrollBox.clientHeight + 15;
+                if (isAtBottom && agreeTermsBtn) {
+                    agreeTermsBtn.disabled = false;
+                    agreeTermsBtn.style.background = 'var(--accent)';
+                    agreeTermsBtn.style.cursor = 'pointer';
+                }
+            });
+        }
+        function closeTermsModal() {
+            document.getElementById('terms-modal').style.display = 'none';
+        }
+        function acceptTermsAndProceed() {
+            closeTermsModal();
+            document.getElementById('modal-pass-input').value = '';
+            document.getElementById('modal-err').style.display = 'none';
+            document.getElementById('login-modal').style.display = 'flex';
+            setTimeout(() => document.getElementById('modal-pass-input').focus(), 100);
+        }
+        function closeLoginModal() {
+            document.getElementById('login-modal').style.display = 'none';
+        }
+        function submitLogin() {
+            const passVal = document.getElementById('modal-pass-input').value;
+            if (passVal === CORRECT_PASS) {
+                localStorage.setItem('class_unlocked', 'true');
+                closeLoginModal();
+                updateAuthButtonState(true);
+                loadAchievementsFromStorage();
+            } else {
+                document.getElementById('modal-err').style.display = 'block';
+            }
+        }
+        function closeLogoutModal() {
+            document.getElementById('logout-modal').style.display = 'none';
+        }
+        function confirmLogout() {
+            localStorage.removeItem('class_unlocked');
+            location.reload();
+        }
+        function updateAuthButtonState(isLoggedIn) {
+            const btn = document.getElementById('auth-nav-btn');
+            const btnUpload = document.getElementById('btn-upload');
+            if (!btn) return;
+            if (isLoggedIn) {
+                btn.textContent = '🚪 Đăng xuất';
+                btn.className = 'auth-nav-btn logout-state';
+                if (btnUpload) btnUpload.style.display = 'inline-block';
+            } else {
+                btn.textContent = '🔑 Đăng nhập';
+                btn.className = 'auth-nav-btn';
+                if (btnUpload) btnUpload.style.display = 'none';
+                isSelectMode = false;
+                const selectBtn = document.getElementById('select-mode-btn');
+                if(selectBtn) selectBtn.style.display = 'none';
+                const batchToolbar = document.getElementById('batch-toolbar');
+                if(batchToolbar) batchToolbar.style.display = 'none';
+            }
+        }
+        function toggleSelectMode() {
+            isSelectMode = !isSelectMode;
+            const btn = document.getElementById('select-mode-btn');
+            const toolbar = document.getElementById('batch-toolbar');
+            if (isSelectMode) {
+                btn.style.background = 'var(--accent)'; btn.style.color = '#fff'; btn.textContent = '✕ Hủy chọn';
+                toolbar.style.display = 'flex';
+            } else {
+                btn.style.background = 'transparent'; btn.style.color = 'var(--accent)'; btn.textContent = '+ Chọn';
+                toolbar.style.display = 'none';
+                document.getElementById('select-all').checked = false;
+            }
+            loadAchievementsFromStorage();
+        }
+        function toggleSelectAll(masterCheckbox) {
+            const checkboxes = document.querySelectorAll('.achievement-checkbox');
+            checkboxes.forEach(cb => cb.checked = masterCheckbox.checked);
+            updateSelectedCount();
+        }
+        function updateSelectedCount() {
+            const checkboxes = document.querySelectorAll('.achievement-checkbox:checked');
+            document.getElementById('selected-count').textContent = checkboxes.length;
+        }
+        function openUploadModal() {
+            if (localStorage.getItem('class_unlocked') !== 'true') return;
+            editingId = null;
+            document.getElementById('modal-title').textContent = '🏆 Thêm Thành Tích Mới';
+            document.getElementById('ach-student-name').value = '';
+            document.getElementById('ach-title').value = '';
+            document.getElementById('ach-link').value = '';
+            document.getElementById('ach-desc').value = '';
+            document.getElementById('file-input').value = '';
+            document.getElementById('file-upload-text').textContent = 'Bấm vào đây để chọn ảnh';
+            document.getElementById('preview-container').style.display = 'none';
+            document.getElementById('preview-container').innerHTML = '';
+            selectedFileObj = null;
+            document.getElementById('upload-modal').style.display = 'flex';
+        }
+        async function editAchievement(id) {
+            if (localStorage.getItem('class_unlocked') !== 'true') return;
+            try {
+                const { data, error } = await _supabase
+                    .from('achievements')
+                    .select('*')
+                    .eq('id', id)
+                    .single();
+                if (error) throw error;
+                if (!data) return;
+                editingId = data.id;
+                document.getElementById('modal-title').textContent = '✏️ Chỉnh Sửa Thành Tích';
+                document.getElementById('ach-student-name').value = data.student_name || '';
+                document.getElementById('ach-title').value = data.title || '';
+                document.getElementById('ach-link').value = data.link || '';
+                document.getElementById('ach-desc').value = data.description || '';
+                selectedFileObj = { url: data.image_url, isExisting: true };
+                const previewContainer = document.getElementById('preview-container');
+                document.getElementById('file-upload-text').textContent = 'Đang giữ ảnh hiện tại';
+                previewContainer.style.display = 'block';
+                previewContainer.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-main);">✓ Đã có ảnh sẵn sàng</span>
+                        <button type="button" class="remove-preview-btn" onclick="removePreview()">Đổi ảnh khác</button>
+                    </div>
+                `;
+                document.getElementById('upload-modal').style.display = 'flex';
+            } catch (err) {
+                console.error('Lỗi lấy thông tin sửa:', err);
+                showToast('Không thể tải thông tin thành tích.');
+            }
+        }
+        function closeUploadModal() {
+            document.getElementById('upload-modal').style.display = 'none';
+            selectedFileObj = null;
+            editingId = null;
+        }
+        function previewFile(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                if (!file.type.startsWith('image/')) {
+                    showToast('Vui lòng chọn file hình ảnh hợp lệ.');
+                    input.value = '';
+                    return;
+                }
+                selectedFileObj = file;
+                document.getElementById('file-upload-text').textContent = `Đã chọn: ${file.name}`;
+                const previewContainer = document.getElementById('preview-container');
+                previewContainer.style.display = 'block';
+                previewContainer.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 280px;">📄 ${file.name}</span>
+                        <button type="button" class="remove-preview-btn" onclick="removePreview()">Xóa</button>
+                    </div>
+                `;
+            }
+        }
+        function removePreview() {
+            selectedFileObj = null;
+            document.getElementById('file-input').value = '';
+            document.getElementById('file-upload-text').textContent = 'Bấm vào đây để chọn ảnh';
+            document.getElementById('preview-container').style.display = 'none';
+            document.getElementById('preview-container').innerHTML = '';
+        }
+        async function submitAchievement() {
+            if (localStorage.getItem('class_unlocked') !== 'true') return;
+            const studentName = document.getElementById('ach-student-name').value.trim();
+            const title = document.getElementById('ach-title').value.trim();
+            const link = document.getElementById('ach-link').value.trim();
+            const desc = document.getElementById('ach-desc').value.trim();
+            if (!studentName || !title) {
+                showToast('Vui lòng điền đầy đủ tên học sinh và tên giải thưởng.');
+                return;
+            }
+            if (!selectedFileObj) {
+                showToast('Vui lòng đính kèm hình ảnh minh họa hoặc giấy khen.');
+                return;
+            }
+            try {
+                let fileUrl = '';
+                if (selectedFileObj.isExisting) {
+                    fileUrl = selectedFileObj.url;
+                } else {
+                    const file = selectedFileObj;
+                    const fileExt = file.name.split('.').pop().toLowerCase();
+                    const fileName = `achievement_${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
+                    const filePath = `achievements/${fileName}`;
+                    const { error: uploadError } = await _supabase.storage
+                        .from('gallery_images')
+                        .upload(filePath, file);
+                    if (uploadError) throw uploadError;
+                    const { data: publicUrlData } = _supabase.storage
+                        .from('gallery_images')
+                        .getPublicUrl(filePath);
+                    fileUrl = publicUrlData.publicUrl;
+                }
+                const currentTimeIso = new Date().toISOString();
+                if (editingId !== null) {
+                    const { error: updateError } = await _supabase
+                        .from('achievements')
+                        .update({
+                            student_name: studentName,
+                            title: title,
+                            link: link,
+                            description: desc,
+                            image_url: fileUrl
+                        })
+                        .eq('id', editingId);
+                    if (updateError) throw updateError;
+                    showToast('Cập nhật thành tích thành công!');
+                } else {
+                    const { error: dbError } = await _supabase
+                        .from('achievements')
+                        .insert([
+                            { 
+                                id: Date.now(), 
+                                student_name: studentName,
+                                title: title,
+                                link: link,
+                                description: desc,
+                                image_url: fileUrl,
+                                created_at: currentTimeIso
+                            }
+                        ]);
+                    if (dbError) throw dbError;
+                    showToast('Thêm thành tích thành công!');
+                }
+                closeUploadModal();
+                loadAchievementsFromStorage();
+            } catch (error) {
+                console.error('Lỗi:', error.message);
+                showToast('Có lỗi xảy ra: ' + error.message);
+            }
+        }
+        async function loadAchievementsFromStorage() {
+            const container = document.getElementById('achievement-grid');
+            const emptyNotice = document.getElementById('empty-notice');
+            const selectBtn = document.getElementById('select-mode-btn');
+            const batchToolbar = document.getElementById('batch-toolbar');
+            if (!container) return;
+            try {
+                const { data, error } = await _supabase
+                    .from('achievements')
+                    .select('*')
+                    .order('id', { ascending: false });
+                if (error) throw error;
+                if (!data || data.length === 0) {
+                    container.innerHTML = '';
+                    if (emptyNotice) emptyNotice.style.display = 'block';
+                    if (selectBtn) selectBtn.style.display = 'none';
+                    if (batchToolbar) batchToolbar.style.display = 'none';
+                    isSelectMode = false;
+                    return;
+                }
+                if (emptyNotice) emptyNotice.style.display = 'none';
+                const isUnlocked = localStorage.getItem('class_unlocked') === 'true';
+                if (selectBtn && isUnlocked) selectBtn.style.display = 'inline-block';
+                container.innerHTML = '';
+                data.forEach((item) => {
+                    const card = document.createElement('div');
+                    card.className = 'achievement-card';
+                    let checkboxHtml = (isSelectMode && isUnlocked) ? `<input type="checkbox" class="achievement-checkbox item-checkbox" data-id="${item.id}" onchange="updateSelectedCount()">` : '';
+                    let actionButtonsHtml = isUnlocked ? `
+                        <div class="action-btns">
+                            <button class="edit-btn" onclick="editAchievement(${item.id})">Sửa</button>
+                            <button class="delete-btn" onclick="deleteOneItem(${item.id})">Xóa</button>
+                        </div>
+                    ` : '';
+                    let newsLinkHtml = item.link ? `<a href="${item.link}" target="_blank" style="display: inline-block; margin-top: 8px; margin-bottom: 8px; background: rgba(59, 130, 246, 0.1); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.2); padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">📰 Xem bài báo gốc</a>` : '';
+                    let formattedDate = item.created_at ? formatDateTime(item.created_at) : '';
+                    let dateHtml = formattedDate ? `<div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 6px;">📅 Ngày đăng tải: ${formattedDate}</div>` : '';
+                    card.innerHTML = `
+                        ${checkboxHtml}
+                        <div class="achievement-img-wrap" onclick="openLightbox('${item.image_url}')">
+                            ${item.image_url ? `<img src="${item.image_url}" alt="Thành tích">` : ''}
+                        </div>
+                        <div class="achievement-content">
+                            <div>
+                                <div style="font-weight: 700; color: var(--text-main); font-size: 1rem; margin-bottom: 4px;">${escapeHtml(item.student_name)}</div>
+                                <div style="font-weight: 600; color: var(--accent); font-size: 0.9rem; margin-bottom: 6px;">🏅 ${escapeHtml(item.title)}</div>
+                                ${newsLinkHtml}
+                                <div style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.4; word-break: break-word;">${escapeHtml(item.description || 'Không có mô tả thêm.')}</div>
+                            </div>
+                            <div>
+                                ${dateHtml}
+                                <div class="achievement-footer">
+                                    <span style="color: var(--text-muted);">Chuyên Toán K36</span>
+                                    ${actionButtonsHtml}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (err) {
+                console.error('Lỗi tải dữ liệu:', err);
+            }
+        }
+        function deleteOneItem(id) {
+            if (localStorage.getItem('class_unlocked') !== 'true') return;
+            showCustomConfirm('Bạn có chắc chắn muốn xóa thành tích này không?', async () => {
+                try {
+                    const { error } = await _supabase
+                        .from('achievements')
+                        .delete()
+                        .eq('id', id);
+                    if (error) throw error;
+                    showToast('Đã xóa thành công!');
+                    loadAchievementsFromStorage();
+                } catch (err) {
+                    console.error('Lỗi xóa:', err);
+                    showToast('Không thể xóa mục này.');
+                }
+            });
+        }
+        function confirmDeleteSelected() {
+            if (localStorage.getItem('class_unlocked') !== 'true') return;
+            const checkboxes = document.querySelectorAll('.achievement-checkbox:checked');
+            if (checkboxes.length === 0) {
+                showToast('Vui lòng chọn ít nhất một mục để xóa.');
+                return;
+            }
+            showCustomConfirm(`Bạn có chắc chắn muốn xóa vĩnh viễn ${checkboxes.length} mục đã chọn không?`, async () => {
+                try {
+                    const idsToDelete = Array.from(checkboxes).map(cb => parseInt(cb.getAttribute('data-id')));
+                    const { error } = await _supabase
+                        .from('achievements')
+                        .delete()
+                        .in('id', idsToDelete);
+                    if (error) throw error;
+                    isSelectMode = false;
+                    document.getElementById('select-mode-btn').style.background = 'transparent';
+                    document.getElementById('select-mode-btn').style.color = 'var(--accent)';
+                    document.getElementById('select-mode-btn').textContent = '+ Chọn';
+                    document.getElementById('batch-toolbar').style.display = 'none';
+                    document.getElementById('select-all').checked = false;
+                    showToast('Đã xóa các mục đã chọn!');
+                    loadAchievementsFromStorage();
+                } catch (err) {
+                    console.error('Lỗi xóa hàng loạt:', err);
+                    showToast('Không thể xóa các mục đã chọn.');
+                }
+            });
+        }
+        function showCustomConfirm(message, callback) {
+            document.getElementById('confirm-msg').textContent = message;
+            pendingAction = callback;
+            document.getElementById('confirm-modal').style.display = 'flex';
+        }
+        function closeConfirmModal() {
+            document.getElementById('confirm-modal').style.display = 'none';
+            pendingAction = null;
+        }
+        document.getElementById('confirm-yes-btn').addEventListener('click', () => {
+            if (typeof pendingAction === 'function') pendingAction();
+            closeConfirmModal();
+        });
+        function openLightbox(url) {
+            if (!url) return;
+            document.getElementById('lightbox-img').src = url;
+            document.getElementById('lightbox-modal').style.display = 'flex';
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox-modal').style.display = 'none';
+        }
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const body = document.body;
+        if (localStorage.getItem('theme') === 'light') {
+            body.classList.add('light-mode');
+            if (themeToggleBtn) themeToggleBtn.textContent = '☀️ Giao diện';
+        }
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                body.classList.toggle('light-mode');
+                if (body.classList.contains('light-mode')) {
+                    themeToggleBtn.textContent = '☀️ Giao diện';
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    themeToggleBtn.textContent = '🌙 Giao diện';
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+        }
+    </script>
+<script src="js/animation.js"></script>
+<div id="toastMessage" style="position: fixed; bottom: 20px; right: 20px; background: var(--card-bg); backdrop-filter: var(--backdrop); border: 1px solid var(--accent); color: var(--text-main); padding: 12px 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transform: translateY(100px); opacity: 0; transition: all 0.4s ease; z-index: 9999;">
+        ✨ Thao tác thành công!
+    </div>
+<script>
+        function showToast(message = "✨ Thao tác thành công!") {
+            let toast = document.getElementById('toastMessage');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'toastMessage';
+                toast.style.cssText = "position: fixed; bottom: 20px; right: 20px; background: var(--card-bg); backdrop-filter: var(--backdrop); border: 1px solid var(--accent); color: var(--text-main); padding: 12px 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transform: translateY(100px); opacity: 0; transition: all 0.4s ease; z-index: 9999;";
+                document.body.appendChild(toast);
+            }
+            if (typeof message === 'object') {
+                message = JSON.stringify(message);
+            }
+            toast.innerText = message;
+            setTimeout(() => {
+                toast.style.transform = 'translateY(0)';
+                toast.style.opacity = '1';
+            }, 100);
+            setTimeout(() => {
+                toast.style.transform = 'translateY(100px)';
+                toast.style.opacity = '0';
+            }, 3000);
+        }
+    </script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const symbols = ['π', '∫', '∑', 'Δ', '√', 'α', 'β', 'θ', '∞', 'f(x)', 'lim', 'φ', '∂', '∇', '∏', 'µ', 'σ', 'Ω', '∀', '∃', '∈', '∉', '⊂', '⊃', '∪', '∩', 'sin', 'cos', 'tan', 'log', 'ln', 'vec{a}', 'lim', 'dx'];
+        const container = document.createElement('div');
+        container.className = 'math-bg-animation';
+        document.body.appendChild(container);
+        const symbolCount = 18; 
+        for (let i = 0; i < symbolCount; i++) {
+            const span = document.createElement('span');
+            span.className = 'math-symbol';
+            span.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+            span.style.left = Math.random() * 100 + 'vw';
+            span.style.fontSize = (Math.random() * 1.5 + 1) + 'rem';
+            span.style.animationDuration = (Math.random() * 10 + 10) + 's'; 
+            span.style.animationDelay = (Math.random() * 10) + 's';
+            container.appendChild(span);
+        }
+    });
+</script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const dot = document.createElement('div');
+        dot.className = 'math-ray-dot';
+        const ring = document.createElement('div');
+        ring.className = 'math-ray-ring';
+        const pulse = document.createElement('div');
+        pulse.className = 'math-ray-pulse';
+        document.body.appendChild(dot);
+        document.body.appendChild(ring);
+        document.body.appendChild(pulse);
+        let mouseX = 0, mouseY = 0;
+        let currentX = 0, currentY = 0;
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+        function renderRayCursor() {
+            currentX += (mouseX - currentX) * 0.25;
+            currentY += (mouseY - currentY) * 0.25;
+            dot.style.left = currentX + 'px';
+            dot.style.top = currentY + 'px';
+            ring.style.left = currentX + 'px';
+            ring.style.top = currentY + 'px';
+            pulse.style.left = currentX + 'px';
+            pulse.style.top = currentY + 'px';
+            requestAnimationFrame(renderRayCursor);
+        }
+        renderRayCursor();
+        const interactiveElements = document.querySelectorAll('a, button, input, .intro-logo, .video-frame-wrapper, select');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+        });
+    });
+</script>
+<script>
+    window.addEventListener('click', (e) => {
+        const mathChars = ['+', '-', '×', '÷', '=', 'π', '∫', '∑', 'Δ', '√', '0', '1'];
+        const particleCount = 6; 
+        for (let i = 0; i < particleCount; i++) {
+            const span = document.createElement('span');
+            span.className = 'math-click-particle';
+            span.textContent = mathChars[Math.floor(Math.random() * mathChars.length)];
+            span.style.left = e.clientX + 'px';
+            span.style.top = e.clientY + 'px';
+            const angle = Math.random() * Math.PI * 2;
+            const distance = Math.random() * 80 + 40; 
+            const tx = Math.cos(angle) * distance;
+            const ty = Math.sin(angle) * distance;
+            const tr = (Math.random() - 0.5) * 360; 
+            span.style.setProperty('--tx', tx + 'px');
+            span.style.setProperty('--ty', ty + 'px');
+            span.style.setProperty('--tr', tr + 'deg');
+            document.body.appendChild(span);
+            setTimeout(() => {
+                span.remove();
+            }, 800);
+        }
+    });
+</script>
+<script>
+    function toggleMathEffects() {
+        const isCurrentlyDisabled = document.body.classList.contains('fx-disabled');
+        const fxBtn = document.getElementById('fx-toggle-btn');
+        if (isCurrentlyDisabled) {
+            document.body.classList.remove('fx-disabled');
+            if (fxBtn) fxBtn.innerHTML = '✨ Hiệu ứng: Bật';
+            localStorage.setItem('math_fx_enabled', 'true');
+        } else {
+            document.body.classList.add('fx-disabled');
+            if (fxBtn) fxBtn.innerHTML = '✨ Hiệu ứng: Tắt';
+            localStorage.setItem('math_fx_enabled', 'false');
+        }
+    }
+    window.addEventListener('DOMContentLoaded', () => {
+        const fxEnabled = localStorage.getItem('math_fx_enabled') !== 'false';
+        const fxBtn = document.getElementById('fx-toggle-btn');
+        if (!fxEnabled) {
+            document.body.classList.add('fx-disabled');
+            if (fxBtn) fxBtn.innerHTML = '✨ Hiệu ứng: Tắt';
+        } else {
+            document.body.classList.remove('fx-disabled');
+            if (fxBtn) fxBtn.innerHTML = '✨ Hiệu ứng: Bật';
+        }
+    });
+    const originalWindowClick = window.onclick;
+    window.addEventListener('click', (e) => {
+        if (document.body.classList.contains('fx-disabled')) return;
+    }, true);
+</script>
+<script>
+    let player;
+    const btn = document.getElementById('music-toggle-btn');
+    const statusText = document.getElementById('music-status');
+    const youtubeVideoId = '9kzE8isXlQY'; 
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('youtube-player-container', {
+            height: '0',
+            width: '0',
+            videoId: youtubeVideoId,
+            playerVars: {
+                'autoplay': 1, 
+                'loop': 1,
+                'playlist': youtubeVideoId
+            },
+            events: {
+                'onReady': onPlayerReady
+            }
+        });
+    }
+    function onPlayerReady(event) {
+        player.setVolume(30);
+        const musicState = localStorage.getItem('isYoutubeMusicPlaying');
+        if (musicState === null || musicState === 'true') {
+            player.playVideo();
+            if (btn) btn.style.background = '#ef4444';
+            if (statusText) statusText.textContent = 'Đang phát...';
+            localStorage.setItem('isYoutubeMusicPlaying', 'true');
+        } else {
+            player.pauseVideo();
+            if (btn) btn.style.background = '#4f46e5';
+            if (statusText) statusText.textContent = 'Đang tắt';
+        }
+    }
+    function toggleYouTubeMusic() {
+        if (!player) return;
+        const state = player.getPlayerState();
+        if (state === YT.PlayerState.PLAYING) {
+            player.pauseVideo();
+            if (btn) btn.style.background = '#4f46e5';
+            if (statusText) statusText.textContent = 'Đang tắt';
+            localStorage.setItem('isYoutubeMusicPlaying', 'false'); 
+        } else {
+            player.playVideo();
+            if (btn) btn.style.background = '#ef4444';
+            if (statusText) statusText.textContent = 'Đang phát...';
+            localStorage.setItem('isYoutubeMusicPlaying', 'true'); 
+        }
+    }
+</script>
+<iframe allow="autoplay" src="music.html" style="position: fixed; bottom: 20px; right: 20px; width: 150px; height: 50px; border: none; z-index: 9999; background: transparent;"></iframe>
+<script src="time.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('Service Worker đăng ký thành công:', reg.scope))
+        .catch(err => console.log('Đăng ký Service Worker thất bại:', err));
+    });
+  }
+</script>
+</body>
+</html>

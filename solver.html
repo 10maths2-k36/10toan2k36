@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathIcons()"></script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Giải Bài Tập AI - 10 Toán 2 K36</title>
+<link href="css/style.css" rel="stylesheet"/>
+<style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .main-content {
+            flex: 1;
+        }
+        .auth-nav-btn {
+            background: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 6px 14px;
+            border-radius: 99px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+        .auth-nav-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-1px);
+        }
+        .auth-nav-btn.logout-state {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+        .auth-nav-btn.logout-state:hover {
+            background: #ef4444;
+            color: #fff;
+        }
+        .header-logo-img {
+            height: 38px;
+            width: 38px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: rgba(128, 128, 128, 0.05);
+            padding: 2px;
+            border: 1px solid var(--border);
+            cursor: zoom-in;
+            transition: transform 0.2s ease;
+            vertical-align: middle;
+        }
+        .header-logo-img:hover {
+            transform: scale(1.1);
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .site-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 30px;
+            border-top: 1px solid var(--border);
+            background: var(--card-bg);
+            flex-shrink: 0;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .footer-left-content {
+            text-align: left;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .footer-left-content p {
+            margin: 4px 0;
+        }
+        .footer-right-logos {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .footer-right-logos img.school-logo {
+            height: 55px;
+            width: auto;
+            object-fit: contain;
+            background: rgba(128, 128, 128, 0.05);
+            padding: 3px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            cursor: zoom-in;
+            transition: transform 0.2s ease;
+        }
+        .footer-right-logos img.class-logo {
+            height: 55px;
+            width: 55px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: rgba(128, 128, 128, 0.05);
+            padding: 3px;
+            border: 1px solid var(--border);
+            cursor: zoom-in;
+            transition: transform 0.2s ease;
+        }
+        .footer-right-logos img:hover {
+            transform: scale(1.08);
+        }
+        .solver-workspace {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 20px;
+            margin-top: 24px;
+            height: 600px;
+        }
+        @media (max-width: 900px) {
+            .solver-workspace {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+        }
+        .chat-sidebar {
+            background: var(--card-bg, #fff);
+            border: 1px solid var(--border, #ddd);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            max-height: 600px;
+            overflow: hidden;
+        }
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+        .new-chat-btn {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: opacity 0.2s;
+        }
+        .new-chat-btn:hover { opacity: 0.9; }
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 8px 12px;
+            gap: 8px;
+        }
+        .search-box input {
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            outline: none;
+            width: 100%;
+            font-size: 0.85rem;
+        }
+        .search-box input::placeholder {
+            color: var(--text-muted);
+        }
+        .history-list {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .history-item {
+            position: relative;
+            padding: 10px 12px;
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .history-item:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .history-item.active {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: var(--accent);
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .chat-item-text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-options {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        .btn-options:hover {
+            color: var(--text-main);
+            background: rgba(128, 128, 128, 0.1);
+        }
+        .options-menu {
+            display: none;
+            position: absolute;
+            right: 10px;
+            top: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            width: 170px;
+            z-index: 100;
+            padding: 6px 0;
+            margin-top: 4px;
+        }
+        .options-menu.show {
+            display: block;
+        }
+        .option-item {
+            padding: 8px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.83rem;
+            color: var(--text-main);
+            background: transparent;
+            border: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+        }
+        .option-item:hover {
+            background: var(--bg-main);
+            color: var(--accent);
+        }
+        .option-item.delete {
+            color: #ef4444;
+        }
+        .option-item.delete:hover {
+            background: rgba(239, 68, 68, 0.1);
+        }
+        .embedded-chat-container {
+            background: var(--card-bg, #fff);
+            border: 1px solid var(--border, #ddd);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+            overflow: hidden;
+            position: relative;
+        }
+        .chat-window-header {
+            padding: 14px 20px;
+            background: var(--accent, #3b82f6);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+        .formula-quick-bar {
+            display: flex;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--bg-main);
+            border-bottom: 1px solid var(--border);
+            overflow-x: auto;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .formula-chip {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .formula-chip:hover {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+        .chat-window-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            background: var(--bg-main, #f9f9f9);
+        }
+        .chat-message-wrapper {
+            display: flex;
+            flex-direction: column;
+            max-width: 85%;
+        }
+        .chat-message-wrapper.user {
+            align-self: flex-end;
+            align-items: flex-end;
+        }
+        .chat-message-wrapper.ai {
+            align-self: flex-start;
+            align-items: flex-start;
+        }
+        .chat-message {
+            padding: 12px 16px;
+            border-radius: 14px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            word-break: break-word;
+            animation: fadeInMessage 0.2s ease;
+        }
+        @keyframes fadeInMessage {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .chat-message.user {
+            background: #2563eb;
+            color: #fff;
+            border-bottom-right-radius: 4px;
+        }
+        .chat-message.ai {
+            background: #f97316;
+            color: #fff;
+            border-bottom-left-radius: 4px;
+        }
+        .ai-actions-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 4px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        .ai-action-btn {
+            background: transparent;
+            border: 1px solid var(--border, #ddd);
+            color: var(--text-muted);
+            padding: 2px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+        }
+        .ai-action-btn:hover {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+        .chat-window-footer {
+            padding: 14px 16px;
+            background: var(--card-bg, #fff);
+            border-top: 1px solid var(--border, #ddd);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: relative;
+        }
+        .chat-input-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .chat-window-input {
+            flex: 1;
+            background: var(--bg-main, #f9f9f9);
+            border: 1px solid var(--border, #ddd);
+            padding: 10px 16px;
+            border-radius: 24px;
+            color: var(--text-main);
+            outline: none;
+            font-size: 0.95rem;
+        }
+        .chat-window-input:focus {
+            border-color: var(--accent, #3b82f6);
+        }
+        .chat-tool-btn {
+            background: transparent;
+            border: 1px solid var(--border, #ddd);
+            color: var(--text-muted);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.2s;
+        }
+        .chat-tool-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .chat-send-btn, .chat-mic-btn {
+            background: var(--accent, #3b82f6);
+            color: #fff;
+            border: none;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.2s, transform 0.1s;
+            font-size: 1.1rem;
+        }
+        .chat-mic-btn {
+            background: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+        }
+        .chat-mic-btn.recording {
+            background: #ef4444;
+            color: #fff;
+            border-color: #ef4444;
+            animation: pulseMic 1.2s infinite;
+        }
+        @keyframes pulseMic {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .chat-send-btn:hover, .chat-mic-btn:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+        .plus-popup-menu {
+            display: none;
+            position: absolute;
+            bottom: 75px;
+            left: 16px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 8px;
+            z-index: 100;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 200px;
+            animation: fadeInMessage 0.15s ease;
+        }
+        .plus-popup-menu.show {
+            display: flex;
+        }
+        .plus-popup-item {
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            padding: 10px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            text-align: left;
+            transition: background 0.2s;
+        }
+        .plus-popup-item:hover {
+            background: var(--bg-main);
+            color: var(--accent);
+        }
+        .stop-gen-btn {
+            display: none;
+            background: #ef4444;
+            color: #fff;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            align-self: center;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 6px;
+            animation: fadeInMessage 0.2s ease;
+        }
+        .stop-gen-btn:hover { opacity: 0.9; }
+        .preview-attachment {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            width: fit-content;
+        }
+        .preview-attachment img {
+            height: 30px;
+            width: 30px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        .webcam-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 10001;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .webcam-modal-box {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid var(--border);
+        }
+        .webcam-video {
+            width: 100%;
+            max-height: 350px;
+            border-radius: 12px;
+            background: #000;
+            object-fit: cover;
+        }
+        .webcam-actions {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+        .custom-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .custom-modal-box {
+            background: var(--card-bg, #fff);
+            border: 1px solid var(--border, #ddd);
+            padding: 24px;
+            border-radius: 16px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+            animation: modalScaleIn 0.2s ease;
+        }
+        @keyframes modalScaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        #lightbox-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            cursor: zoom-out;
+        }
+        #lightbox-modal img {
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+    </style>
+    <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0284c7">
+</head>
+<body>
+<div id="preloader">
+<div class="spinner"></div>
+</div>
+<header class="header-nav">
+    <div class="logo">
+        <img alt="Logo 10 Toán 2 K36" class="header-logo-img" onclick="openLightbox('10_t2_logo.jpeg')" src="10_t2_logo.jpeg" title="Bấm để phóng to logo Lớp"/>
+        <h2>10 Toán 2 K36</h2>
+    </div>
+    <nav class="site-nav">
+        <a href="index.html"><i class="ri-home-4-line"></i> Trang Chủ</a>
+        <a href="members.html"><i class="ri-team-line"></i> Thành Viên</a>
+        <a href="achievements.html"><i class="ri-trophy-line"></i> Thành Tích</a>
+        <a href="gallery.html"><i class="ri-image-line"></i> Thư Viện</a>
+        <a href="about.html"><i class="ri-information-line"></i> Giới Thiệu</a>
+        <a href="feedback.html"><i class="ri-chat-settings-line"></i> Góp Ý</a>
+        <a href="solver.html" class="active"><i class="ri-book-open-line"></i> Giải Bài Tập AI</a>
+        <span class="nav-divider"></span>
+        <button class="nav-action-btn theme-btn" id="theme-toggle"><i class="ri-moon-line"></i> Giao diện</button>
+        <button class="nav-action-btn auth-nav-btn" id="auth-nav-btn" onclick="handleAuthNavAction()"><i class="ri-key-line"></i> Đăng nhập</button>
+        <button class="nav-action-btn fx-menu-btn" id="fx-toggle-btn" onclick="toggleMathEffects()"><i class="ri-magic-line"></i> Hiệu ứng: Bật</button>
+    </nav>
+</header>
+<main class="main-content">
+    <section class="card animate-on-scroll">
+        <h2><i class="ri-robot-line" style="color: var(--accent);"></i> Trợ Lý Giải Bài Tập AI Trực Tiếp.</h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 16px;">
+            Trò chuyện trực tiếp với AI, sử dụng micro, chụp ảnh webcam hoặc đính kèm tài liệu (hỗ trợ đọc trực tiếp file PDF).
+        </p>
+        <div class="solver-workspace">
+            <div class="chat-sidebar">
+                <div class="sidebar-header">
+                    <span><i class="ri-history-line"></i> Lịch sử chat</span>
+                </div>
+                <button class="new-chat-btn" onclick="startNewChatSession()"><i class="ri-add-line"></i> Cuộc trò chuyện mới</button>
+                <div class="search-box">
+                    <i class="ri-search-line" style="color: var(--text-muted);"></i>
+                    <input type="text" id="chat-search-input" placeholder="Tìm kiếm cuộc trò chuyện..." oninput="filterChatSessions(this.value)"/>
+                </div>
+                <div class="history-list" id="history-list-container">
+                </div>
+            </div>
+            <div class="embedded-chat-container">
+                <div class="chat-window-header">
+                    <span><i class="ri-robot-2-line"></i> AI - Hỗ trợ bài tập chuyên sâu</span>
+                </div>
+                <div class="formula-quick-bar">
+                    <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); display:inline-flex; align-items:center;">Công thức:</span>
+                    <button class="formula-chip" onclick="insertFormula('$$ax^2 + bx + c = 0$$')">Phương trình bậc 2</button>
+                    <button class="formula-chip" onclick="insertFormula('$$\\Delta = b^2 - 4ac$$')">Delta ($\Delta$)</button>
+                    <button class="formula-chip" onclick="insertFormula('$$\\begin{cases} x_1 + x_2 = -\\frac{b}{a} \\\\ x_1 x_2 = \\frac{c}{a} \\end{cases}$$')">Định lý Vi-ét</button>
+                    <button class="formula-chip" onclick="insertFormula('$$\\sin^2\\alpha + \\cos^2\\alpha = 1$$')">Lượng giác cơ bản</button>
+                    <button class="formula-chip" onclick="insertFormula('$$A = \\sqrt{B} \\iff \\begin{cases} B \\ge 0 \\\\ A \\ge 0 \\\\ A^2 = B \\end{cases}$$')">Phương trình chứa căn</button>
+                </div>
+                <div class="chat-window-body" id="chat-window-body">
+                    <div class="chat-message-wrapper ai">
+                        <div class="chat-message ai">Chào bạn! Tôi là trợ lý AI chuyên nghiệp. Hãy gửi bài tập khó để tôi phân tích chi tiết nhé!</div>
+                        <div class="ai-actions-bar">
+                            <button class="ai-action-btn" onclick="copyAiMessage(this)"><i class="ri-file-copy-line"></i> Sao chép</button>
+                            <button class="ai-action-btn" onclick="speakAiMessage(this)"><i class="ri-volume-up-line"></i> Đọc to</button>
+                            <button class="ai-action-btn" onclick="rateAiMessage(this, 'like')" title="Thích"><i class="ri-thumb-up-line"></i></button>
+                            <button class="ai-action-btn" onclick="rateAiMessage(this, 'dislike')" title="Không thích"><i class="ri-thumb-down-line"></i></button>
+                            <button class="ai-action-btn" onclick="regenerateAiMessage(this)" title="Tạo lại phản hồi"><i class="ri-restart-line"></i> Tạo lại</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="stop-gen-btn" id="stop-gen-btn" onclick="stopGeneration()"><i class="ri-stop-circle-line"></i> Dừng phản hồi</button>
+                <div class="chat-window-footer">
+                    <div class="plus-popup-menu" id="plus-popup-menu">
+                        <button class="plus-popup-item" onclick="triggerFileInput('image/*')"><i class="ri-image-line" style="color: var(--accent); font-size: 1.1rem;"></i> Tải ảnh lên</button>
+                        <button class="plus-popup-item" onclick="openWebcamModal()"><i class="ri-camera-line" style="color: #22c55e; font-size: 1.1rem;"></i> Chụp ảnh trực tiếp</button>
+                        <button class="plus-popup-item" onclick="triggerFileInput('.pdf,.doc,.docx,.txt,.xlsx,.xls')"><i class="ri-file-text-line" style="color: #f59e0b; font-size: 1.1rem;"></i> File tệp đính kèm</button>
+                    </div>
+                    <div class="preview-attachment" id="preview-attachment">
+                        <img id="preview-thumb" src="" alt="preview"/>
+                        <span id="preview-name" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
+                        <i class="ri-close-line" style="cursor:pointer;" onclick="clearAttachment()" title="Xóa tệp đính kèm"></i>
+                    </div>
+                    <div class="chat-input-row">
+                        <input type="file" id="chat-file-input" style="display:none;" onchange="handleFileSelected(event)"/>
+                        <button class="chat-tool-btn" id="plus-toggle-btn" onclick="togglePlusMenu(event)" title="Thêm nội dung"><i class="ri-add-line"></i></button>
+                        <input type="text" class="chat-window-input" id="chat-window-input" placeholder="Nhập vấn đề mà bạn cần giải quyết..." onkeydown="if(event.key === 'Enter') sendEmbeddedChatMessage()"/>
+                        <button class="chat-mic-btn" id="chat-mic-btn" onclick="toggleSpeechRecognition()" title="Ghi âm giọng nói"><i class="ri-mic-line"></i></button>
+                        <button class="chat-send-btn" onclick="sendEmbeddedChatMessage()" title="Gửi tin nhắn"><i class="ri-send-plane-2-fill"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<div class="webcam-modal-overlay" id="webcam-modal">
+    <div class="webcam-modal-box">
+        <h3 style="margin: 0; color: var(--text-main); font-size: 1.1rem;"><i class="ri-camera-line"></i> Chụp ảnh đề bài</h3>
+        <video id="webcam-video" class="webcam-video" autoplay playsinline></video>
+        <canvas id="webcam-canvas" style="display:none;"></canvas>
+        <div class="webcam-actions">
+            <button onclick="closeWebcamModal()" style="flex: 1; background: transparent; color: var(--text-main); border: 1px solid var(--border); padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Hủy</button>
+            <button onclick="captureWebcamImage()" style="flex: 1; background: var(--accent); color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;"><i class="ri-camera-fill"></i> Chụp ảnh</button>
+        </div>
+    </div>
+</div>
+<footer class="site-footer">
+<div class="footer-left-content">
+<p><strong>Lớp 10 Toán 2 - K36</strong></p>
+<p>Trường THPT Chuyên Bến Tre • Nơi lưu trữ kỷ niệm và thành tích học tập.</p>
+<p style="font-size: 0.8rem; margin-top: 6px; color: var(--text-muted);">© 2026 Designed by K36 Math Students.</p>
+</div>
+<div class="footer-right-logos">
+<img alt="Logo THPT Chuyên Bến Tre" class="school-logo" onclick="openLightbox('logocbt.png')" src="logocbt.png" title="Bấm để phóng to logo Trường"/>
+<img alt="Logo 10 Toán 2 K36" class="class-logo" onclick="openLightbox('10_t2_logo.jpeg')" src="10_t2_logo.jpeg" title="Bấm để phóng to logo Lớp"/>
+</div>
+</footer>
+<div class="custom-modal-overlay" id="terms-modal">
+<div class="custom-modal-box" style="max-width: 520px; text-align: left;">
+<div style="font-size: 1.5rem; text-align: center; margin-bottom: 5px;">📜</div>
+<h3 style="color: var(--text-main); margin: 0 0 5px 0; font-size: 1.15rem; text-align: center;">Điều khoản và Quy định sử dụng</h3>
+<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center; margin-bottom: 12px;">Vui lòng cuộn xuống dưới cùng để mở khóa nút đồng ý.</p>
+<div id="index-terms-scroll" style="height: 200px; overflow-y: auto; border: 1px solid var(--border); padding: 12px; border-radius: 8px; background: var(--bg-main, #f9f9f9); font-size: 0.83rem; line-height: 1.45; color: var(--text-main); margin-bottom: 15px;">
+<p><b>ĐIỀU KHOẢN VÀ QUY ĐỊNH ĐĂNG TẢI NỘI DUNG</b></p>
+<p>Khi truy cập, sử dụng và đăng tải nội dung vào khu vực nội bộ của website 10 Toán 2 K36, thành viên đồng ý tuân thủ tuyệt đối các quy định về an toàn thông tin và văn hóa ứng xử trực tuyến. Cụ thể, các hành vi sau đây <b>bị nghiêm cấm tuyệt đối</b>:</p>
+<br/>
+<p><b>1. Đăng tải nội dung trái pháp luật và thuần phong mỹ tục:</b> Phát tán, chia sẻ hoặc lưu trữ hình ảnh, video, tài liệu có nội dung bạo lực, đồi trụy, phản động, xuyên tạc lịch sử, vi phạm pháp luật nước Cộng hòa Xã hội Chủ nghĩa Việt Nam hoặc trái với đạo đức xã hội và thuần phong mỹ tục của người Việt Nam.</p>
+<p><b>2. Xâm phạm quyền riêng tư và danh dự cá nhân:</b> Đăng tải hình ảnh, thông tin cá nhân, bài viết hoặc bình luận mang tính chất xúc phạm, lăng mạ, bôi nhọ danh dự, nhân phẩm của các thành viên trong lớp, thầy cô giáo hoặc bất kỳ cá nhân, tổ chức nào khác (bao gồm cả việc cố ý chia sẻ hình ảnh riêng tư khi chưa có sự đồng ý).</p>
+<p><b>3. Vi phạm bản quyền sở hữu trí tuệ:</b> Đăng tải các tài liệu học tập, sách, đề thi, phần mềm hoặc các sản phẩm sáng tạo thuộc bản quyền của tác giả, tổ chức khác mà chưa có sự cho phép hoặc trích nguồn rõ ràng, gây ảnh hưởng tiêu cực đến bản quyền tác giả.</p>
+<p><b>4. Phá hoại hệ thống và bảo mật website:</b> Cố ý thực hiện các hành vi xâm nhập trái phép, phá hoại mã nguồn, phát tán mã độc (virus, spyware), can thiệp vào cơ sở dữ liệu chung, hoặc lợi dụng quyền hạn sau khi đăng nhập để xóa, chỉnh sửa, làm sai lệch dữ liệu học tập và hình ảnh kỷ niệm của tập thể lớp.</p>
+<p><b>5. Đăng tải thông tin sai lệch (Fake News):</b> Cố tình tạo ra, phát tán hoặc chia sẻ các thông tin giả mạo, sai sự thật liên quan đến hoạt động của lớp học, nhà trường hoặc cá nhân các thành viên nhằm mục đích gây hoang mang, hiểu lầm hoặc mất đoàn kết nội bộ.</p>
+<p><b>6. Lạm dụng không gian chung:</b> Đăng tải các nội dung rác, spam quảng cáo thương mại, nội dung không liên quan đến mục đích học tập và lưu trữ kỷ niệm chung của tập thể 10 Toán 2.</p>
+<br/>
+<p><b>Hình thức xử lý:</b> Bất kỳ thành viên nào vi phạm các điều khoản trên sẽ bị thu hồi quyền truy cập khu vực nội bộ ngay lập tức, gỡ bỏ toàn bộ nội dung vi phạm, đồng thời chịu hoàn toàn trách nhiệm trước tập thể lớp và nhà trường tùy theo mức độ vi phạm.</p>
+</div>
+<div style="display: flex; gap: 10px;">
+<button onclick="closeTermsModal()" style="flex: 1; background: transparent; color: var(--text-main); border: 1px solid var(--border); padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Hủy</button>
+<button disabled="" id="index-agree-btn" onclick="acceptIndexTerms()" style="flex: 1; background: #ccc; color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: 600; cursor: not-allowed;">Tôi đã đọc và Đồng ý</button>
+</div>
+</div>
+</div>
+<div class="custom-modal-overlay" id="login-modal">
+<div class="custom-modal-box">
+<div style="font-size: 2rem; margin-bottom: 8px;">🔐</div>
+<h3 style="color: var(--text-main); margin: 0 0 6px 0; font-size: 1.15rem;">Khu vực nội bộ lớp</h3>
+<p style="color: var(--text-muted); font-size: 0.85rem; margin: 0 0 16px 0;">Nhập mật khẩu để tiếp tục truy cập</p>
+<input id="modal-pass-input" onkeydown="if(event.key === 'Enter') submitLogin()" placeholder="Mật khẩu lớp..." style="width: 100%; background: var(--card-bg); border: 1px solid var(--border); padding: 10px 12px; border-radius: 10px; color: var(--text-main); outline: none; font-size: 0.95rem; box-sizing: border-box; margin-bottom: 12px;" type="password"/>
+<div id="modal-err" style="color: #ef4444; font-size: 0.8rem; margin-bottom: 12px; display: none;">Sai mật khẩu rồi bạn ơi!</div>
+<div style="display: flex; gap: 10px;">
+<button onclick="closeLoginModal()" style="flex: 1; background: transparent; color: var(--text-main); border: 1px solid var(--border); padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Hủy</button>
+<button onclick="submitLogin()" style="flex: 1; background: var(--accent); color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Xác nhận</button>
+</div>
+</div>
+</div>
+<div class="custom-modal-overlay" id="logout-modal">
+<div class="custom-modal-box">
+<div style="font-size: 2rem; margin-bottom: 8px;">⚠️</div>
+<h3 style="color: var(--text-main); margin: 0 0 8px 0; font-size: 1.15rem;">Xác nhận đăng xuất</h3>
+<p style="color: var(--text-muted); font-size: 0.9rem; margin: 0 0 20px 0;">Bạn có chắc chắn muốn đăng xuất khỏi khu vực nội bộ không?</p>
+<div style="display: flex; gap: 10px;">
+<button onclick="closeLogoutModal()" style="flex: 1; background: transparent; color: var(--text-main); border: 1px solid var(--border); padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Hủy</button>
+<button onclick="confirmLogout()" style="flex: 1; background: #ef4444; color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Đăng xuất</button>
+</div>
+</div>
+</div>
+<div id="lightbox-modal" onclick="closeLightbox()">
+<img alt="Phóng to ảnh" id="lightbox-img" src=""/>
+</div>
+<iframe allow="autoplay" src="music.html" style="position: fixed; bottom: 20px; right: 20px; width: 150px; height: 50px; border: none; z-index: 9999; background: transparent;"></iframe>
+<script src="config.js"></script>
+<script>
+        const CORRECT_PASS = "10toan2k36";
+        let currentAbortController = null;
+        let attachedFile = null;
+        let extractedPdfText = "";
+        let recognition = null;
+        let isRecording = false;
+        let webcamStream = null;
+        let chatSessions = JSON.parse(localStorage.getItem('k36_solver_sessions')) || [];
+        let currentSessionId = localStorage.getItem('k36_active_session_id') || null;
+        let isSendingMessage = false; 
+        let currentKeyIndex = 0;
+        function getNextApiKey() {
+            const key = GEMINI_API_KEYS[currentKeyIndex];
+            currentKeyIndex = (currentKeyIndex + 1) % GEMINI_API_KEYS.length;
+            return key;
+        }
+        async function callGeminiProWithRetry(userMessage, imageBase64 = null, maxAttempts = 27) {
+            let attempts = 0;
+            let parts = [];
+            if (userMessage) {
+                parts.push({ text: userMessage });
+            }
+            if (imageBase64) {
+                const base64Data = imageBase64.split(',')[1];
+                const mimeType = imageBase64.substring(imageBase64.indexOf(":") + 1, imageBase64.indexOf(";"));
+                parts.push({
+                    inline_data: {
+                        mime_type: mimeType,
+                        data: base64Data
+                    }
+                });
+            }
+            const payload = {
+                contents: [{ parts: parts }],
+                system_instruction: {
+                    parts: [{ text: "Mày là trợ lý học tập AI chuyên nghiệp. Khi viết công thức toán học, căn thức, phân số hoặc phương trình, LUÔN LUÔN bọc trong LaTeX chuẩn (dùng $ cho inline và $$ cho phương trình độc lập, ví dụ $\\sqrt{x}$, $\\frac{a}{b}$). Tư duy logic sắc bén, giải thích chi tiết và chính xác tuyệt đối." }]
+                }
+            };
+            while (attempts < maxAttempts) {
+                const apiKey = getNextApiKey();
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
+                try {
+                    const response = await fetch(url, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) {
+                        const errData = await response.json().catch(() => ({}));
+                        const errMessage = errData.error?.message || '';
+                        const errStatus = response.status;
+                        if (errStatus === 429 || errMessage.toLowerCase().includes('quota') || errMessage.toLowerCase().includes('rate limit') || errStatus >= 500) {
+                            console.warn(`Key hiện tại gặp lỗi quá hạn mức hoặc quá tải (${errStatus}). Đang chuyển sang key dự phòng tiếp theo...`);
+                            attempts++;
+                            continue; 
+                        }
+                        throw new Error(errMessage || `Lỗi HTTP: ${errStatus}`);
+                    }
+                    const data = await response.json();
+                    if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts) {
+                        return data.candidates[0].content.parts[0].text;
+                    } else {
+                        throw new Error("Phản hồi từ API không hợp lệ!");
+                    }
+                } catch (err) {
+                    attempts++;
+                    if (attempts >= maxAttempts) {
+                        throw err;
+                    }
+                }
+            }
+            throw new Error("Tất cả các API key đều đã vượt quá hạn mức hoặc không phản hồi. Vui lòng thử lại sau!");
+        }
+        window.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('class_unlogged') === 'true' || localStorage.getItem('class_unlocked') === 'true') {
+                updateAuthButtonState(true);
+            } else {
+                updateAuthButtonState(false);
+            }
+            initChatSessions();
+            document.addEventListener('click', (e) => {
+                const menu = document.getElementById('plus-popup-menu');
+                const btn = document.getElementById('plus-toggle-btn');
+                if (menu && btn && !menu.contains(e.target) && !btn.contains(e.target)) {
+                    menu.classList.remove('show');
+                }
+                if (!e.target.closest('.btn-options') && !e.target.closest('.options-menu')) {
+                    document.querySelectorAll('.options-menu').forEach(m => m.classList.remove('show'));
+                }
+            });
+            const chatInput = document.getElementById('chat-window-input');
+            if (chatInput) {
+                chatInput.addEventListener('paste', (e) => {
+                    const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+                    for (let item of items) {
+                        if (item.type.indexOf('image') === 0) {
+                            e.preventDefault();
+                            const blob = item.getAsFile();
+                            if (blob) {
+                                const file = new File([blob], "pasted-image.png", { type: blob.type });
+                                handleFileObject(file);
+                            }
+                            break;
+                        }
+                    }
+                });
+            }
+        });
+        function renderMathIcons() {
+            if (typeof renderMathInElement === 'function') {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+        function insertFormula(formulaText) {
+            const input = document.getElementById('chat-window-input');
+            const startPos = input.selectionStart;
+            const endPos = input.selectionEnd;
+            input.value = input.value.substring(0, startPos) + formulaText + input.value.substring(endPos, input.value.length);
+            input.focus();
+            input.selectionStart = startPos + formulaText.length;
+            input.selectionEnd = startPos + formulaText.length;
+        }
+        function speakAiMessage(btn) {
+            const wrapper = btn.closest('.chat-message-wrapper');
+            const msgBox = wrapper.querySelector('.chat-message');
+            const textToSpeak = msgBox.innerText;
+            if (!('speechSynthesis' in window)) {
+                showToast('Trình duyệt của bạn không hỗ trợ tính năng đọc văn bản!');
+                return;
+            }
+            if (window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+            }
+            const utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.lang = 'vi-VN';
+            utterance.rate = 1.0;
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="ri-volume-mute-line" style="color: #ef4444;"></i> Dừng đọc';
+            btn.onclick = () => {
+                window.speechSynthesis.cancel();
+                btn.innerHTML = originalHTML;
+                btn.onclick = () => speakAiMessage(btn);
+            };
+            utterance.onend = () => {
+                btn.innerHTML = originalHTML;
+                btn.onclick = () => speakAiMessage(btn);
+            };
+            window.speechSynthesis.speak(utterance);
+        }
+        function rateAiMessage(btn, type) {
+            const wrapper = btn.closest('.ai-actions-bar');
+            const likeBtn = wrapper.querySelector('[title="Thích"], [onclick*="like"]');
+            const dislikeBtn = wrapper.querySelector('[title="Không thích"], [onclick*="dislike"]');
+            let feedbackToast = wrapper.querySelector('.feedback-toast');
+            if (!feedbackToast) {
+                feedbackToast = document.createElement('span');
+                feedbackToast.className = 'feedback-toast';
+                feedbackToast.style.cssText = 'font-size: 0.78rem; font-style: italic; margin-left: 6px; transition: opacity 0.3s;';
+                wrapper.appendChild(feedbackToast);
+            }
+            if (type === 'like') {
+                const isActive = btn.classList.toggle('active-rate');
+                btn.style.color = isActive ? '#22c55e' : '';
+                btn.style.borderColor = isActive ? '#22c55e' : '';
+                if (dislikeBtn) {
+                    dislikeBtn.classList.remove('active-rate');
+                    dislikeBtn.style.color = '';
+                    dislikeBtn.style.borderColor = '';
+                }
+                if (isActive) {
+                    feedbackToast.style.color = '#22c55e';
+                    feedbackToast.textContent = 'Cảm ơn bạn đã thích phản hồi này! ❤️';
+                } else {
+                    feedbackToast.textContent = '';
+                }
+            } else if (type === 'dislike') {
+                const isActive = btn.classList.toggle('active-rate');
+                btn.style.color = isActive ? '#ef4444' : '';
+                btn.style.borderColor = isActive ? '#ef4444' : '';
+                if (likeBtn) {
+                    likeBtn.classList.remove('active-rate');
+                    likeBtn.style.color = '';
+                    likeBtn.style.borderColor = '';
+                }
+                if (isActive) {
+                    feedbackToast.style.color = '#ef4444';
+                    feedbackToast.textContent = 'Cảm ơn góp ý, mình sẽ cải thiện câu trả lời này nhé! 🙇‍♂️';
+                } else {
+                    feedbackToast.textContent = '';
+                }
+            }
+        }
+        async function regenerateAiMessage(btn) {
+            const messageWrapper = btn.closest('.chat-message-wrapper');
+            let prevWrapper = messageWrapper.previousElementSibling;
+            while (prevWrapper && !prevWrapper.classList.contains('user')) {
+                prevWrapper = prevWrapper.previousElementSibling;
+            }
+            if (!prevWrapper) {
+                showToast('Không tìm thấy câu hỏi tương ứng để tạo lại!');
+                return;
+            }
+            const userText = prevWrapper.querySelector('.chat-message').innerText;
+            messageWrapper.remove();
+            const inputField = document.getElementById('chat-window-input');
+            inputField.value = userText;
+            prevWrapper.remove();
+            await sendEmbeddedChatMessage();
+        }
+        async function openWebcamModal() {
+            document.getElementById('plus-popup-menu').classList.remove('show');
+            const modal = document.getElementById('webcam-modal');
+            const video = document.getElementById('webcam-video');
+            modal.style.display = 'flex';
+            try {
+                webcamStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+                video.srcObject = webcamStream;
+            } catch (err) {
+                showToast('Không thể truy cập vào camera của thiết bị!');
+                modal.style.display = 'none';
+            }
+        }
+        function closeWebcamModal() {
+            const modal = document.getElementById('webcam-modal');
+            modal.style.display = 'none';
+            if (webcamStream) {
+                webcamStream.getTracks().forEach(track => track.stop());
+                webcamStream = null;
+            }
+        }
+        function captureWebcamImage() {
+            const video = document.getElementById('webcam-video');
+            const canvas = document.getElementById('webcam-canvas');
+            canvas.width = video.videoWidth || 640;
+            canvas.height = video.videoHeight || 480;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            canvas.toBlob((blob) => {
+                if (blob) {
+                    const file = new File([blob], "webcam-capture.jpg", { type: "image/jpeg" });
+                    handleFileObject(file);
+                }
+                closeWebcamModal();
+            }, 'image/jpeg', 0.9);
+        }
+        function initChatSessions() {
+            if (chatSessions.length === 0) {
+                startNewChatSession();
+            } else {
+                if (!currentSessionId || !chatSessions.find(s => s.id === currentSessionId)) {
+                    currentSessionId = chatSessions[0].id;
+                }
+                loadSession(currentSessionId);
+            }
+            renderSessionList();
+        }
+        function startNewChatSession() {
+            const newSession = {
+                id: 'session_' + Date.now(),
+                title: 'Cuộc trò chuyện mới',
+                pinned: false,
+                htmlContent: `
+                    <div class="chat-message-wrapper ai">
+                        <div class="chat-message ai">Chào bạn! Tôi là trợ lý AI. Hãy gửi bài tập khó để tôi phân tích chi tiết nhé!</div>
+                        <div class="ai-actions-bar">
+                            <button class="ai-action-btn" onclick="copyAiMessage(this)"><i class="ri-file-copy-line"></i> Sao chép</button>
+                            <button class="ai-action-btn" onclick="speakAiMessage(this)"><i class="ri-volume-up-line"></i> Đọc to</button>
+                            <button class="ai-action-btn" onclick="rateAiMessage(this, 'like')" title="Thích"><i class="ri-thumb-up-line"></i></button>
+                            <button class="ai-action-btn" onclick="rateAiMessage(this, 'dislike')" title="Không thích"><i class="ri-thumb-down-line"></i></button>
+                            <button class="ai-action-btn" onclick="regenerateAiMessage(this)" title="Tạo lại phản hồi"><i class="ri-restart-line"></i> Tạo lại</button>
+                        </div>
+                    </div>
+                `
+            };
+            chatSessions.unshift(newSession);
+            currentSessionId = newSession.id;
+            saveSessionsToLocalStorage();
+            renderSessionList();
+            loadSession(currentSessionId);
+        }
+        function saveSessionsToLocalStorage() {
+            localStorage.setItem('k36_solver_sessions', JSON.stringify(chatSessions));
+            localStorage.setItem('k36_active_session_id', currentSessionId);
+        }
+        function renderSessionList(filterKeyword = "") {
+            const container = document.getElementById('history-list-container');
+            if (!container) return;
+            container.innerHTML = '';
+            const filtered = chatSessions.filter(s => s.title.toLowerCase().includes(filterKeyword.toLowerCase()));
+            filtered.forEach(session => {
+                const item = document.createElement('div');
+                item.className = `history-item ${session.id === currentSessionId ? 'active' : ''}`;
+                item.innerHTML = `
+                    <div class="chat-item-text" onclick="switchSession('${session.id}')">
+                        <i class="${session.pinned ? 'ri-pushpin-fill' : 'ri-chat-history-line'}" style="${session.pinned ? 'color: var(--accent);' : ''}"></i> 
+                        <span>${session.title}</span>
+                    </div>
+                    <button class="btn-options" onclick="toggleChatOptionsMenu(event, '${session.id}')"><i class="ri-more-fill"></i></button>
+                    <div class="options-menu" id="menu_${session.id}">
+                        <button class="option-item" onclick="shareChatSession(event, '${session.id}')"><i class="ri-share-line"></i> Chia sẻ</button>
+                        <button class="option-item" onclick="togglePinSession(event, '${session.id}')"><i class="ri-pushpin-line"></i> ${session.pinned ? 'Bỏ ghim' : 'Ghim'}</button>
+                        <button class="option-item" onclick="renameChatSession(event, '${session.id}')"><i class="ri-pencil-line"></i> Đổi tên</button>
+                        <button class="option-item delete" onclick="deleteChatSession(event, '${session.id}')"><i class="ri-delete-bin-line"></i> Xóa</button>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+        function switchSession(sessionId) {
+            currentSessionId = sessionId;
+            saveSessionsToLocalStorage();
+            loadSession(currentSessionId);
+            renderSessionList(document.getElementById('chat-search-input').value);
+        }
+        function filterChatSessions(keyword) {
+            renderSessionList(keyword);
+        }
+        function toggleChatOptionsMenu(event, sessionId) {
+            event.stopPropagation();
+            document.querySelectorAll('.options-menu').forEach(m => {
+                if (m.id !== 'menu_' + sessionId) m.classList.remove('show');
+            });
+            const menu = document.getElementById('menu_' + sessionId);
+            if (menu) menu.classList.toggle('show');
+        }
+        function shareChatSession(event, sessionId) {
+            event.stopPropagation();
+            document.getElementById('menu_' + sessionId).classList.remove('show');
+            const session = chatSessions.find(s => s.id === sessionId);
+            if (session) {
+                const shareText = `Đoạn chat: ${session.title} tại Giải Bài Tập AI - 10 Toán 2 K36`;
+                navigator.clipboard.writeText(shareText).then(() => {
+                    showToast('Đã sao chép thông tin đoạn chat vào bảng tạm!');
+                });
+            }
+        }
+        function togglePinSession(event, sessionId) {
+            event.stopPropagation();
+            document.getElementById('menu_' + sessionId).classList.remove('show');
+            const session = chatSessions.find(s => s.id === sessionId);
+            if (session) {
+                session.pinned = !session.pinned;
+                chatSessions.sort((a, b) => (b.pinned === true) - (a.pinned === true));
+                saveSessionsToLocalStorage();
+                renderSessionList(document.getElementById('chat-search-input').value);
+            }
+        }
+        function renameChatSession(event, sessionId) {
+            event.stopPropagation();
+            document.getElementById('menu_' + sessionId).classList.remove('show');
+            const session = chatSessions.find(s => s.id === sessionId);
+            if (session) {
+                const newTitle = prompt('Nhập tên mới cho cuộc trò chuyện:', session.title);
+                if (newTitle && newTitle.trim() !== '') {
+                    session.title = newTitle.trim();
+                    saveSessionsToLocalStorage();
+                    renderSessionList(document.getElementById('chat-search-input').value);
+                }
+            }
+        }
+        function deleteChatSession(event, sessionId) {
+            event.stopPropagation();
+            document.getElementById('menu_' + sessionId).classList.remove('show');
+            if (chatSessions.length <= 1) {
+                showToast('Bạn phải giữ lại ít nhất một cuộc trò chuyện!');
+                return;
+            }
+            if (confirm('Bạn có chắc chắn muốn xóa cuộc trò chuyện này không?')) {
+                chatSessions = chatSessions.filter(s => s.id !== sessionId);
+                if (currentSessionId === sessionId) {
+                    currentSessionId = chatSessions[0].id;
+                }
+                saveSessionsToLocalStorage();
+                renderSessionList(document.getElementById('chat-search-input').value);
+                loadSession(currentSessionId);
+            }
+        }
+        function loadSession(sessionId) {
+            const session = chatSessions.find(s => s.id === sessionId);
+            const chatBody = document.getElementById('chat-window-body');
+            if (session && chatBody) {
+                chatBody.innerHTML = session.htmlContent;
+                renderMathIcons();
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }
+        }
+        function updateCurrentSessionContent() {
+            const chatBody = document.getElementById('chat-window-body');
+            const session = chatSessions.find(s => s.id === currentSessionId);
+            if (session && chatBody) {
+                session.htmlContent = chatBody.innerHTML;
+                const firstUserMsg = chatBody.querySelector('.chat-message-wrapper.user .chat-message');
+                if (firstUserMsg && session.title === 'Cuộc trò chuyện mới') {
+                    let cleanText = firstUserMsg.innerText.replace(/\n/g, ' ');
+                    if (cleanText.length > 25) cleanText = cleanText.substring(0, 25) + '...';
+                    session.title = cleanText;
+                }
+                saveSessionsToLocalStorage();
+                renderSessionList(document.getElementById('chat-search-input').value);
+            }
+        }
+        function togglePlusMenu(event) {
+            event.stopPropagation();
+            const menu = document.getElementById('plus-popup-menu');
+            menu.classList.toggle('show');
+        }
+        function triggerFileInput(acceptType) {
+            const fileInput = document.getElementById('chat-file-input');
+            fileInput.accept = acceptType;
+            fileInput.click();
+            document.getElementById('plus-popup-menu').classList.remove('show');
+        }
+        async function handleFileSelected(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            await handleFileObject(file);
+        }
+        async function handleFileObject(file) {
+            attachedFile = file;
+            extractedPdfText = "";
+            const preview = document.getElementById('preview-attachment');
+            const thumb = document.getElementById('preview-thumb');
+            const name = document.getElementById('preview-name');
+            name.textContent = file.name;
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    thumb.src = e.target.result;
+                    preview.style.display = 'flex';
+                };
+                reader.readAsDataURL(file);
+            } else if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
+                thumb.src = "https://cdn-icons-png.flaticon.com/512/337/337946.png";
+                preview.style.display = 'flex';
+                showToast('Đang đọc và bóc tách nội dung file PDF...');
+                try {
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                    let fullText = "";
+                    for (let i = 1; i <= pdfDoc.numPages; i++) {
+                        const page = await pdfDoc.getPage(i);
+                        const textContent = await page.getTextContent();
+                        const pageText = textContent.items.map(item => item.str).join(' ');
+                        fullText += `--- Trang ${i} ---\n` + pageText + "\n";
+                    }
+                    extractedPdfText = fullText;
+                    showToast('Đã trích xuất xong toàn bộ nội dung PDF! 🚀');
+                } catch (err) {
+                    console.error("Lỗi đọc PDF:", err);
+                    showToast('Không thể bóc tách nội dung PDF này!');
+                }
+            } else {
+                thumb.src = "https://cdn-icons-png.flaticon.com/512/337/337946.png";
+                preview.style.display = 'flex';
+            }
+        }
+        function clearAttachment() {
+            attachedFile = null;
+            extractedPdfText = "";
+            document.getElementById('preview-attachment').style.display = 'none';
+            document.getElementById('chat-file-input').value = '';
+        }
+        function toggleSpeechRecognition() {
+            const micBtn = document.getElementById('chat-mic-btn');
+            const inputField = document.getElementById('chat-window-input');
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                showToast('Trình duyệt của bạn không hỗ trợ tính năng nhận diện giọng nói!');
+                return;
+            }
+            if (isRecording) {
+                if (recognition) recognition.stop();
+                return;
+            }
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.lang = 'vi-VN';
+            recognition.interimResults = true;
+            recognition.continuous = false;
+            recognition.onstart = () => {
+                isRecording = true;
+                micBtn.classList.add('recording');
+                micBtn.title = "Đang nghe... (Bấm để dừng)";
+            };
+            recognition.onresult = (event) => {
+                let transcript = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    transcript += event.results[i][0].transcript;
+                }
+                inputField.value = transcript;
+            };
+            recognition.onerror = () => { stopSpeechUI(); };
+            recognition.onend = () => { stopSpeechUI(); };
+            recognition.start();
+        }
+        function stopSpeechUI() {
+            isRecording = false;
+            const micBtn = document.getElementById('chat-mic-btn');
+            if (micBtn) {
+                micBtn.classList.remove('recording');
+                micBtn.title = "Ghi âm giọng nói";
+            }
+        }
+        function copyAiMessage(btn) {
+            const wrapper = btn.closest('.chat-message-wrapper');
+            const msgBox = wrapper.querySelector('.chat-message');
+            const textToCopy = msgBox.innerText;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '<i class="ri-check-line" style="color: #22c55e;"></i> Đã chép';
+                setTimeout(() => { btn.innerHTML = originalHTML; }, 2000);
+            });
+        }
+        function stopGeneration() {
+            if (currentAbortController) {
+                currentAbortController.abort();
+                currentAbortController = null;
+            }
+            document.getElementById('stop-gen-btn').style.display = 'none';
+        }
+        async function sendEmbeddedChatMessage() {
+            if (isSendingMessage) {
+                showToast('Bạn đang gửi tin nhắn quá nhanh, vui lòng từ từ nhé! 🕒');
+                return;
+            }
+            const input = document.getElementById('chat-window-input');
+            const body = document.getElementById('chat-window-body');
+            const stopBtn = document.getElementById('stop-gen-btn');
+            let text = input.value.trim();
+            if (!text && !attachedFile) return;
+            isSendingMessage = true;
+            let finalPromptText = text;
+            if (extractedPdfText) {
+                finalPromptText = `[Nội dung tài liệu PDF đính kèm:\n${extractedPdfText}\n]\n\nYêu cầu của tôi: ${text}`;
+            }
+            let imageBase64Data = null;
+            const userWrapper = document.createElement('div');
+            userWrapper.className = 'chat-message-wrapper user';
+            const userMsg = document.createElement('div');
+            userMsg.className = 'chat-message user';
+            let displayHtml = text.replace(/\n/g, '<br>');
+            if (attachedFile) {
+                if (attachedFile.type.startsWith('image/')) {
+                    imageBase64Data = await new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onload = (e) => resolve(e.target.result);
+                        reader.readAsDataURL(attachedFile);
+                    });
+                    userMsg.innerHTML = `<img src="${imageBase64Data}" style="max-width:200px; border-radius:8px; display:block; margin-bottom:6px;"/><br>` + displayHtml;
+                } else {
+                    userMsg.innerHTML = `📎 [Tệp: ${attachedFile.name}]<br>` + displayHtml;
+                }
+            } else {
+                userMsg.innerHTML = displayHtml;
+            }
+            userWrapper.appendChild(userMsg);
+            body.appendChild(userWrapper);
+            input.value = '';
+            clearAttachment();
+            body.scrollTop = body.scrollHeight;
+            const aiWrapper = document.createElement('div');
+            aiWrapper.className = 'chat-message-wrapper ai';
+            const aiMsg = document.createElement('div');
+            aiMsg.className = 'chat-message ai';
+            aiMsg.textContent = 'Đang phân tích...';
+            aiWrapper.appendChild(aiMsg);
+            const actionsBar = document.createElement('div');
+            actionsBar.className = 'ai-actions-bar';
+            actionsBar.innerHTML = `
+                <button class="ai-action-btn" onclick="copyAiMessage(this)"><i class="ri-file-copy-line"></i> Sao chép</button>
+                <button class="ai-action-btn" onclick="speakAiMessage(this)"><i class="ri-volume-up-line"></i> Đọc to</button>
+                <button class="ai-action-btn" onclick="rateAiMessage(this, 'like')" title="Thích"><i class="ri-thumb-up-line"></i></button>
+                <button class="ai-action-btn" onclick="rateAiMessage(this, 'dislike')" title="Không thích"><i class="ri-thumb-down-line"></i></button>
+                <button class="ai-action-btn" onclick="regenerateAiMessage(this)" title="Tạo lại phản hồi"><i class="ri-restart-line"></i> Tạo lại</button>
+            `;
+            aiWrapper.appendChild(actionsBar);
+            body.appendChild(aiWrapper);
+            body.scrollTop = body.scrollHeight;
+            stopBtn.style.display = 'flex';
+            try {
+                const aiResponseText = await callGeminiProWithRetry(finalPromptText, imageBase64Data);
+                aiMsg.innerHTML = marked.parse(aiResponseText);
+                renderMathIcons();
+                body.scrollTop = body.scrollHeight;
+            } catch (err) {
+                aiMsg.textContent = "Xin lỗi, đã xảy ra lỗi kết nối hoặc vượt hạn mức: " + err.message;
+            } finally {
+                stopBtn.style.display = 'none';
+                updateCurrentSessionContent();
+                setTimeout(() => {
+                    isSendingMessage = false;
+                }, 1500);
+            }
+        }
+        function handleAuthNavAction() {
+            if (localStorage.getItem('class_unlocked') === 'true') {
+                document.getElementById('logout-modal').style.display = 'flex';
+            } else {
+                const modal = document.getElementById('terms-modal');
+                const scrollBox = document.getElementById('index-terms-scroll');
+                const agreeBtn = document.getElementById('index-agree-btn');
+                document.getElementById('login-modal').style.display = 'none';
+                document.getElementById('logout-modal').style.display = 'none';
+                modal.style.display = 'flex';
+                if (scrollBox) scrollBox.scrollTop = 0;
+                if (agreeBtn) {
+                    agreeBtn.disabled = true;
+                    agreeBtn.style.background = '#ccc';
+                    agreeBtn.style.cursor = 'not-allowed';
+                }
+            }
+        }
+        const indexScrollBox = document.getElementById('index-terms-scroll');
+        const indexAgreeBtn = document.getElementById('index-agree-btn');
+        if (indexScrollBox) {
+            indexScrollBox.addEventListener('scroll', () => {
+                const isAtBottom = indexScrollBox.scrollHeight - indexScrollBox.scrollTop <= indexScrollBox.clientHeight + 15;
+                if (isAtBottom && indexAgreeBtn) {
+                    indexAgreeBtn.disabled = false;
+                    indexAgreeBtn.style.background = 'var(--accent)';
+                    indexAgreeBtn.style.cursor = 'pointer';
+                }
+            });
+        }
+        function closeTermsModal() { document.getElementById('terms-modal').style.display = 'none'; }
+        function acceptIndexTerms() {
+            closeTermsModal();
+            document.getElementById('modal-pass-input').value = '';
+            document.getElementById('modal-err').style.display = 'none';
+            document.getElementById('login-modal').style.display = 'flex';
+            setTimeout(() => document.getElementById('modal-pass-input').focus(), 100);
+        }
+        function closeLoginModal() { document.getElementById('login-modal').style.display = 'none'; }
+        function submitLogin() {
+            const passVal = document.getElementById('modal-pass-input').value;
+            if (passVal === CORRECT_PASS) {
+                localStorage.setItem('class_unlocked', 'true');
+                closeLoginModal();
+                updateAuthButtonState(true);
+                location.reload();
+            } else {
+                document.getElementById('modal-err').style.display = 'block';
+            }
+        }
+        function closeLogoutModal() { document.getElementById('logout-modal').style.display = 'none'; }
+        function confirmLogout() {
+            localStorage.removeItem('class_unlocked');
+            updateAuthButtonState(false);
+            location.reload();
+        }
+        function updateAuthButtonState(isLoggedIn) {
+            const btn = document.getElementById('auth-nav-btn');
+            if (!btn) return;
+            if (isLoggedIn) {
+                btn.textContent = '🚪 Đăng xuất';
+                btn.className = 'auth-nav-btn logout-state';
+            } else {
+                btn.textContent = '🔑 Đăng nhập';
+                btn.className = 'auth-nav-btn';
+            }
+        }
+        function openLightbox(url) {
+            document.getElementById('lightbox-img').src = url;
+            document.getElementById('lightbox-modal').style.display = 'flex';
+        }
+        function closeLightbox() { document.getElementById('lightbox-modal').style.display = 'none'; }
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const body = document.body;
+        if (localStorage.getItem('theme') === 'light') {
+            body.classList.add('light-mode');
+            if (themeToggleBtn) themeToggleBtn.textContent = '☀️ Giao diện';
+        }
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                body.classList.toggle('light-mode');
+                if (body.classList.contains('light-mode')) {
+                    themeToggleBtn.textContent = '☀️ Giao diện';
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    themeToggleBtn.textContent = '🌙 Giao diện';
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+        }
+    </script>
+<script src="js/animation.js"></script>
+<script src="time.js"></script>
+<div id="toastMessage" style="position: fixed; bottom: 20px; right: 20px; background: var(--card-bg); backdrop-filter: var(--backdrop); border: 1px solid var(--accent); color: var(--text-main); padding: 12px 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transform: translateY(100px); opacity: 0; transition: all 0.4s ease; z-index: 9999;">
+    ✨ Thao tác thành công!
+</div>
+<script>
+    function showToast(message = "✨ Thao tác thành công!") {
+        let toast = document.getElementById('toastMessage');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'toastMessage';
+            toast.style.cssText = "position: fixed; bottom: 20px; right: 20px; background: var(--card-bg); backdrop-filter: var(--backdrop); border: 1px solid var(--accent); color: var(--text-main); padding: 12px 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transform: translateY(100px); opacity: 0; transition: all 0.4s ease; z-index: 9999;";
+            document.body.appendChild(toast);
+        }
+        if (typeof message === 'object') {
+            message = JSON.stringify(message);
+        }
+        toast.innerText = message;
+        setTimeout(() => {
+            toast.style.transform = 'translateY(0)';
+            toast.style.opacity = '1';
+        }, 100);
+        setTimeout(() => {
+            toast.style.transform = 'translateY(100px)';
+            toast.style.opacity = '0';
+        }, 3000);
+    }
+</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('Service Worker đăng ký thành công:', reg.scope))
+        .catch(err => console.log('Đăng ký Service Worker thất bại:', err));
+    });
+  }
+</script>
+</body>
+</html>

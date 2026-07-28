@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>10 Toán 2 K36 -  Góc Thành Viên</title><span id="live-clock" style="font-size: 0.85rem; color: var(--text-muted, #ccc); font-weight: 500; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 12px;"></span>
+<link href="css/style.css" rel="stylesheet"/>
+<style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .main-content {
+            flex: 1; 
+        }
+        .card-header-box {
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.8rem;
+        }
+        .card-header-box h2 {
+            margin: 0 0 4px 0;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-main);
+            border: none;
+            padding: 0;
+        }
+        .card-sub-info {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-align: center; 
+        }
+        .sub-tabs {
+            display: flex;
+            gap: 10px;
+            background: rgba(128, 128, 128, 0.05);
+            padding: 6px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+        .sub-tab-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 10px 16px;
+            font-weight: 600;
+            color: var(--text-muted);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .sub-tab-btn.active {
+            background: var(--card-bg);
+            color: var(--accent);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border);
+        }
+        .tab-pane {
+            display: none;
+        }
+        .tab-pane.active {
+            display: block;
+        }
+        .custom-file-upload {
+            border: 2px dashed var(--border);
+            background: rgba(128, 128, 128, 0.02);
+            padding: 16px;
+            text-align: center;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+        }
+        .custom-file-upload:hover {
+            border-color: var(--accent);
+            background: rgba(128, 128, 128, 0.05);
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .gallery-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            cursor: zoom-in;
+            transition: transform 0.3s;
+        }
+        .gallery-item img:hover {
+            transform: scale(1.03);
+        }
+        .gallery-info {
+            padding: 10px;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            word-break: break-word;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .action-btns {
+            display: flex;
+            gap: 5px;
+        }
+        .edit-btn {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .edit-btn:hover {
+            background: #3b82f6;
+            color: #fff;
+        }
+        .delete-btn {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .delete-btn:hover {
+            background: #ef4444;
+            color: #fff;
+        }
+        .badge-status {
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-weight: 600;
+            display: inline-block;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+        .badge-public {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        .badge-private {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+        .item-checkbox {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            z-index: 10;
+            accent-color: var(--accent);
+        }
+        .batch-toolbar {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(128, 128, 128, 0.08);
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
+        }
+        .resource-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .resource-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            position: relative;
+            transition: border-color 0.2s;
+        }
+        .resource-item:hover {
+            border-color: var(--accent);
+        }
+        .resource-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex: 1;
+            min-width: 0;
+        }
+        .file-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+        .file-details {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+        .file-name {
+            font-weight: 600;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .file-meta {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        .resource-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+            margin-left: 10px;
+        }
+        .action-btn-sm {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .download-btn {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+        .download-btn:hover {
+            background: #10b981;
+            color: #fff;
+        }
+        .remove-preview-btn {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: none;
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .remove-preview-btn:hover {
+            background: #ef4444;
+            color: #fff;
+        }
+        .badge-new-inline {
+            font-size: 0.65rem;
+            padding: 1px 5px;
+            border-radius: 4px;
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .auth-nav-btn {
+            background: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .auth-nav-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-1px);
+        }
+        .auth-nav-btn.logout-state {
+            background: rgba(239, 68, 68, 0.08);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+        .auth-nav-btn.logout-state:hover {
+            background: #ef4444;
+            color: #fff;
+        }
+        .logo div {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        .header-class-logo {
+            height: 38px;
+            width: 38px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: rgba(128, 128, 128, 0.05);
+            padding: 2px;
+            border: 1px solid var(--border);
+            cursor: zoom-in;
+            transition: transform 0.2s ease;
+        }
+        .header-class-logo:hover {
+            transform: scale(1.08);
+        }
+        .site-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 30px;
+            border-top: 1px solid var(--border);
+            background: var(--card-bg);
+            flex-shrink: 0;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .footer-left-content {
+            text-align: left;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .footer-left-content p {
+            margin: 4px 0;
+        }
+        .footer-right-logos {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .footer-right-logos img.school-logo {
+            height: 55px;
+            width: auto;
+            object-fit: contain;
+            background: rgba(128, 128, 128, 0.05);
+            padding: 3px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            cursor: zoom-in;
+            transition: transform 0.2s ease;
+        }
+        .footer-right-logos img.class-logo {
+            height: 55px;
+            width: 55px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: rgba(128, 128, 128, 0.05);
+            padding: 3px;
+            border: 1px solid var(--border);
+            cursor: zoom-in;
+            transition: transform 0.2s ease;
+        }
+        .footer-right-logos img:hover {
+            transform: scale(1.08);
+        }
+        .custom-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 2500;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .custom-modal-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 24px;
+            border-radius: 16px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        #lightbox-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            cursor: zoom-out;
+        }
+        #lightbox-modal img {
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .filter-btn {
+            background: var(--card-bg);
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            padding: 6px 14px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+        .filter-btn.active {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+        .custom-dropdown {
+            position: relative;
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px 14px;
+            color: var(--text-main);
+            font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+            box-sizing: border-box;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .custom-dropdown:hover {
+            border-color: var(--accent);
+        }
+        .dropdown-selected {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.95rem;
+        }
+        .dropdown-options-box {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            overflow: hidden;
+            display: none;
+            box-sizing: border-box;
+            backdrop-filter: blur(12px);
+        }
+        .custom-dropdown.active .dropdown-options-box {
+            display: block;
+        }
+        .custom-dropdown.active .dropdown-selected i {
+            transform: rotate(180deg);
+        }
+        .dropdown-option-item {
+            padding: 10px 14px;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            transition: background 0.2s, color 0.2s;
+            border-bottom: 1px solid rgba(128, 128, 128, 0.08);
+        }
+        .dropdown-option-item:last-child {
+            border-bottom: none;
+        }
+        .dropdown-option-item:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+    </style>
+    <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0284c7">
+</head>
+<body>
+<header class="header-nav">
+    <div class="logo">
+        <img alt="Logo 10 Toán 2 K36" class="header-logo-img" onclick="openLightbox('10_t2_logo.jpeg')" src="10_t2_logo.jpeg" title="Bấm để phóng to logo Lớp"/>
+        <h2>10 Toán 2 K36</h2>
+    </div>
+    <nav class="site-nav">
+        <a href="index.html"><i class="ri-home-4-line"></i> Trang Chủ</a>
+        <a href="members.html"><i class="ri-team-line"></i> Thành Viên</a>
+        <a href="achievements.html"><i class="ri-trophy-line"></i> Thành Tích</a>
+        <a href="gallery.html" class="active"><i class="ri-image-line"></i> Thư Viện</a>
+        <a href="about.html"><i class="ri-information-line"></i> Giới Thiệu</a>
+        <a href="feedback.html"><i class="ri-chat-settings-line"></i> Góp Ý</a>
+        <a href="solver.html"><i class="ri-book-open-line"></i> Giải Bài Tập AI</a>
+        <span class="nav-divider"></span>
+        <button class="nav-action-btn theme-btn" id="theme-toggle"><i class="ri-moon-line"></i> Giao diện</button>
+        <button class="nav-action-btn auth-nav-btn" id="auth-nav-btn" onclick="handleAuthNavAction()"><i class="ri-key-line"></i> Đăng nhập</button>
+        <button class="nav-action-btn fx-menu-btn" id="fx-toggle-btn" onclick="toggleMathEffects()"><i class="ri-magic-line"></i> Hiệu ứng: Bật</button>
+    </nav>
+</header>
+<main class="main-content">
+<section class="card">
+<div class="card-header-box" style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+    <h2>Kho Góc Thành Viên</h2>
+    <p class="card-sub-info" style="text-align: center;">Nơi lưu giữ hình ảnh và tài liệu học tập của tập thể 10 Toán 2</p>
+</div>
+<div class="sub-tabs">
+<a class="sub-tab-btn active" href="#images" id="tab-btn-images" onclick="switchTab('images', event)">📷 Khoảnh Khắc Kỷ Niệm</a>
+<a class="sub-tab-btn" href="#documents" id="tab-btn-resources" onclick="switchTab('resources', event)">📚 Tài Liệu Học Tập</a>
+</div>
+<div class="tab-pane active" id="pane-gallery">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px;">
+<div>
+<h3 style="color: var(--accent); margin: 0;">📸 Khoảnh Khắc Kỷ Niệm</h3>
+<p style="color: var(--text-muted); margin: 4px 0 0 0; font-size: 0.9rem;">Hình ảnh hoạt động của lớp.</p>
+</div>
+<div style="display: flex; gap: 8px; align-items: center;">
+<button id="gallery-select-mode-btn" onclick="toggleSelectMode('gallery')" style="display: none; background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 8px 14px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                            + Chọn
+                        </button>
+<button id="btn-upload-gallery" onclick="openUploadModal('gallery')" style="display: none; background: var(--accent); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: transform 0.2s;">
+                            + Đăng ảnh kỷ niệm
+                        </button>
+</div>
+</div>
+<div class="batch-toolbar" id="batch-toolbar-gallery">
+<label style="display: flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer; color: var(--text-main); font-size: 0.9rem;">
+<input id="select-all-gallery" onchange="toggleSelectAll('gallery', this)" style="width: 18px; height: 18px; accent-color: var(--accent);" type="checkbox"/> Chọn tất cả (<span id="selected-count-gallery">0</span> đã chọn)
+                    </label>
+<button onclick="confirmDeleteSelected('gallery')" style="background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600;">
+                        🗑️ Xóa đã chọn
+                    </button>
+</div>
+<div id="empty-notice-gallery" style="padding: 25px; text-align: center; background: rgba(128,128,128,0.05); border-radius: 12px; border: 1px dashed var(--border); margin-top: 15px; color: var(--text-muted);">
+                    [Chưa có ảnh nào được đăng...]
+                </div>
+<div class="gallery-grid" id="image-grid"></div>
+</div>
+<div class="tab-pane" id="pane-resources">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px;">
+<div>
+<h3 style="color: var(--accent); margin: 0;">📚 Tài Liệu Học Tập</h3>
+<p style="color: var(--text-muted); margin: 4px 0 0 0; font-size: 0.9rem;">Tài liệu của lớp.</p>
+</div>
+<div style="display: flex; gap: 8px; align-items: center;">
+<button id="resource-select-mode-btn" onclick="toggleSelectMode('resources')" style="display: none; background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 8px 14px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                            + Chọn
+                        </button>
+<button id="btn-upload-resources" onclick="openUploadModal('resources')" style="display: none; background: var(--accent); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: transform 0.2s;">
+                            + Đăng tài liệu mới
+                        </button>
+</div>
+</div>
+<div class="subject-filter-tabs" style="display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap;">
+    <button class="filter-btn active" data-subject="all" onclick="filterDocuments('all')">📚 Tất cả</button>
+    <button class="filter-btn" data-subject="toan" onclick="filterDocuments('toan')">📐 Toán Chuyên</button>
+    <button class="filter-btn" data-subject="anh" onclick="filterDocuments('anh')">🇬🇧 Tiếng Anh</button>
+    <button class="filter-btn" data-subject="van" onclick="filterDocuments('van')">✍️ Ngữ Văn</button>
+    <button class="filter-btn" data-subject="khac" onclick="filterDocuments('khac')">📁 Khác</button>
+</div>
+<div class="batch-toolbar" id="batch-toolbar-resources">
+<label style="display: flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer; color: var(--text-main); font-size: 0.9rem;">
+<input id="select-all-resources" onchange="toggleSelectAll('resources', this)" style="width: 18px; height: 18px; accent-color: var(--accent);" type="checkbox"/> Chọn tất cả (<span id="selected-count-resources">0</span> đã chọn)
+                    </label>
+<button onclick="confirmDeleteSelected('resources')" style="background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600;">
+                        🗑️ Xóa đã chọn
+                    </button>
+</div>
+<div id="empty-notice-resources" style="padding: 25px; text-align: center; background: rgba(128,128,128,0.05); border-radius: 12px; border: 1px dashed var(--border); margin-top: 15px; color: var(--text-muted);">
+                    [Tài liệu học tập đang cập nhật...]
+                </div>
+<div class="resource-list" id="resource-list-container"></div>
+</div>
+</section>
+</main>
+<div class="custom-modal-overlay" id="terms-modal">
+<div class="custom-modal-box" style="max-width: 520px; text-align: left;">
+<div style="font-size: 1.5rem; text-align: center; margin-bottom: 5px;">📜</div>
+<h3 style="color: var(--text-main); margin: 0 0 5px 0; font-size: 1.15rem; text-align: center;">Điều khoản và Quy định sử dụng</h3>
+<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center; margin-bottom: 12px;">Vui lòng cuộn xuống dưới cùng để mở khóa nút đồng ý.</p>
+<div id="index-terms-scroll" onscroll="checkTermsScroll()" style="height: 200px; overflow-y: auto; border: 1px solid var(--border); padding: 12px; border-radius: 8px; background: var(--bg-main, #f9f9f9); font-size: 0.83rem; line-height: 1.45; color: var(--text-main); margin-bottom: 15px;">
+<p><b>ĐIỀU KHOẢN VÀ QUY ĐỊNH ĐĂNG TẢI NỘI DUNG</b></p>
+<p>Khi truy cập, sử dụng và đăng tải nội dung vào khu vực nội bộ của website 10 Toán 2 K36, thành viên đồng ý tuân thủ tuyệt đối các quy định về an toàn thông tin và văn hóa ứng xử trực tuyến. Cụ thể, các hành vi sau đây <b>bị nghiêm cấm tuyệt đối</b>:</p>
+<br/>
+<p><b>1. Đăng tải nội dung trái pháp luật và thuần phong mỹ tục:</b> Phát tán, chia sẻ hoặc lưu trữ hình ảnh, video, tài liệu có nội dung bạo lực, đồi trụy, phản động, xuyên tạc lịch sử, vi phạm pháp luật nước Cộng hòa Xã hội Chủ nghĩa Việt Nam hoặc trái với đạo đức xã hội và thuần phong mỹ tục của người Việt Nam.</p>
+<p><b>2. Xâm phạm quyền riêng tư và danh dự cá nhân:</b> Đăng tải hình ảnh, thông tin cá nhân, bài viết hoặc bình luận mang tính chất xúc phạm, lăng mạ, bôi nhọ danh dự, nhân phẩm của các thành viên trong lớp, thầy cô giáo hoặc bất kỳ cá nhân, tổ chức nào khác (bao gồm cả việc cố ý chia sẻ hình ảnh riêng tư khi chưa có sự đồng ý).</p>
+<p><b>3. Vi phạm bản quyền sở hữu trí tuệ:</b> Đăng tải các tài liệu học tập, sách, đề thi, phần mềm hoặc các sản phẩm sáng tạo thuộc bản quyền của tác giả, tổ chức khác mà chưa có sự cho phép hoặc trích nguồn rõ ràng, gây ảnh hưởng tiêu cực đến bản quyền tác giả.</p>
+<p><b>4. Phá hoại hệ thống và bảo mật website:</b> Cố ý thực hiện các hành vi xâm nhập trái phép, phá hoại mã nguồn, phát tán mã độc (virus, spyware), can thiệp vào cơ sở dữ liệu chung, hoặc lợi dụng quyền hạn sau khi đăng nhập để xóa, chỉnh sửa, làm sai lệch dữ liệu học tập và hình ảnh kỷ niệm của tập thể lớp.</p>
+<p><b>5. Đăng tải thông tin sai lệch (Fake News):</b> Cố tình tạo ra, phát tán hoặc chia sẻ các thông tin giả mạo, sai sự thật liên quan đến hoạt động của lớp học, nhà trường hoặc cá nhân các thành viên nhằm mục đích gây hoang mang, hiểu lầm hoặc mất đoàn kết nội bộ.</p>
+<p><b>6. Lạm dụng không gian chung:</b> Đăng tải các nội dung rác, spam quảng cáo thương mại, nội dung không liên quan đến mục đích học tập và lưu trữ kỷ niệm chung của tập thể 10 Toán 2.</p>
+<br/>
+<p><b>Hình thức xử lý:</b> Bất kỳ thành viên nào vi phạm các điều khoản trên sẽ bị thu hồi quyền truy cập khu vực nội bộ ngay lập tức, gỡ bỏ toàn bộ nội dung vi phạm, đồng thời chịu hoàn toàn trách nhiệm trước tập thể lớp và nhà trường tùy theo mức độ vi phạm.</p>
+</div>
+<div style="display: flex; gap: 10px;">
+<button onclick="closeTermsModal()" style="flex: 1; background: transparent; color: var(--text-main); border: 1px solid var(--border); padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Hủy</button>
+<button disabled="" id="index-agree-btn" onclick="acceptIndexTerms()" style="flex: 1; background: #ccc; color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: 600; cursor: not-allowed;">Tôi đã đọc và Đồng ý</button>
+</div>
+</div>
+</div>
+<div class="custom-modal-overlay" id="login-modal">
+<div class="custom-modal-box">
+<div style="font-size: 2rem; margin-bottom: 8px;">🔐</div>
+<h3 style="color: var(--text-main); margin: 0 0 6px 0; font-size: 1.15rem;">Khu vực nội bộ lớp</h3>
+<p style="color: var(--text-muted); font-size: 0.85rem; margin: 0 0 16px 0;">Nhập mật khẩu để tiếp tục truy cập</p>
+<input id="modal-pass-input" onkeydown="if(event.key === 'Enter') submitLogin()" placeholder="Mật khẩu lớp..." style="width: 100%; background: var(--card-bg); border: 1px solid var(--border); padding: 10px 12px; border-radius: 10px; color: var(--text-main); outline: none; font-size: 0.95rem; box-sizing: border-box; margin-bottom: 12px;" type="password"/>
+<div id="modal-err" style="color: #ef4444; font-size: 0.8rem; margin-bottom: 12px; display: none;">Sai mật khẩu rồi bạn ơi!</div>
+<div style="display: flex; gap: 10px;">
+<button onclick="backToTermsModal()" style="flex: 1; background: transparent; color: var(--text-main); border: 1px solid var(--border); padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Quay lại</button>
+<button onclick="submitLogin()" style="flex: 1; background: var(--accent); color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Xác nhận</button>
+</div>
+</div>
+</div>
+<div class="custom-modal-overlay" id="logout-modal">
+<div class="custom-modal-box">
+<div style="font-size: 2rem; margin-bottom: 8px;">⚠️</div>
+<h3 style="color: var(--text-main); margin: 0 0 8px 0; font-size: 1.15rem;">Xác nhận đăng xuất</h3>
+<p style="color: var(--text-muted); font-size: 0.9rem; margin: 0 0 20px 0;">Bạn có chắc chắn muốn đăng xuất khỏi khu vực nội bộ không?</p>
+<div style="display: flex; gap: 10px;">
+<button onclick="closeLogoutModal()" style="flex: 1; background: transparent; color: var(--text-main); border: 1px solid var(--border); padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Hủy</button>
+<button onclick="confirmLogout()" style="flex: 1; background: #ef4444; color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Đăng xuất</button>
+</div>
+</div>
+</div>
+<div id="upload-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 2500; justify-content: center; align-items: center; padding: 20px;">
+<div style="background: var(--card-bg); border: 1px solid var(--border); padding: 22px; border-radius: 16px; max-width: 500px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;">
+<h3 id="modal-title" style="color: var(--accent); margin-top: 0; margin-bottom: 12px;">📤 Đăng Nội Dung</h3>
+<div style="margin-bottom: 12px;">
+<label style="display: block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 6px;">Tên người đăng / Tác giả:</label>
+<input id="file-author" placeholder="Ví dụ: Nguyễn Văn A..." style="width: 100%; background: var(--card-bg); border: 1px solid var(--border); padding: 10px; border-radius: 10px; color: var(--text-main); outline: none; font-size: 0.95rem; box-sizing: border-box;" type="text"/>
+</div>
+<div style="margin-bottom: 12px;">
+<label style="display: block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 6px;">Tiêu đề hiển thị:</label>
+<input id="file-title-input" placeholder="Nhập tiêu đề hiển thị..." style="width: 100%; background: var(--card-bg); border: 1px solid var(--border); padding: 10px; border-radius: 10px; color: var(--text-main); outline: none; font-size: 0.95rem; box-sizing: border-box;" type="text"/>
+</div>
+<div id="file-input-wrapper" style="margin-bottom: 12px;">
+<label id="modal-file-label" style="display: block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 6px;">Chọn file:</label>
+<input id="file-input" multiple="" onchange="previewFiles(this)" style="display: none;" type="file"/>
+<label class="custom-file-upload" for="file-input">
+<div style="font-size: 1.4rem; margin-bottom: 2px;">📁</div>
+<div id="file-upload-text" style="font-weight: 600; color: var(--text-main); font-size: 0.9rem;">Bấm vào đây để chọn file</div>
+<div id="file-upload-subtext" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Hỗ trợ chọn nhiều file</div>
+</label>
+</div>
+<div id="preview-container" style="display: none; flex-direction: column; gap: 6px; margin-bottom: 15px; max-height: 140px; overflow-y: auto; padding: 6px; background: rgba(128,128,128,0.03); border-radius: 8px;"></div>
+<div id="subject-select-wrapper" style="margin-bottom: 12px;">
+    <label style="display: block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 6px;">Chọn môn học:</label>
+    <div class="custom-dropdown" id="subject-dropdown" onclick="toggleCustomDropdown('subject', event)">
+        <div class="dropdown-selected">
+            <span id="subject-selected-text">📐 Toán Chuyên</span>
+            <i class="ri-arrow-down-s-line" style="transition: transform 0.3s ease;"></i>
+        </div>
+        <div class="dropdown-options-box">
+            <div class="dropdown-option-item" onclick="selectCustomOption('subject', 'toan', '📐 Toán Chuyên', event)">📐 Toán Chuyên</div>
+            <div class="dropdown-option-item" onclick="selectCustomOption('subject', 'anh', '🇬🇧 Tiếng Anh', event)">🇬🇧 Tiếng Anh</div>
+            <div class="dropdown-option-item" onclick="selectCustomOption('subject', 'van', '✍️ Ngữ Văn', event)">✍️ Ngữ Văn</div>
+            <div class="dropdown-option-item" onclick="selectCustomOption('subject', 'khac', '📁 Khác', event)">📁 Khác</div>
+        </div>
+    </div>
+    <input type="hidden" id="file-subject" value="toan">
+</div>
+<div style="margin-bottom: 12px;">
+<label style="display: block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 6px;">Mô tả (Description):</label>
+<textarea id="file-caption" placeholder="Nhập mô tả cho file..." style="width: 100%; height: 70px; background: var(--card-bg); border: 1px solid var(--border); padding: 8px; border-radius: 8px; color: var(--text-main); outline: none; resize: none;"></textarea>
+</div>
+<div style="margin-bottom: 20px;">
+    <label style="display: block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 6px;">Trạng thái hiển thị:</label>
+    <div class="custom-dropdown" id="visibility-dropdown" onclick="toggleCustomDropdown('visibility', event)">
+        <div class="dropdown-selected">
+            <span id="visibility-selected-text">🌐 Công Khai (Mọi người đều xem được)</span>
+            <i class="ri-arrow-down-s-line" style="transition: transform 0.3s ease;"></i>
+        </div>
+        <div class="dropdown-options-box">
+            <div class="dropdown-option-item" onclick="selectCustomOption('visibility', 'public', '🌐 Công Khai (Mọi người đều xem được)', event)">🌐 Công Khai (Mọi người đều xem được)</div>
+            <div class="dropdown-option-item" onclick="selectCustomOption('visibility', 'private', '🔒 Riêng Tư (Chỉ thành viên nội bộ thấy khi đăng nhập)', event)">🔒 Riêng Tư (Chỉ thành viên nội bộ thấy khi đăng nhập)</div>
+        </div>
+    </div>
+    <input type="hidden" id="file-visibility" value="public">
+</div>
+<div style="display: flex; justify-content: flex-end; gap: 10px;">
+<button onclick="closeUploadModal()" style="background: transparent; color: var(--text-muted); border: 1px solid var(--border); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600;">Hủy</button>
+<button id="submit-btn" onclick="submitFiles()" style="background: var(--accent); color: #fff; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600;">Đăng tải</button>
+</div>
+</div>
+</div>
+<div class="custom-modal-overlay" id="custom-confirm-modal" style="z-index: 3500;">
+<div class="custom-modal-box">
+<div style="font-size: 2.2rem; margin-bottom: 10px;">⚠️</div>
+<h3 style="color: var(--text-main); margin-top: 0; margin-bottom: 8px; font-size: 1.2rem;">Xác nhận thao tác</h3>
+<p id="confirm-msg" style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; line-height: 1.5;">Bạn có chắc chắn muốn thực hiện hành động này không?</p>
+<div style="display: flex; justify-content: center; gap: 10px;">
+<button onclick="closeConfirmModal()" style="flex: 1; background: transparent; color: var(--text-muted); border: 1px solid var(--border); padding: 10px; border-radius: 10px; cursor: pointer; font-weight: 600;">Hủy</button>
+<button id="confirm-yes-btn" style="flex: 1; background: #ef4444; color: #fff; border: none; padding: 10px; border-radius: 10px; cursor: pointer; font-weight: 600;">Xác nhận</button>
+</div>
+</div>
+</div>
+<div id="lightbox-modal" onclick="closeLightbox()">
+<img alt="Phóng to ảnh" id="lightbox-img" src=""/>
+</div>
+<div id="toastMessage" style="position: fixed; bottom: 20px; right: 20px; background: var(--card-bg); backdrop-filter: var(--backdrop); border: 1px solid var(--accent); color: var(--text-main); padding: 12px 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transform: translateY(100px); opacity: 0; transition: all 0.4s ease; z-index: 9999;">
+        ✨ Thao tác thành công!
+    </div>
+<footer class="site-footer">
+<div class="footer-left-content">
+<p><strong>Lớp 10 Toán 2 - K36</strong></p>
+<p>Trường THPT Chuyên Bến Tre • Nơi lưu trữ kỷ niệm và thành tích học tập.</p>
+<p style="font-size: 0.8rem; margin-top: 6px; color: var(--text-muted);">© 2026 Designed by K36 Math Students.</p>
+</div>
+<div class="footer-right-logos">
+<img alt="Logo THPT Chuyên Bến Tre" class="school-logo" onclick="openLightbox('logocbt.png')" src="logocbt.png" title="Bấm để phóng to logo Trường"/>
+<img alt="Logo 10 Toán 2 K36" class="class-logo" onclick="openLightbox('10_t2_logo.jpeg')" src="10_t2_logo.jpeg" title="Bấm để phóng to logo Lớp"/>
+</div>
+</footer>
+<script>
+        const CORRECT_PASS = "10toan2k36";
+        let currentActiveTab = 'gallery';
+        let selectedFilesArray = [];
+        let isSelectModeGallery = false;
+        let isSelectModeResources = false;
+        let pendingAction = null;
+        let currentSubjectFilter = 'all';
+        let isEditMode = false;
+        let editingItemId = null;
+        const SUPABASE_URL = 'https://mwyjcrpwxpghieizswfa.supabase.co';
+        const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_9Ow2Q57vi9ArOtQRPr3bfw_olVCoAfD';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+        window.addEventListener('DOMContentLoaded', () => {
+            const hash = window.location.hash;
+            if (hash === '#documents') {
+                switchTab('resources', false);
+            } else {
+                switchTab('gallery', false);
+            }
+            if (localStorage.getItem('class_unlocked') === 'true') {
+                updateAuthButtonState(true);
+            } else {
+                updateAuthButtonState(false);
+            }
+            loadGalleryFromStorage();
+            loadResourcesFromStorage();
+        });
+        window.addEventListener('popstate', () => {
+            const hash = window.location.hash;
+            if (hash === '#documents') {
+                switchTab('resources', false);
+            } else {
+                switchTab('gallery', false);
+            }
+        });
+        function filterDocuments(subject) {
+            currentSubjectFilter = subject;
+            document.querySelectorAll('.subject-filter-tabs .filter-btn').forEach(btn => {
+                if (btn.getAttribute('data-subject') === subject) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            loadResourcesFromStorage();
+        }
+        function formatDateTime(isoString) {
+            if (!isoString) return 'Đang cập nhật';
+            const date = new Date(isoString);
+            if (isNaN(date.getTime())) return 'Đang cập nhật';
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            let hours = date.getHours();
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'CH' : 'SA';
+            hours = hours % 12;
+            hours = hours ? hours : 12; 
+            const strHours = String(hours).padStart(2, '0');
+            return `${day}/${month}/${year} ${strHours}:${minutes}:${seconds}:${ampm}`;
+        }
+        function handleAuthNavAction() {
+            if (localStorage.getItem('class_unlocked') === 'true') {
+                document.getElementById('logout-modal').style.display = 'flex';
+            } else {
+                const scrollBox = document.getElementById('index-terms-scroll');
+                scrollBox.scrollTop = 0;
+                const agreeBtn = document.getElementById('index-agree-btn');
+                agreeBtn.disabled = true;
+                agreeBtn.style.background = '#ccc';
+                agreeBtn.style.cursor = 'not-allowed';
+                document.getElementById('terms-modal').style.display = 'flex';
+            }
+        }
+        function checkTermsScroll() {
+            const scrollBox = document.getElementById('index-terms-scroll');
+            const agreeBtn = document.getElementById('index-agree-btn');
+            if (scrollBox.scrollTop + scrollBox.clientHeight >= scrollBox.scrollHeight - 10) {
+                agreeBtn.disabled = false;
+                agreeBtn.style.background = 'var(--accent)';
+                agreeBtn.style.cursor = 'pointer';
+            }
+        }
+        function closeTermsModal() {
+            document.getElementById('terms-modal').style.display = 'none';
+        }
+        function acceptIndexTerms() {
+            const agreeBtn = document.getElementById('index-agree-btn');
+            if (!agreeBtn.disabled) {
+                closeTermsModal();
+                document.getElementById('modal-pass-input').value = '';
+                document.getElementById('modal-err').style.display = 'none';
+                document.getElementById('login-modal').style.display = 'flex';
+                setTimeout(() => document.getElementById('modal-pass-input').focus(), 100);
+            }
+        }
+        function backToTermsModal() {
+            document.getElementById('login-modal').style.display = 'none';
+            document.getElementById('terms-modal').style.display = 'flex';
+        }
+        function closeLoginModal() {
+            document.getElementById('login-modal').style.display = 'none';
+        }
+        function submitLogin() {
+            const passVal = document.getElementById('modal-pass-input').value;
+            if (passVal === CORRECT_PASS) {
+                localStorage.setItem('class_unlocked', 'true');
+                closeLoginModal();
+                updateAuthButtonState(true);
+                loadGalleryFromStorage();
+                loadResourcesFromStorage();
+                showToast('✨ Đăng nhập thành công!');
+            } else {
+                document.getElementById('modal-err').style.display = 'block';
+            }
+        }
+        function closeLogoutModal() {
+            document.getElementById('logout-modal').style.display = 'none';
+        }
+        function confirmLogout() {
+            localStorage.removeItem('class_unlocked');
+            closeLogoutModal();
+            updateAuthButtonState(false);
+            loadGalleryFromStorage();
+            loadResourcesFromStorage();
+            showToast('✨ Đã đăng xuất!');
+        }
+        function updateAuthButtonState(isLoggedIn) {
+            const btn = document.getElementById('auth-nav-btn');
+            const btnUploadGallery = document.getElementById('btn-upload-gallery');
+            const btnUploadResources = document.getElementById('btn-upload-resources');
+            if (!btn) return;
+            if (isLoggedIn) {
+                btn.textContent = '🚪 Đăng xuất';
+                btn.className = 'auth-nav-btn logout-state';
+                if (btnUploadGallery) btnUploadGallery.style.display = 'inline-block';
+                if (btnUploadResources) btnUploadResources.style.display = 'inline-block';
+            } else {
+                btn.textContent = '🔑 Đăng nhập';
+                btn.className = 'auth-nav-btn';
+                if (btnUploadGallery) btnUploadGallery.style.display = 'none';
+                if (btnUploadResources) btnUploadResources.style.display = 'none';
+            }
+        }
+        function switchTab(tabName, updateHash = true, event = null) {
+            if (event) event.preventDefault();
+            currentActiveTab = tabName;
+            const btnImages = document.getElementById('tab-btn-images');
+            const btnResources = document.getElementById('tab-btn-resources');
+            const paneGallery = document.getElementById('pane-gallery');
+            const paneResources = document.getElementById('pane-resources');
+            if (tabName === 'gallery') {
+                btnImages.classList.add('active');
+                btnResources.classList.remove('active');
+                paneGallery.classList.add('active');
+                paneResources.classList.remove('active');
+                if (updateHash) history.pushState(null, null, '#images');
+            } else {
+                btnResources.classList.add('active');
+                btnImages.classList.remove('active');
+                paneResources.classList.add('active');
+                paneGallery.classList.remove('active');
+                if (updateHash) history.pushState(null, null, '#documents');
+            }
+        }
+        function toggleSelectMode(tab) {
+            if (tab === 'gallery') {
+                isSelectModeGallery = !isSelectModeGallery;
+                const btn = document.getElementById('gallery-select-mode-btn');
+                const toolbar = document.getElementById('batch-toolbar-gallery');
+                if (isSelectModeGallery) {
+                    btn.style.background = 'var(--accent)'; btn.style.color = '#fff'; btn.textContent = '✕ Hủy chọn';
+                    toolbar.style.display = 'flex';
+                } else {
+                    btn.style.background = 'transparent'; btn.style.color = 'var(--accent)'; btn.textContent = '+ Chọn';
+                    toolbar.style.display = 'none';
+                    document.getElementById('select-all-gallery').checked = false;
+                }
+                loadGalleryFromStorage();
+            } else {
+                isSelectModeResources = !isSelectModeResources;
+                const btn = document.getElementById('resource-select-mode-btn');
+                const toolbar = document.getElementById('batch-toolbar-resources');
+                if (isSelectModeResources) {
+                    btn.style.background = 'var(--accent)'; btn.style.color = '#fff'; btn.textContent = '✕ Hủy chọn';
+                    toolbar.style.display = 'flex';
+                } else {
+                    btn.style.background = 'transparent'; btn.style.color = 'var(--accent)'; btn.textContent = '+ Chọn';
+                    toolbar.style.display = 'none';
+                    document.getElementById('select-all-resources').checked = false;
+                }
+                loadResourcesFromStorage();
+            }
+        }
+        function toggleSelectAll(tab, masterCheckbox) {
+            const checkboxes = document.querySelectorAll(`.${tab}-checkbox`);
+            checkboxes.forEach(cb => cb.checked = masterCheckbox.checked);
+            updateSelectedCount(tab);
+        }
+        function updateSelectedCount(tab) {
+            const checkboxes = document.querySelectorAll(`.${tab}-checkbox:checked`);
+            document.getElementById(`selected-count-${tab}`).textContent = checkboxes.length;
+        }
+        function openUploadModal(tab) {
+            if (localStorage.getItem('class_unlocked') !== 'true') {
+                showToast('Vui lòng đăng nhập mật khẩu nội bộ để sử dụng tính năng này!');
+                return;
+            }
+            isEditMode = false;
+            editingItemId = null;
+            currentActiveTab = tab;
+            const fileInputWrapper = document.getElementById('file-input-wrapper');
+            fileInputWrapper.style.display = 'block';
+            const title = document.getElementById('modal-title');
+            const subjectWrapper = document.getElementById('subject-select-wrapper');
+            if (tab === 'gallery') {
+                title.textContent = '📤 Đăng Ảnh Kỷ Niệm';
+                if (subjectWrapper) subjectWrapper.style.display = 'none';
+            } else {
+                title.textContent = '📤 Đăng Tài Liệu Học Tập';
+                if (subjectWrapper) subjectWrapper.style.display = 'block';
+            }
+            document.getElementById('file-author').value = '';
+            document.getElementById('file-title-input').value = '';
+            document.getElementById('file-caption').value = '';
+            setCustomDropdownValue('visibility', 'public', '🌐 Công Khai (Mọi người đều xem được)');
+            setCustomDropdownValue('subject', 'toan', '📐 Toán Chuyên');
+            document.getElementById('submit-btn').textContent = 'Đăng tải';
+            document.getElementById('upload-modal').style.display = 'flex';
+        }
+        function openEditModal(item, tab) {
+            if (localStorage.getItem('class_unlocked') !== 'true') return;
+            isEditMode = true;
+            editingItemId = item.id;
+            currentActiveTab = tab;
+            const title = document.getElementById('modal-title');
+            const fileInputWrapper = document.getElementById('file-input-wrapper');
+            fileInputWrapper.style.display = 'none'; 
+            const subjectWrapper = document.getElementById('subject-select-wrapper');
+            if (tab === 'gallery') {
+                title.textContent = '✏️ Chỉnh Sửa Ảnh Kỷ Niệm';
+                if (subjectWrapper) subjectWrapper.style.display = 'none';
+            } else {
+                title.textContent = '✏️ Chỉnh Sửa Tài Liệu Học Tập';
+                if (subjectWrapper) {
+                    subjectWrapper.style.display = 'block';
+                    const sub = item.subject || 'khac';
+                    const subTexts = {
+                        'toan': '📐 Toán Chuyên',
+                        'anh': '🇬🇧 Tiếng Anh',
+                        'van': '✍️ Ngữ Văn',
+                        'khac': '📁 Khác'
+                    };
+                    setCustomDropdownValue('subject', sub, subTexts[sub] || '📁 Khác');
+                }
+            }
+            document.getElementById('file-author').value = item.student_name || '';
+            document.getElementById('file-title-input').value = item.title || '';
+            document.getElementById('file-caption').value = item.description || '';
+            const vis = item.visibility || 'public';
+            const visTexts = {
+                'public': '🌐 Công Khai (Mọi người đều xem được)',
+                'private': '🔒 Riêng Tư (Chỉ thành viên nội bộ thấy khi đăng nhập)'
+            };
+            setCustomDropdownValue('visibility', vis, visTexts[vis]);
+            document.getElementById('submit-btn').textContent = 'Lưu thay đổi';
+            document.getElementById('upload-modal').style.display = 'flex';
+        }
+        function setCustomDropdownValue(type, value, text) {
+            document.getElementById('file-' + type).value = value;
+            document.getElementById(type + '-selected-text').textContent = text;
+        }
+        function toggleCustomDropdown(type, event) {
+            event.stopPropagation();
+            document.querySelectorAll('.custom-dropdown').forEach(el => {
+                if (el.id !== type + '-dropdown') el.classList.remove('active');
+            });
+            const dropdown = document.getElementById(type + '-dropdown');
+            dropdown.classList.toggle('active');
+        }
+        function selectCustomOption(type, value, text, event) {
+            event.stopPropagation();
+            setCustomDropdownValue(type, value, text);
+            document.getElementById(type + '-dropdown').classList.remove('active');
+        }
+        window.addEventListener('click', () => {
+            document.querySelectorAll('.custom-dropdown').forEach(el => {
+                el.classList.remove('active');
+            });
+        });
+        function closeUploadModal() {
+            document.getElementById('upload-modal').style.display = 'none';
+            document.getElementById('file-upload-text').textContent = 'Bấm vào đây để chọn file';
+            document.getElementById('file-upload-text').style.color = 'var(--text-main)';
+            document.getElementById('file-input').value = '';
+            document.getElementById('file-caption').value = '';
+            document.getElementById('file-title-input').value = '';
+            document.getElementById('file-author').value = '';
+            document.getElementById('preview-container').style.display = 'none';
+            document.getElementById('preview-container').innerHTML = '';
+            selectedFilesArray = [];
+            isEditMode = false;
+            editingItemId = null;
+        }
+        function previewFiles(input) {
+            const previewContainer = document.getElementById('preview-container');
+            const textEl = document.getElementById('file-upload-text');
+            const titleInput = document.getElementById('file-title-input');
+            if (input.files.length > 0) {
+                const files = Array.from(input.files);
+                if (currentActiveTab === 'gallery') {
+                    const hasNonImage = files.some(file => !file.type.startsWith('image/'));
+                    if (hasNonImage) {
+                        showToast('Tab Khoảnh Khắc Kỷ Niệm chỉ nhận file ảnh.');
+                        input.value = '';
+                        return;
+                    }
+                } else {
+                    const hasImage = files.some(file => file.type.startsWith('image/'));
+                    if (hasImage) {
+                        showToast('Kho tài liệu không nhận file ảnh. Vui lòng chọn PDF, Word, Excel, PPT...');
+                        input.value = '';
+                        return;
+                    }
+                }
+                selectedFilesArray = files;
+                textEl.textContent = `Đã chọn ${selectedFilesArray.length} file`;
+                textEl.style.color = 'var(--accent)';
+                if (titleInput && !titleInput.value.trim()) {
+                    titleInput.value = files[0].name;
+                }
+                previewContainer.style.display = 'flex';
+                previewContainer.innerHTML = '';
+                selectedFilesArray.forEach((file, index) => {
+                    const div = document.createElement('div');
+                    div.style.display = 'flex';
+                    div.style.alignItems = 'center';
+                    div.style.justifyContent = 'space-between';
+                    div.style.background = 'var(--card-bg)';
+                    div.style.border = '1px solid var(--border)';
+                    div.style.padding = '6px 10px';
+                    div.style.borderRadius = '6px';
+                    div.innerHTML = `
+                        <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 320px;">📄 ${file.name}</span>
+                        <button type="button" class="remove-preview-btn" onclick="removePreviewItem(${index})">Xóa</button>
+                    `;
+                    previewContainer.appendChild(div);
+                });
+            }
+        }
+        function removePreviewItem(index) {
+            selectedFilesArray.splice(index, 1);
+            const previewContainer = document.getElementById('preview-container');
+            const textEl = document.getElementById('file-upload-text');
+            if (selectedFilesArray.length === 0) {
+                previewContainer.style.display = 'none';
+                previewContainer.innerHTML = '';
+                textEl.textContent = 'Bấm vào đây để chọn file';
+                textEl.style.color = 'var(--text-main)';
+                document.getElementById('file-input').value = '';
+            } else {
+                textEl.textContent = `Đã chọn ${selectedFilesArray.length} file`;
+                previewContainer.innerHTML = '';
+                selectedFilesArray.forEach((item, idx) => {
+                    const div = document.createElement('div');
+                    div.style.display = 'flex';
+                    div.style.alignItems = 'center';
+                    div.style.justifyContent = 'space-between';
+                    div.style.background = 'var(--card-bg)';
+                    div.style.border = '1px solid var(--border)';
+                    div.style.padding = '6px 10px';
+                    div.style.borderRadius = '6px';
+                    div.innerHTML = `
+                        <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 320px;">📄 ${item.name}</span>
+                        <button type="button" class="remove-preview-btn" onclick="removePreviewItem(${idx})">Xóa</button>
+                    `;
+                    previewContainer.appendChild(div);
+                });
+            }
+        }
+        async function submitFiles() {
+            if (localStorage.getItem('class_unlocked') !== 'true') {
+                showToast('Vui lòng đăng nhập!');
+                return;
+            }
+            const captionInput = document.getElementById('file-caption');
+            const titleInput = document.getElementById('file-title-input');
+            const authorInput = document.getElementById('file-author');
+            const visibility = document.getElementById('file-visibility').value;
+            const subjectVal = document.getElementById('file-subject').value;
+            const customTitle = titleInput ? titleInput.value.trim() : '';
+            const finalTitle = customTitle !== '' ? customTitle : 'Không có tiêu đề';
+            const customAuthor = authorInput ? authorInput.value.trim() : '';
+            const finalAuthor = customAuthor !== '' ? customAuthor : 'Thành viên 10 Toán 2';
+            const userDescription = captionInput ? captionInput.value.trim() : '';
+            try {
+                if (isEditMode && editingItemId) {
+                    const updateData = {
+                        title: finalTitle,
+                        student_name: finalAuthor,
+                        description: userDescription !== '' ? userDescription : null,
+                        visibility: visibility
+                    };
+                    if (currentActiveTab === 'resources') {
+                        updateData.subject = subjectVal;
+                    }
+                    const { error: updateError } = await _supabase
+                        .from('gallery')
+                        .update(updateData)
+                        .eq('id', editingItemId);
+                    if (updateError) throw updateError;
+                    showToast('Cập nhật thành công!');
+                    closeUploadModal();
+                    loadGalleryFromStorage();
+                    loadResourcesFromStorage();
+                } else {
+                    const fileInput = document.getElementById('file-input');
+                    if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+                        showToast('Vui lòng chọn tệp tin!');
+                        return;
+                    }
+                    const file = fileInput.files[0];
+                    const fileExt = file.name.split('.').pop().toLowerCase();
+                    const uniqueStorageName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
+                    const isImage = currentActiveTab === 'gallery';
+                    const folder = isImage ? 'gallery' : 'resources';
+                    const filePath = `${folder}/${uniqueStorageName}`;
+                    const { error: uploadError } = await _supabase.storage
+                        .from('gallery_images')
+                        .upload(filePath, file);
+                    if (uploadError) throw uploadError;
+                    const { data: publicUrlData } = _supabase.storage
+                        .from('gallery_images')
+                        .getPublicUrl(filePath);
+                    const fileUrl = publicUrlData.publicUrl;
+                    const { error: dbError } = await _supabase
+                        .from('gallery')
+                        .insert([
+                            { 
+                                id: Date.now(),
+                                title: customTitle !== '' ? customTitle : file.name,
+                                student_name: finalAuthor,
+                                image_url: isImage ? fileUrl : null,
+                                link: fileUrl,
+                                description: userDescription !== '' ? userDescription : null,
+                                subject: isImage ? null : subjectVal,
+                                visibility: visibility,
+                                created_at: new Date().toISOString()
+                            }
+                        ]);
+                    if (dbError) throw dbError;
+                    showToast('Tải lên thành công!');
+                    closeUploadModal();
+                    loadGalleryFromStorage();
+                    loadResourcesFromStorage();
+                }
+            } catch (error) {
+                console.error('Lỗi:', error.message);
+                showToast('Có lỗi xảy ra: ' + error.message);
+            }
+        }
+        async function loadGalleryFromStorage() {
+            const gridEl = document.getElementById('image-grid');
+            const noticeEl = document.getElementById('empty-notice-gallery');
+            const selectBtn = document.getElementById('gallery-select-mode-btn');
+            const batchToolbar = document.getElementById('batch-toolbar-gallery');
+            const isUnlocked = localStorage.getItem('class_unlocked') === 'true';
+            if (!isUnlocked && isSelectModeGallery) {
+                isSelectModeGallery = false;
+                if(batchToolbar) batchToolbar.style.display = 'none';
+            }
+            try {
+                let query = _supabase.from('gallery').select('*').not('image_url', 'is', null);
+                if (!isUnlocked) {
+                    query = query.eq('visibility', 'public');
+                }
+                const { data: images, error } = await query;
+                if (error) throw error;
+                gridEl.innerHTML = '';
+                if (images && images.length > 0) {
+                    noticeEl.style.display = 'none';
+                    if (selectBtn) {
+                        selectBtn.style.display = isUnlocked ? 'inline-block' : 'none';
+                    }
+                    images.forEach((item) => {
+                        const card = document.createElement('div');
+                        card.className = 'gallery-item';
+                        let checkboxHtml = (isSelectModeGallery && isUnlocked) ? `<input type="checkbox" class="gallery-checkbox item-checkbox" data-id="${item.id}" onchange="updateSelectedCount('gallery')">` : '';
+                        let actionButtonsHtml = isUnlocked ? `
+                            <div class="action-btns">
+                                <button class="edit-btn" onclick='openEditModal(${JSON.stringify(item)}, "gallery")'>Sửa</button>
+                                <button class="delete-btn" onclick="deleteSupabaseItem(${item.id}, 'gallery')">Xóa</button>
+                            </div>
+                        ` : '';
+                        let badgeHtml = '';
+                        if (isUnlocked) {
+                            badgeHtml = item.visibility === 'private' ? `<span class="badge-status badge-private">Riêng tư</span>` : `<span class="badge-status badge-public">Công khai</span>`;
+                        }
+                        const displayTitle = item.title || 'Ảnh kỷ niệm';
+                        const displayAuthor = item.student_name ? `<span style="font-size: 0.75rem; color: var(--accent);">Đăng bởi: ${escapeHtml(item.student_name)}</span>` : '';
+                        const formattedDate = formatDateTime(item.created_at);
+                        card.innerHTML = `
+                            ${checkboxHtml}
+                            <img src="${item.image_url}" alt="Kỷ niệm lớp" onclick="openLightbox('${item.image_url}')">
+                            <div class="gallery-info" style="flex-direction: column; align-items: flex-start; gap: 4px;">
+                                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                                    <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 120px;" title="${escapeHtml(displayTitle)}">
+                                        <b>${escapeHtml(displayTitle)}</b>
+                                        ${badgeHtml}
+                                    </div>
+                                    ${actionButtonsHtml}
+                                </div>
+                                ${displayAuthor}
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">
+                                    ${formattedDate}
+                                </div>
+                            </div>
+                        `;
+                        gridEl.appendChild(card);
+                    });
+                } else {
+                    noticeEl.style.display = 'block';
+                    if (selectBtn) selectBtn.style.display = 'none';
+                    if (batchToolbar) batchToolbar.style.display = 'none';
+                    isSelectModeGallery = false;
+                }
+            } catch (err) {
+                console.error('Lỗi tải gallery:', err.message);
+            }
+        }
+        async function loadResourcesFromStorage() {
+            const containerEl = document.getElementById('resource-list-container');
+            const noticeEl = document.getElementById('empty-notice-resources');
+            const selectBtn = document.getElementById('resource-select-mode-btn');
+            const batchToolbar = document.getElementById('batch-toolbar-resources');
+            const isUnlocked = localStorage.getItem('class_unlocked') === 'true';
+            if (!isUnlocked && isSelectModeResources) {
+                isSelectModeResources = false;
+                if(batchToolbar) batchToolbar.style.display = 'none';
+            }
+            try {
+                let query = _supabase.from('gallery').select('*').or('image_url.is.null,image_url.eq.""');
+                if (currentSubjectFilter !== 'all') {
+                    query = query.eq('subject', currentSubjectFilter);
+                }
+                if (!isUnlocked) {
+                    query = query.eq('visibility', 'public');
+                }
+                const { data: resources, error } = await query;
+                if (error) throw error;
+                containerEl.innerHTML = '';
+                if (resources && resources.length > 0) {
+                    noticeEl.style.display = 'none';
+                    if (selectBtn) {
+                        selectBtn.style.display = isUnlocked ? 'inline-block' : 'none';
+                    }
+                    resources.forEach((item) => {
+                        const itemEl = document.createElement('div');
+                        itemEl.className = 'resource-item';
+                        let checkboxHtml = (isSelectModeResources && isUnlocked) ? `<input type="checkbox" class="resources-checkbox item-checkbox" style="position:static; margin-right:8px;" data-id="${item.id}" onchange="updateSelectedCount('resources')">` : '';
+                        let badgeHtml = '';
+                        if (isUnlocked) {
+                            badgeHtml = item.visibility === 'private' ? `<span class="badge-status badge-private">Riêng tư</span>` : `<span class="badge-status badge-public">Công khai</span>`;
+                        }
+                        let timeBadgeHtml = '';
+                        if (item.created_at) {
+                            const createdDate = new Date(item.created_at);
+                            const now = new Date();
+                            const diffTime = now - createdDate;
+                            const diffDays = diffTime / (1000 * 60 * 60 * 24);
+                            if (diffDays <= 10) {
+                                timeBadgeHtml = `<span class="badge-new-inline">Mới</span>`;
+                            }
+                        }
+                        let adminActionsHtml = isUnlocked ? `
+                            <button class="action-btn-sm edit-btn" onclick='openEditModal(${JSON.stringify(item)}, "resources")'>Sửa</button>
+                            <button class="action-btn-sm delete-btn" onclick="deleteSupabaseItem(${item.id}, 'resources')">Xóa</button>
+                        ` : '';
+                        const fileLink = item.link || '#';
+                        const displayTitle = item.title || 'Tài liệu học tập';
+                        const displayAuthor = item.student_name ? `Đăng bởi: ${escapeHtml(item.student_name)}` : 'Thành viên lớp';
+                        const displayDesc = item.description ? ` - ${escapeHtml(item.description)}` : '';
+                        const formattedDate = formatDateTime(item.created_at);
+                        itemEl.innerHTML = `
+                            <div class="resource-left">
+                                ${checkboxHtml}
+                                <div class="file-icon">📄</div>
+                                <div class="file-details">
+                                    <span class="file-name" title="${escapeHtml(displayTitle)}">
+                                        ${escapeHtml(displayTitle)} 
+                                        ${timeBadgeHtml}
+                                        ${badgeHtml}
+                                    </span>
+                                    <span class="file-meta">
+                                        ${displayAuthor}${displayDesc}<br>
+                                        <span style="color: var(--accent); display: inline-block; margin-top: 0px !important;">Ngày đăng tải: ${formattedDate}</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="resource-right">
+                                <a href="${fileLink}" download class="action-btn-sm download-btn" target="_blank">⬇️ Tải về</a>
+                                ${adminActionsHtml}
+                            </div>
+                        `;
+                        containerEl.appendChild(itemEl);
+                    });
+                } else {
+                    noticeEl.style.display = 'block';
+                    if (selectBtn) selectBtn.style.display = 'none';
+                    if (batchToolbar) batchToolbar.style.display = 'none';
+                    isSelectModeResources = false;
+                }
+            } catch (err) {
+                console.error('Lỗi tải resources:', err.message);
+            }
+        }
+        async function deleteSupabaseItem(id, tab) {
+            if (localStorage.getItem('class_unlocked') !== 'true') return;
+            showCustomConfirm('Bạn có chắc chắn muốn xóa vĩnh viễn mục này không?', async () => {
+                try {
+                    const { error } = await _supabase.from('gallery').delete().eq('id', id);
+                    if (error) throw error;
+                    showToast('Đã xóa thành công!');
+                    tab === 'gallery' ? loadGalleryFromStorage() : loadResourcesFromStorage();
+                } catch (err) {
+                    showToast('Lỗi khi xóa: ' + err.message);
+                }
+            });
+        }
+        async function confirmDeleteSelected(tab) {
+            if (localStorage.getItem('class_unlocked') !== 'true') return;
+            const checkboxes = document.querySelectorAll(`.${tab}-checkbox:checked`);
+            if (checkboxes.length === 0) {
+                showToast('Vui lòng chọn ít nhất một mục để xóa.');
+                return;
+            }
+            showCustomConfirm(`Bạn có chắc chắn muốn xóa vĩnh viễn ${checkboxes.length} mục đã chọn không?`, async () => {
+                try {
+                    const idsToDelete = Array.from(checkboxes).map(cb => parseInt(cb.getAttribute('data-id')));
+                    const { error } = await _supabase.from('gallery').delete().in('id', idsToDelete);
+                    if (error) throw error;
+                    showToast('Đã xóa thành công các mục đã chọn!');
+                    if (tab === 'gallery') {
+                        isSelectModeGallery = false;
+                        document.getElementById('gallery-select-mode-btn').style.background = 'transparent';
+                        document.getElementById('gallery-select-mode-btn').style.color = 'var(--accent)';
+                        document.getElementById('gallery-select-mode-btn').textContent = '+ Chọn';
+                        document.getElementById('batch-toolbar-gallery').style.display = 'none';
+                        document.getElementById('select-all-gallery').checked = false;
+                        loadGalleryFromStorage();
+                    } else {
+                        isSelectModeResources = false;
+                        document.getElementById('resource-select-mode-btn').style.background = 'transparent';
+                        document.getElementById('resource-select-mode-btn').style.color = 'var(--accent)';
+                        document.getElementById('resource-select-mode-btn').textContent = '+ Chọn';
+                        document.getElementById('batch-toolbar-resources').style.display = 'none';
+                        document.getElementById('select-all-resources').checked = false;
+                        loadResourcesFromStorage();
+                    }
+                } catch (err) {
+                    showToast('Lỗi khi xóa hàng loạt: ' + err.message);
+                }
+            });
+        }
+        function showCustomConfirm(message, callback) {
+            document.getElementById('confirm-msg').textContent = message;
+            pendingAction = callback;
+            document.getElementById('custom-confirm-modal').style.display = 'flex';
+        }
+        function closeConfirmModal() {
+            document.getElementById('custom-confirm-modal').style.display = 'none';
+            pendingAction = null;
+        }
+        document.getElementById('confirm-yes-btn').addEventListener('click', () => {
+            if (typeof pendingAction === 'function') pendingAction();
+            closeConfirmModal();
+        });
+        function openLightbox(url) {
+            const lightbox = document.getElementById('lightbox-modal');
+            document.getElementById('lightbox-img').src = url;
+            lightbox.style.display = 'flex';
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox-modal').style.display = 'none';
+        }
+        function escapeHtml(text) {
+            return (text || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+        function showToast(message = "✨ Thao tác thành công!") {
+            let toast = document.getElementById('toastMessage');
+            if (!toast) return;
+            toast.innerText = message;
+            setTimeout(() => {
+                toast.style.transform = 'translateY(0)';
+                toast.style.opacity = '1';
+            }, 100);
+            setTimeout(() => {
+                toast.style.transform = 'translateY(100px)';
+                toast.style.opacity = '0';
+            }, 3000);
+        }
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const body = document.body;
+        if (localStorage.getItem('theme') === 'light') {
+            body.classList.add('light-mode');
+            if (themeToggleBtn) themeToggleBtn.textContent = '☀️ Giao diện';
+        }
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                body.classList.toggle('light-mode');
+                if (body.classList.contains('light-mode')) {
+                    themeToggleBtn.textContent = '☀️ Giao diện';
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    themeToggleBtn.textContent = '🌙 Giao diện';
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+        }
+    </script>
+<script src="js/animation.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const symbols = ['π', '∫', '∑', 'Δ', '√', 'α', 'β', 'θ', '∞', 'f(x)', 'lim', 'φ', '∂', '∇', '∏', 'µ', 'σ', 'Ω', '∀', '∃', '∈', '∉', '⊂', '⊃', '∪', '∩', 'sin', 'cos', 'tan', 'log', 'ln', 'vec{a}', 'lim', 'dx'];
+        const container = document.createElement('div');
+        container.className = 'math-bg-animation';
+        document.body.appendChild(container);
+        const symbolCount = 18; 
+        for (let i = 0; i < symbolCount; i++) {
+            const span = document.createElement('span');
+            span.className = 'math-symbol';
+            span.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+            span.style.left = Math.random() * 100 + 'vw';
+            span.style.fontSize = (Math.random() * 1.5 + 1) + 'rem';
+            span.style.animationDuration = (Math.random() * 10 + 10) + 's'; 
+            span.style.animationDelay = (Math.random() * 10) + 's';
+            container.appendChild(span);
+        }
+    });
+</script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const dot = document.createElement('div');
+        dot.className = 'math-ray-dot';
+        const ring = document.createElement('div');
+        ring.className = 'math-ray-ring';
+        const pulse = document.createElement('div');
+        pulse.className = 'math-ray-pulse';
+        document.body.appendChild(dot);
+        document.body.appendChild(ring);
+        document.body.appendChild(pulse);
+        let mouseX = 0, mouseY = 0;
+        let currentX = 0, currentY = 0;
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+        function renderRayCursor() {
+            currentX += (mouseX - currentX) * 0.25;
+            currentY += (mouseY - currentY) * 0.25;
+            dot.style.left = currentX + 'px';
+            dot.style.top = currentY + 'px';
+            ring.style.left = currentX + 'px';
+            ring.style.top = currentY + 'px';
+            pulse.style.left = currentX + 'px';
+            pulse.style.top = currentY + 'px';
+            requestAnimationFrame(renderRayCursor);
+        }
+        renderRayCursor();
+        const interactiveElements = document.querySelectorAll('a, button, input, .intro-logo, .video-frame-wrapper, select');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+        });
+    });
+</script>
+<script>
+    window.addEventListener('click', (e) => {
+        const mathChars = ['+', '-', '×', '÷', '=', 'π', '∫', '∑', 'Δ', '√', '0', '1'];
+        const particleCount = 6; 
+        for (let i = 0; i < particleCount; i++) {
+            const span = document.createElement('span');
+            span.className = 'math-click-particle';
+            span.textContent = mathChars[Math.floor(Math.random() * mathChars.length)];
+            span.style.left = e.clientX + 'px';
+            span.style.top = e.clientY + 'px';
+            const angle = Math.random() * Math.PI * 2;
+            const distance = Math.random() * 80 + 40; 
+            const tx = Math.cos(angle) * distance;
+            const ty = Math.sin(angle) * distance;
+            const tr = (Math.random() - 0.5) * 360; 
+            span.style.setProperty('--tx', tx + 'px');
+            span.style.setProperty('--ty', ty + 'px');
+            span.style.setProperty('--tr', tr + 'deg');
+            document.body.appendChild(span);
+            setTimeout(() => {
+                span.remove();
+            }, 800);
+        }
+    });
+</script>
+<script>
+    function toggleMathEffects() {
+        const isCurrentlyDisabled = document.body.classList.contains('fx-disabled');
+        const fxBtn = document.getElementById('fx-toggle-btn');
+        if (isCurrentlyDisabled) {
+            document.body.classList.remove('fx-disabled');
+            if (fxBtn) fxBtn.innerHTML = '✨ Hiệu ứng: Bật';
+            localStorage.setItem('math_fx_enabled', 'true');
+        } else {
+            document.body.classList.add('fx-disabled');
+            if (fxBtn) fxBtn.innerHTML = '✨ Hiệu ứng: Tắt';
+            localStorage.setItem('math_fx_enabled', 'false');
+        }
+    }
+    window.addEventListener('DOMContentLoaded', () => {
+        const fxEnabled = localStorage.getItem('math_fx_enabled') !== 'false';
+        const fxBtn = document.getElementById('fx-toggle-btn');
+        if (!fxEnabled) {
+            document.body.classList.add('fx-disabled');
+            if (fxBtn) fxBtn.innerHTML = '✨ Hiệu ứng: Tắt';
+        } else {
+            document.body.classList.remove('fx-disabled');
+            if (fxBtn) fxBtn.innerHTML = '✨ Hiệu ứng: Bật';
+        }
+    });
+</script>
+<script src="time.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('Service Worker đăng ký thành công:', reg.scope))
+        .catch(err => console.log('Đăng ký Service Worker thất bại:', err));
+    });
+  }
+</script>
+</body>
+</html>

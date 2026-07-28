@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Background Music</title>
+</head>
+<body style="margin: 0; background: transparent;">
+    <div id="youtube-player-container" style="display: none;"></div>
+    <button id="music-toggle-btn" onclick="toggleYouTubeMusic()" style="background: #ef4444; border: none; color: white; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: 0.2s; position: fixed; bottom: 0; right: 0;">
+        🎵
+    </button>
+    <div id="music-widget" style="position: fixed; bottom: 2px; right: 45px; background: var(--card-bg, #ffffff); padding: 4px 10px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 8px; border: 1px solid var(--border, #eaeaea); font-family: sans-serif;">
+        <span style="font-size: 11px; font-weight: 600; color: #333;">Lofi YouTube</span>
+        <span id="music-status" style="font-size: 9px; color: #666;">Đang phát...</span>
+    </div>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        let player;
+        const btn = document.getElementById('music-toggle-btn');
+        const statusText = document.getElementById('music-status');
+        const youtubeVideoId = 'JdqL89ZZwFw'; 
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player-container', {
+                height: '0',
+                width: '0',
+                videoId: youtubeVideoId,
+                playerVars: {
+                    'autoplay': 1,
+                    'loop': 1,
+                    'playlist': youtubeVideoId
+                },
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+        function onPlayerReady(event) {
+            player.setVolume(30);
+            const musicState = localStorage.getItem('isYoutubeMusicPlaying');
+            if (musicState === null || musicState === 'true') {
+                player.playVideo();
+                btn.style.background = '#ef4444';
+                statusText.textContent = 'Đang phát...';
+                localStorage.setItem('isYoutubeMusicPlaying', 'true');
+            } else {
+                player.pauseVideo();
+                btn.style.background = '#4f46e5';
+                statusText.textContent = 'Đang tắt';
+            }
+        }
+        function toggleYouTubeMusic() {
+            if (!player) return;
+            const state = player.getPlayerState();
+            if (state === YT.PlayerState.PLAYING) {
+                player.pauseVideo();
+                btn.style.background = '#4f46e5';
+                statusText.textContent = 'Đang tắt';
+                localStorage.setItem('isYoutubeMusicPlaying', 'false');
+            } else {
+                player.playVideo();
+                btn.style.background = '#ef4444';
+                statusText.textContent = 'Đang phát...';
+                localStorage.setItem('isYoutubeMusicPlaying', 'true');
+            }
+        }
+    </script>
+</body>
+</html>

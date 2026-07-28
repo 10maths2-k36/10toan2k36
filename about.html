@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Giới Thiệu - 10 Toán 2 K36</title><span id="live-clock" style="font-size: 0.85rem; color: var(--text-muted, #ccc); font-weight: 500; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 12px;"></span>
+<link href="css/style.css" rel="stylesheet"/>
+<style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .main-content {
+            flex: 1;
+        }
+        .auth-nav-btn {
+            background: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 6px 14px;
+            border-radius: 99px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+        .auth-nav-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-1px);
+        }
+        .auth-nav-btn.logout-state {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+        .auth-nav-btn.logout-state:hover {
+            background: #ef4444;
+            color: #fff;
+        }
+        .intro-container {
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+        .intro-logo {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: rgba(128, 128, 128, 0.05);
+            border: 2px solid var(--border);
+            padding: 4px;
+            flex-shrink: 0;
+            cursor: zoom-in;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .intro-logo.school-shape {
+            border-radius: 12px;
+        }
+        .intro-logo:hover {
+            transform: scale(1.05);
+        }
+        .intro-info {
+            flex: 1;
+            min-width: 250px;
+        }
+        .intro-info p {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+        .intro-info a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .intro-info a:hover {
+            text-decoration: underline;
+        }
+        .video-frame-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 850px;
+            margin: 16px auto 0 auto;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 2px solid var(--border);
+            background: #0b0f19;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            aspect-ratio: 16 / 9; 
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .video-frame-wrapper:hover {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+        }
+        .video-frame-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .custom-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .custom-modal-box {
+            background: var(--card-bg, #fff);
+            border: 1px solid var(--border, #ddd);
+            padding: 24px;
+            border-radius: 16px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+            animation: modalScaleIn 0.2s ease;
+        }
+        @keyframes modalScaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        #lightbox-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            cursor: zoom-out;
+        }
+        #lightbox-modal img {
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .header-logo-img {
+            height: 38px;
+            width: 38px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: rgba(128, 128, 128, 0.05);
+            padding: 2px;
+            border: 1px solid var(--border);
+            cursor: zoom-in;
+            transition: transform 0.2s ease;
+            vertical-align: middle;
+        }
+        .header-logo-img:hover {
+            transform: scale(1.1);
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .site-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 30px;
+            border-top: 1px solid var(--border);
+            background: var(--card-bg);
+            flex-shrink: 0;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .footer-left-content {
+            text-align: left;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .footer-left-content p {
+            margin: 4px 0;
+        }
+        .footer-right-logos {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .footer-right-logos img.school-logo {
+            height: 55px;
+            width: auto;
+            object-fit: contain;
+            background: rgba(128, 128, 128, 0.05);
+            padding: 3px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            cursor: zoom-in;
+            transition: transform 0.2s ease;
+        }
+        .footer-right-logos img.class-logo {
+            height: 55px;
+            width: 55px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: rgba(128, 128, 128, 0.05);
+            padding: 3px;
+            border: 1px solid var(--border);
+            cursor: zoom-in;
+            transition: transform 0.2s ease;
+        }
+        .footer-right-logos img:hover {
+            transform: scale(1.08);
+        }
+    </style>
+    <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0284c7">
+</head>
+<body>
+<div id="preloader">
+<div class="spinner"></div>
+</div>
+<header class="header-nav">
+    <div class="logo">
+        <img alt="Logo 10 Toán 2 K36" class="header-logo-img" onclick="openLightbox('10_t2_logo.jpeg')" src="10_t2_logo.jpeg" title="Bấm để phóng to logo Lớp"/>
+        <h2>10 Toán 2 K36</h2>
+    </div>
+    <nav class="site-nav">
+        <a href="index.html"><i class="ri-home-4-line"></i> Trang Chủ</a>
+        <a href="members.html"><i class="ri-team-line"></i> Thành Viên</a>
+        <a href="achievements.html"><i class="ri-trophy-line"></i> Thành Tích</a>
+        <a href="gallery.html"><i class="ri-image-line"></i> Thư Viện</a>
+        <a href="about.html" class="active"><i class="ri-information-line"></i> Giới Thiệu</a>
+        <a href="feedback.html"><i class="ri-chat-settings-line"></i> Góp Ý</a>
+        <a href="solver.html"><i class="ri-book-open-line"></i> Giải Bài Tập AI</a>
+        <span class="nav-divider"></span>
+        <button class="nav-action-btn theme-btn" id="theme-toggle"><i class="ri-moon-line"></i> Giao diện</button>
+        <button class="nav-action-btn auth-nav-btn" id="auth-nav-btn" onclick="handleAuthNavAction()"><i class="ri-key-line"></i> Đăng nhập</button>
+        <button class="nav-action-btn fx-menu-btn" id="fx-toggle-btn" onclick="toggleMathEffects()"><i class="ri-magic-line"></i> Hiệu ứng: Bật</button>
+    </nav>
+</header>
+<main class="main-content">
+<section class="card animate-on-scroll">
+<h2>🌟 Về Tập Thể Lớp 10 Toán 2 K36</h2>
+<div class="intro-container">
+<img alt="Logo 10 Toán 2 K36" class="intro-logo" onclick="openLightbox('10_t2_logo.jpeg')" src="10_t2_logo.jpeg" title="Bấm để phóng to"/>
+<div class="intro-info">
+<p><strong>📖 Giới thiệu chung:</strong> Ngôi nhà chung của tập thể lớp 10 Toán 2 K36 dưới mái trường THPT Chuyên Bến Tre. Nơi hội tụ niềm đam mê toán học và những kỷ niệm tuổi trẻ rực rỡ.</p>
+<p><strong>👨‍💻 Quản trị viên:</strong> Tập thể lớp 10 Toán 2</p>
+<p><strong>📧 Gmail liên hệ:</strong> <a href="mailto:10toan2k36@gmail.com">10toan2k36@gmail.com</a> (Có thể liên hệ ở phần Góp Ý)</p>
+<p><strong>🌐 Fanpage lớp:</strong> <a href="https://www.facebook.com/profile.php?id=61592307514906&amp;sk=directory_contact_info" target="_blank">10T2 K36 - Kings of Maths</a></p>
+<p><strong>📱 TikTok lớp:</strong> <a href="https://www.tiktok.com/@t2.k36_cbt" target="_blank">@t2.k36_cbt</a></p>
+<p><strong>📺 YouTube lớp:</strong> <a href="https://www.youtube.com/@t2.k36_cbt" target="_blank">@t2.k36_cbt</a></p>
+</div>
+</div>
+</section>
+<section class="card animate-on-scroll">
+<h2>🎬 Video Giới Thiệu Lớp 10 Toán 2</h2>
+<p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 8px;">
+                Thước phim ngắn lưu giữ những khoảnh khắc và kỷ niệm đẹp của tập thể lớp chúng ta.
+            </p>
+<div class="video-frame-wrapper">
+<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" src="https://www.youtube.com/embed/HbXp9Q2y0oE" title="Video Giới Thiệu Lớp 10 Toán 2 K36 - THPT Chuyên Bến Tre">
+</iframe>
+</div>
+</section>
+<section class="card animate-on-scroll">
+<h2>🏫 Về Trường THPT Chuyên Bến Tre</h2>
+<div class="intro-container">
+<img alt="Logo THPT Chuyên Bến Tre" class="intro-logo school-shape" onclick="openLightbox('logocbt.png')" src="logocbt.png" title="Bấm để phóng to"/>
+<div class="intro-info">
+<p><strong>🏛️</strong> Trường Trung Học Phổ Thông Chuyên Bến Tre</p>
+<p><strong>📍</strong> Nơi chắp cánh ước mơ cho các thế hệ học sinh Chuyên Bến Tre, là cái nôi đào tạo nhiều nhân tài với bề dày truyền thống học tập xuất sắc, kỷ cương và sáng tạo, viết tiếp trang sử Vàng cho THPT Chuyên Bến Tre.</p>
+<p><strong>🔗 Website Trường:</strong> <a href="https://thptchuyenbentre.edu.vn/" target="_blank">thptchuyenbentre.edu.vn</a></p>
+<p><strong>🌐 Fanpage Trường:</strong> <a href="https://www.facebook.com/thptchuyenbentre" target="_blank">THPT Chuyên Bến Tre - BenTre High School for Gifted Students</a></p>
+<p><strong>📧 Gmail liên hệ:</strong> <a href="mailto:fbchuyenbentre@gmail.com">fbchuyenbentre@gmail.com</a></p>
+</div>
+</div>
+</section>
+</main>
+<footer class="site-footer">
+<div class="footer-left-content">
+<p><strong>Lớp 10 Toán 2 - K36</strong></p>
+<p>Trường THPT Chuyên Bến Tre • Nơi lưu trữ kỷ niệm và thành tích học tập.</p>
+<p style="font-size: 0.8rem; margin-top: 6px; color: var(--text-muted);">© 2026 Designed by K36 Math Students.</p>
+</div>
+<div class="footer-right-logos">
+<img alt="Logo THPT Chuyên Bến Tre" class="school-logo" onclick="openLightbox('logocbt.png')" src="logocbt.png" title="Bấm để phóng to logo Trường"/>
+<img alt="Logo 10 Toán 2 K36" class="class-logo" onclick="openLightbox('10_t2_logo.jpeg')" src="10_t2_logo.jpeg" title="Bấm để phóng to logo Lớp"/>
+</div>
+</footer>
+<div class="custom-modal-overlay" id="terms-modal">
+<div class="custom-modal-box" style="max-width: 520px; text-align: left;">
+<div style="font-size: 1.5rem; text-align: center; margin-bottom: 5px;">📜</div>
+<h3 style="color: var(--text-main); margin: 0 0 5px 0; font-size: 1.15rem; text-align: center;">Điều khoản và Quy định sử dụng</h3>
+<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center; margin-bottom: 12px;">Vui lòng cuộn xuống dưới cùng để mở khóa nút đồng ý.</p>
+<div id="index-terms-scroll" style="height: 200px; overflow-y: auto; border: 1px solid var(--border); padding: 12px; border-radius: 8px; background: var(--bg-main, #f9f9f9); font-size: 0.83rem; line-height: 1.45; color: var(--text-main); margin-bottom: 15px;">
+<p><b>ĐIỀU KHOẢN VÀ QUY ĐỊNH ĐĂNG TẢI NỘI DUNG</b></p>
+<p>Khi truy cập, sử dụng và đăng tải nội dung vào khu vực nội bộ của website 10 Toán 2 K36, thành viên đồng ý tuân thủ tuyệt đối các quy định về an toàn thông tin và văn hóa ứng xử trực tuyến. Cụ thể, các hành vi sau đây <b>bị nghiêm cấm tuyệt đối</b>:</p>
+<br/>
+<p><b>1. Đăng tải nội dung trái pháp luật và thuần phong mỹ tục:</b> Phát tán, chia sẻ hoặc lưu trữ hình ảnh, video, tài liệu có nội dung bạo lực, đồi trụy, phản động, xuyên tạc lịch sử, vi phạm pháp luật nước Cộng hòa Xã hội Chủ nghĩa Việt Nam hoặc trái với đạo đức xã hội và thuần phong mỹ tục của người Việt Nam.</p>
+<p><b>2. Xâm phạm quyền riêng tư và danh dự cá nhân:</b> Đăng tải hình ảnh, thông tin cá nhân, bài viết hoặc bình luận mang tính chất xúc phạm, lăng mạ, bôi nhọ danh dự, nhân phẩm của các thành viên trong lớp, thầy cô giáo hoặc bất kỳ cá nhân, tổ chức nào khác (bao gồm cả việc cố ý chia sẻ hình ảnh riêng tư khi chưa có sự đồng ý).</p>
+<p><b>3. Vi phạm bản quyền sở hữu trí tuệ:</b> Đăng tải các tài liệu học tập, sách, đề thi, phần mềm hoặc các sản phẩm sáng tạo thuộc bản quyền của tác giả, tổ chức khác mà chưa có sự cho phép hoặc trích nguồn rõ ràng, gây ảnh hưởng tiêu cực đến bản quyền tác giả.</p>
+<p><b>4. Phá hoại hệ thống và bảo mật website:</b> Cố ý thực hiện các hành vi xâm nhập trái phép, phá hoại mã nguồn, phát tán mã độc (virus, spyware), can thiệp vào cơ sở dữ liệu chung, hoặc lợi dụng quyền hạn sau khi đăng nhập để xóa, chỉnh sửa, làm sai lệch dữ liệu học tập và hình ảnh kỷ niệm của tập thể lớp.</p>
+<p><b>5. Đăng tải thông tin sai lệch (Fake News):</b> Cố tình tạo ra, phát tán hoặc chia sẻ các thông tin giả mạo, sai sự thật liên quan đến hoạt động của lớp học, nhà trường hoặc cá nhân các thành viên nhằm mục đích gây hoang mang, hiểu lầm hoặc mất đoàn kết nội bộ.</p>
+<p><b>6. Lạm dụng không gian chung:</b> Đăng tải các nội dung rác, spam quảng cáo thương mại, nội dung không liên quan đến mục đích học tập và lưu trữ kỷ niệm chung của tập thể 10 Toán 2.</p>
+<br/>
+<p><b>Hình thức xử lý:</b> Bất kỳ thành viên nào vi phạm các điều khoản trên sẽ bị thu hồi quyền truy cập khu vực nội bộ ngay lập tức, gỡ bỏ toàn bộ nội dung vi phạm, đồng thời chịu hoàn toàn trách nhiệm trước tập thể lớp và nhà trường tùy theo mức độ vi phạm.</p>
+</div>
+<div style="display: flex; gap: 10px;">
+<button onclick="closeTermsModal()" style="flex: 1; background: transparent; color: var(--text-main); border: 1px solid var(--border); padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Hủy</button>
+<button disabled="" id="index-agree-btn" onclick="acceptIndexTerms()" style="flex: 1; background: #ccc; color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: 600; cursor: not-allowed;">Tôi đã đọc và Đồng ý</button>
+</div>
+</div>
+</div>
+<div class="custom-modal-overlay" id="login-modal">
+<div class="custom-modal-box">
+<div style="font-size: 2rem; margin-bottom: 8px;">🔐</div>
+<h3 style="color: var(--text-main); margin: 0 0 6px 0; font-size: 1.15rem;">Khu vực nội bộ lớp</h3>
+<p style="color: var(--text-muted); font-size: 0.85rem; margin: 0 0 16px 0;">Nhập mật khẩu để tiếp tục truy cập</p>
+<input id="modal-pass-input" onkeydown="if(event.key === 'Enter') submitLogin()" placeholder="Mật khẩu lớp..." style="width: 100%; background: var(--card-bg); border: 1px solid var(--border); padding: 10px 12px; border-radius: 10px; color: var(--text-main); outline: none; font-size: 0.95rem; box-sizing: border-box; margin-bottom: 12px;" type="password"/>
+<div id="modal-err" style="color: #ef4444; font-size: 0.8rem; margin-bottom: 12px; display: none;">Sai mật khẩu rồi bạn ơi!</div>
+<div style="display: flex; gap: 10px;">
+<button onclick="closeLoginModal()" style="flex: 1; background: transparent; color: var(--text-main); border: 1px solid var(--border); padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Hủy</button>
+<button onclick="submitLogin()" style="flex: 1; background: var(--accent); color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Xác nhận</button>
+</div>
+</div>
+</div>
+<div class="custom-modal-overlay" id="logout-modal">
+<div class="custom-modal-box">
+<div style="font-size: 2rem; margin-bottom: 8px;">⚠️</div>
+<h3 style="color: var(--text-main); margin: 0 0 8px 0; font-size: 1.15rem;">Xác nhận đăng xuất</h3>
+<p style="color: var(--text-muted); font-size: 0.9rem; margin: 0 0 20px 0;">Bạn có chắc chắn muốn đăng xuất khỏi khu vực nội bộ không?</p>
+<div style="display: flex; gap: 10px;">
+<button onclick="closeLogoutModal()" style="flex: 1; background: transparent; color: var(--text-main); border: 1px solid var(--border); padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Hủy</button>
+<button onclick="confirmLogout()" style="flex: 1; background: #ef4444; color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Đăng xuất</button>
+</div>
+</div>
+</div>
+<div id="lightbox-modal" onclick="closeLightbox()">
+<img alt="Phóng to ảnh" id="lightbox-img" src=""/>
+</div>
+<script>
+        const CORRECT_PASS = "10toan2k36";
+        window.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('class_unlogged') === 'true' || localStorage.getItem('class_unlocked') === 'true') {
+                updateAuthButtonState(true);
+            } else {
+                updateAuthButtonState(false);
+            }
+        });
+        function handleAuthNavAction() {
+            if (localStorage.getItem('class_unlocked') === 'true') {
+                document.getElementById('logout-modal').style.display = 'flex';
+            } else {
+                const modal = document.getElementById('terms-modal');
+                const scrollBox = document.getElementById('index-terms-scroll');
+                const agreeBtn = document.getElementById('index-agree-btn');
+                modal.style.display = 'flex';
+                if (scrollBox) scrollBox.scrollTop = 0;
+                if (agreeBtn) {
+                    agreeBtn.disabled = true;
+                    agreeBtn.style.background = '#ccc';
+                    agreeBtn.style.cursor = 'not-allowed';
+                }
+            }
+        }
+        const indexScrollBox = document.getElementById('index-terms-scroll');
+        const indexAgreeBtn = document.getElementById('index-agree-btn');
+        if (indexScrollBox) {
+            indexScrollBox.addEventListener('scroll', () => {
+                const isAtBottom = indexScrollBox.scrollHeight - indexScrollBox.scrollTop <= indexScrollBox.clientHeight + 15;
+                if (isAtBottom && indexAgreeBtn) {
+                    indexAgreeBtn.disabled = false;
+                    indexAgreeBtn.style.background = 'var(--accent)';
+                    indexAgreeBtn.style.cursor = 'pointer';
+                }
+            });
+        }
+        function closeTermsModal() {
+            document.getElementById('terms-modal').style.display = 'none';
+        }
+        function acceptIndexTerms() {
+            closeTermsModal();
+            document.getElementById('modal-pass-input').value = '';
+            document.getElementById('modal-err').style.display = 'none';
+            document.getElementById('login-modal').style.display = 'flex';
+            setTimeout(() => document.getElementById('modal-pass-input').focus(), 100);
+        }
+        function closeLoginModal() {
+            document.getElementById('login-modal').style.display = 'none';
+        }
+        function submitLogin() {
+            const passVal = document.getElementById('modal-pass-input').value;
+            if (passVal === CORRECT_PASS) {
+                localStorage.setItem('class_unlocked', 'true');
+                closeLoginModal();
+                updateAuthButtonState(true);
+                location.reload();
+            } else {
+                document.getElementById('modal-err').style.display = 'block';
+            }
+        }
+        function closeLogoutModal() {
+            document.getElementById('logout-modal').style.display = 'none';
+        }
+        function confirmLogout() {
+            localStorage.removeItem('class_unlocked');
+            updateAuthButtonState(false);
+            location.reload();
+        }
+        function updateAuthButtonState(isLoggedIn) {
+            const btn = document.getElementById('auth-nav-btn');
+            if (!btn) return;
+            if (isLoggedIn) {
+                btn.textContent = '🚪 Đăng xuất';
+                btn.className = 'auth-nav-btn logout-state';
+            } else {
+                btn.textContent = '🔑 Đăng nhập';
+                btn.className = 'auth-nav-btn';
+            }
+        }
+        function openLightbox(url) {
+            document.getElementById('lightbox-img').src = url;
+            document.getElementById('lightbox-modal').style.display = 'flex';
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox-modal').style.display = 'none';
+        }
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const body = document.body;
+        if (localStorage.getItem('theme') === 'light') {
+            body.classList.add('light-mode');
+            if (themeToggleBtn) themeToggleBtn.textContent = '☀️ Giao diện';
+        }
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                body.classList.toggle('light-mode');
+                if (body.classList.contains('light-mode')) {
+                    themeToggleBtn.textContent = '☀️ Giao diện';
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    themeToggleBtn.textContent = '🌙 Giao diện';
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+        }
+    </script>
+<script src="js/animation.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const symbols = ['π', '∫', '∑', 'Δ', '√', 'α', 'β', 'θ', '∞', 'f(x)', 'lim', 'φ', '∂', '∇', '∏', 'µ', 'σ', 'Ω', '∀', '∃', '∈', '∉', '⊂', '⊃', '∪', '∩', 'sin', 'cos', 'tan', 'log', 'ln', 'vec{a}', 'lim', 'dx'];
+        const container = document.createElement('div');
+        container.className = 'math-bg-animation';
+        document.body.appendChild(container);
+        const symbolCount = 18; 
+        for (let i = 0; i < symbolCount; i++) {
+            const span = document.createElement('span');
+            span.className = 'math-symbol';
+            span.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+            span.style.left = Math.random() * 100 + 'vw';
+            span.style.fontSize = (Math.random() * 1.5 + 1) + 'rem';
+            span.style.animationDuration = (Math.random() * 10 + 10) + 's'; 
+            span.style.animationDelay = (Math.random() * 10) + 's';
+            container.appendChild(span);
+        }
+    });
+</script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const dot = document.createElement('div');
+        dot.className = 'math-ray-dot';
+        const ring = document.createElement('div');
+        ring.className = 'math-ray-ring';
+        const pulse = document.createElement('div');
+        pulse.className = 'math-ray-pulse';
+        document.body.appendChild(dot);
+        document.body.appendChild(ring);
+        document.body.appendChild(pulse);
+        let mouseX = 0, mouseY = 0;
+        let currentX = 0, currentY = 0;
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+        function renderRayCursor() {
+            currentX += (mouseX - currentX) * 0.25;
+            currentY += (mouseY - currentY) * 0.25;
+            dot.style.left = currentX + 'px';
+            dot.style.top = currentY + 'px';
+            ring.style.left = currentX + 'px';
+            ring.style.top = currentY + 'px';
+            pulse.style.left = currentX + 'px';
+            pulse.style.top = currentY + 'px';
+            requestAnimationFrame(renderRayCursor);
+        }
+        renderRayCursor();
+        const interactiveElements = document.querySelectorAll('a, button, input, .intro-logo, .video-frame-wrapper, select');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+        });
+    });
+</script>
+<script>
+    window.addEventListener('click', (e) => {
+        const mathChars = ['+', '-', '×', '÷', '=', 'π', '∫', '∑', 'Δ', '√', '0', '1'];
+        const particleCount = 6; 
+        for (let i = 0; i < particleCount; i++) {
+            const span = document.createElement('span');
+            span.className = 'math-click-particle';
+            span.textContent = mathChars[Math.floor(Math.random() * mathChars.length)];
+            span.style.left = e.clientX + 'px';
+            span.style.top = e.clientY + 'px';
+            const angle = Math.random() * Math.PI * 2;
+            const distance = Math.random() * 80 + 40; 
+            const tx = Math.cos(angle) * distance;
+            const ty = Math.sin(angle) * distance;
+            const tr = (Math.random() - 0.5) * 360; 
+            span.style.setProperty('--tx', tx + 'px');
+            span.style.setProperty('--ty', ty + 'px');
+            span.style.setProperty('--tr', tr + 'deg');
+            document.body.appendChild(span);
+            setTimeout(() => {
+                span.remove();
+            }, 800);
+        }
+    });
+</script>
+<script>
+    function toggleMathEffects() {
+        const isCurrentlyDisabled = document.body.classList.contains('fx-disabled');
+        const fxBtn = document.getElementById('fx-toggle-btn');
+        if (isCurrentlyDisabled) {
+            document.body.classList.remove('fx-disabled');
+            if (fxBtn) fxBtn.innerHTML = '✨ Hiệu ứng: Bật';
+            localStorage.setItem('math_fx_enabled', 'true');
+        } else {
+            document.body.classList.add('fx-disabled');
+            if (fxBtn) fxBtn.innerHTML = '✨ Hiệu ứng: Tắt';
+            localStorage.setItem('math_fx_enabled', 'false');
+        }
+    }
+    window.addEventListener('DOMContentLoaded', () => {
+        const fxEnabled = localStorage.getItem('math_fx_enabled') !== 'false';
+        const fxBtn = document.getElementById('fx-toggle-btn');
+        if (!fxEnabled) {
+            document.body.classList.add('fx-disabled');
+            if (fxBtn) fxBtn.innerHTML = '✨ Hiệu ứng: Tắt';
+        } else {
+            document.body.classList.remove('fx-disabled');
+            if (fxBtn) fxBtn.innerHTML = '✨ Hiệu ứng: Bật';
+        }
+    });
+    const originalWindowClick = window.onclick;
+    window.addEventListener('click', (e) => {
+        if (document.body.classList.contains('fx-disabled')) return;
+    }, true);
+</script>
+<script>
+    let player;
+    const btn = document.getElementById('music-toggle-btn');
+    const statusText = document.getElementById('music-status');
+    const youtubeVideoId = '9kzE8isXlQY'; 
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('youtube-player-container', {
+            height: '0',
+            width: '0',
+            videoId: youtubeVideoId,
+            playerVars: {
+                'autoplay': 1, 
+                'loop': 1,
+                'playlist': youtubeVideoId
+            },
+            events: {
+                'onReady': onPlayerReady
+            }
+        });
+    }
+    function onPlayerReady(event) {
+        player.setVolume(30);
+        const musicState = localStorage.getItem('isYoutubeMusicPlaying');
+        if (musicState === null || musicState === 'true') {
+            player.playVideo();
+            if(btn) btn.style.background = '#ef4444';
+            if(statusText) statusText.textContent = 'Đang phát...';
+            localStorage.setItem('isYoutubeMusicPlaying', 'true');
+        } else {
+            player.pauseVideo();
+            if(btn) btn.style.background = '#4f46e5';
+            if(statusText) statusText.textContent = 'Đang tắt';
+        }
+    }
+    function toggleYouTubeMusic() {
+        if (!player) return;
+        const state = player.getPlayerState();
+        if (state === YT.PlayerState.PLAYING) {
+            player.pauseVideo();
+            if(btn) btn.style.background = '#4f46e5';
+            if(statusText) statusText.textContent = 'Đang tắt';
+            localStorage.setItem('isYoutubeMusicPlaying', 'false'); 
+        } else {
+            player.playVideo();
+            if(btn) btn.style.background = '#ef4444';
+            if(statusText) statusText.textContent = 'Đang phát...';
+            localStorage.setItem('isYoutubeMusicPlaying', 'true'); 
+        }
+    }
+</script>
+<iframe allow="autoplay" src="music.html" style="position: fixed; bottom: 20px; right: 20px; width: 150px; height: 50px; border: none; z-index: 9999; background: transparent;"></iframe>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const cursor = document.createElement('div');
+        cursor.className = 'apple-cursor';
+        document.body.appendChild(cursor);
+        let mouseX = 0, mouseY = 0;
+        let currentX = 0, currentY = 0;
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+        function renderAppleCursor() {
+            currentX += (mouseX - currentX) * 0.2;
+            currentY += (mouseY - currentY) * 0.2;
+            cursor.style.left = currentX + 'px';
+            cursor.style.top = currentY + 'px';
+            requestAnimationFrame(renderAppleCursor);
+        }
+        renderAppleCursor();
+        const interactiveSelectors = 'a, button, input, select, textarea, .intro-logo, .video-frame-wrapper, .auth-nav-btn, .header-logo-img, img';
+        document.addEventListener('mouseover', (e) => {
+            if (e.target.closest(interactiveSelectors)) {
+                document.body.classList.add('cursor-hover');
+            } else {
+                document.body.classList.remove('cursor-hover');
+            }
+        });
+    });
+</script>
+<script src="time.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('Service Worker đăng ký thành công:', reg.scope))
+        .catch(err => console.log('Đăng ký Service Worker thất bại:', err));
+    });
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+    "name": "10 Toán 2 K36",
+    "short_name": "10Toan2K36",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#0284c7",
+    "icons": [
+        {
+            "src": "10_t2_logo.jpeg",
+            "sizes": "192x192",
+            "type": "image/jpeg"
+        },
+        {
+            "src": "10_t2_logo.jpeg",
+            "sizes": "512x512",
+            "type": "image/jpeg"
+        }
+    ]
+}

@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>10 Toán 2 K36 - Thành Viên Lớp</title><span id="live-clock" style="font-size: 0.85rem; color: var(--text-muted, #ccc); font-weight: 500; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 12px;"></span>
+<link href="css/style.css" rel="stylesheet"/>
+<style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .main-content {
+            flex: 1; 
+        }
+        .card-header-box {
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.8rem;
+        }
+        .card-header-box h2 {
+            margin: 0 0 4px 0;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-main);
+            border: none;
+            padding: 0;
+        }
+        .card-sub-info {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        .member-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+            margin-top: 10px;
+            color: var(--text-main);
+            background: transparent;
+            table-layout: fixed; 
+        }
+        .member-table th:nth-child(1), .member-table td:nth-child(1) {
+            width: 12%; 
+            text-align: center;
+        }
+        .member-table th:nth-child(2), .member-table td:nth-child(2) {
+            width: 58%; 
+        }
+        .member-table th:nth-child(3), .member-table td:nth-child(3) {
+            width: 30%; 
+            text-align: center;
+        }
+        .member-table th {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent);
+            font-weight: 600;
+            border: 1px solid var(--border);
+            padding: 14px 18px;
+        }
+        .member-table td {
+            background: var(--card-bg);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 18px;
+            color: var(--text-main);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .member-table td:first-child {
+            border-left: 1px solid var(--border);
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+        }
+        .member-table td:last-child {
+            border-right: 1px solid var(--border);
+            border-top-right-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+        .member-table tbody tr {
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+        }
+        .member-table tbody tr:hover {
+            transform: translateY(-4px) scale(1.01);
+        }
+        .member-table tbody tr:hover td {
+            background: var(--card-bg);
+            border-color: var(--accent);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        .auth-nav-btn {
+            background: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 6px 14px;
+            border-radius: 99px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+        .auth-nav-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-1px);
+        }
+        .auth-nav-btn.logout-state {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+        .auth-nav-btn.logout-state:hover {
+            background: #ef4444;
+            color: #fff;
+        }
+        .custom-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .custom-modal-box {
+            background: var(--card-bg, #fff);
+            border: 1px solid var(--border, #ddd);
+            padding: 24px;
+            border-radius: 16px;
+            max-width: 380px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+            animation: modalScaleIn 0.2s ease;
+        }
+        @keyframes modalScaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        #lightbox-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            cursor: zoom-out;
+        }
+        #lightbox-modal img {
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .header-logo-img {
+            height: 38px;
+            width: 38px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: rgba(128, 128, 128, 0.05);
+            padding: 2px;
+            border: 1px solid var(--border);
+            cursor: zoom-in;
+            transition: transform 0.2s ease;
+            vertical-align: middle;
+        }
+        .header-logo-img:hover {
+            transform: scale(1.1);
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .site-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 30px;
+            border-top: 1px solid var(--border);
+            background: var(--card-bg);
+            flex-shrink: 0;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .footer-left-content {
+            text-align: left;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .footer-left-content p {
+            margin: 4px 0;
+        }
+        .footer-right-logos {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .footer-right-logos img.school-logo {
+            height: 55px;
+            width: auto;
+            object-fit: contain;
+            background: rgba(128, 128, 128, 0.05);
+            padding: 3px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            cursor: zoom-in;
+            transition: transform 0.2s ease;
+        }
+        .footer-right-logos img.class-logo {
+            height: 55px;
+            width: 55px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: rgba(128, 128, 128, 0.05);
+            padding: 3px;
+            border: 1px solid var(--border);
+            cursor: zoom-in;
+            transition: transform 0.2s ease;
+        }
+        .footer-right-logos img:hover {
+            transform: scale(1.08);
+        }
+    </style>
+    <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0284c7">
+</head>
+<body>
+<header class="header-nav">
+    <div class="logo">
+        <img alt="Logo 10 Toán 2 K36" class="header-logo-img" onclick="openLightbox('10_t2_logo.jpeg')" src="10_t2_logo.jpeg" title="Bấm để phóng to logo Lớp"/>
+        <h2>10 Toán 2 K36</h2>
+    </div>
+    <nav class="site-nav">
+        <a href="index.html"><i class="ri-home-4-line"></i> Trang Chủ</a>
+        <a href="members.html" class="active"><i class="ri-team-line"></i> Thành Viên</a>
+        <a href="achievements.html"><i class="ri-trophy-line"></i> Thành Tích</a>
+        <a href="gallery.html"><i class="ri-image-line"></i> Thư Viện</a>
+        <a href="about.html"><i class="ri-information-line"></i> Giới Thiệu</a>
+        <a href="feedback.html"><i class="ri-chat-settings-line"></i> Góp Ý</a>
+        <a href="solver.html"><i class="ri-book-open-line"></i> Giải Bài Tập AI</a>
+        <span class="nav-divider"></span>
+        <button class="nav-action-btn theme-btn" id="theme-toggle"><i class="ri-moon-line"></i> Giao diện</button>
+        <button class="nav-action-btn auth-nav-btn" id="auth-nav-btn" onclick="handleAuthNavAction()"><i class="ri-key-line"></i> Đăng nhập</button>
+        <button class="nav-action-btn fx-menu-btn" id="fx-toggle-btn" onclick="toggleMathEffects()"><i class="ri-magic-line"></i> Hiệu ứng: Bật</button>
+    </nav>
+</header>
+<main class="main-content">
+<section class="card">
+<div class="card-header-box" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+<h2 style="margin: 0 0 -1px 0; font-weight: 700; font-size: 1.5rem; color: var(--text-color);">10 Toán 2 — K36</h2>
+<p style="margin: 0; color: var(--text-muted); font-size: 0.9rem;">35 thành viên</p>
+</div>
+<table class="member-table">
+<thead>
+<tr>
+<th>STT</th>
+<th>Họ và Tên</th>
+<th>Ngày Sinh</th>
+</tr>
+</thead>
+<tbody id="member-list-body">
+</tbody>
+</table>
+</section>
+</main>
+<footer class="site-footer">
+<div class="footer-left-content">
+<p><strong>Lớp 10 Toán 2 - K36</strong></p>
+<p>Trường THPT Chuyên Bến Tre • Nơi lưu trữ kỷ niệm và thành tích học tập.</p>
+<p style="font-size: 0.8rem; margin-top: 6px; color: var(--text-muted);">© 2026 Designed by K36 Math Students.</p>
+</div>
+<div class="footer-right-logos">
+<img alt="Logo THPT Chuyên Bến Tre" class="school-logo" onclick="openLightbox('logocbt.png')" src="logocbt.png" title="Bấm để phóng to logo Trường"/>
+<img alt="Logo 10 Toán 2 K36" class="class-logo" onclick="openLightbox('10_t2_logo.jpeg')" src="10_t2_logo.jpeg" title="Bấm để phóng to logo Lớp"/>
+</div>
+</footer>
+<div class="custom-modal-overlay" id="terms-modal">
+<div class="custom-modal-box" style="max-width: 520px; text-align: left;">
+<div style="font-size: 1.5rem; text-align: center; margin-bottom: 5px;">📜</div>
+<h3 style="color: var(--text-main); margin: 0 0 5px 0; font-size: 1.15rem; text-align: center;">Điều khoản và Quy định sử dụng</h3>
+<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center; margin-bottom: 12px;">Vui lòng cuộn xuống dưới cùng để mở khóa nút đồng ý.</p>
+<div id="index-terms-scroll" onscroll="checkTermsScroll()" style="height: 200px; overflow-y: auto; border: 1px solid var(--border); padding: 12px; border-radius: 8px; background: var(--bg-main, #f9f9f9); font-size: 0.83rem; line-height: 1.45; color: var(--text-main); margin-bottom: 15px;">
+<p><b>ĐIỀU KHOẢN VÀ QUY ĐỊNH ĐĂNG TẢI NỘI DUNG</b></p>
+<p>Khi truy cập, sử dụng và đăng tải nội dung vào khu vực nội bộ của website 10 Toán 2 K36, thành viên đồng ý tuân thủ tuyệt đối các quy định về an toàn thông tin và văn hóa ứng xử trực tuyến. Cụ thể, các hành vi sau đây <b>bị nghiêm cấm tuyệt đối</b>:</p>
+<br/>
+<p><b>1. Đăng tải nội dung trái pháp luật và thuần phong mỹ tục:</b> Phát tán, chia sẻ hoặc lưu trữ hình ảnh, video, tài liệu có nội dung bạo lực, đồi trụy, phản động, xuyên tạc lịch sử, vi phạm pháp luật nước Cộng hòa Xã hội Chủ nghĩa Việt Nam hoặc trái với đạo đức xã hội và thuần phong mỹ tục của người Việt Nam.</p>
+<p><b>2. Xâm phạm quyền riêng tư và danh dự cá nhân:</b> Đăng tải hình ảnh, thông tin cá nhân, bài viết hoặc bình luận mang tính chất xúc phạm, lăng mạ, bôi nhọ danh dự, nhân phẩm của các thành viên trong lớp, thầy cô giáo hoặc bất kỳ cá nhân, tổ chức nào khác (bao gồm cả việc cố ý chia sẻ hình ảnh riêng tư khi chưa có sự đồng ý).</p>
+<p><b>3. Vi phạm bản quyền sở hữu trí tuệ:</b> Đăng tải các tài liệu học tập, sách, đề thi, phần mềm hoặc các sản phẩm sáng tạo thuộc bản quyền của tác giả, tổ chức khác mà chưa có sự cho phép hoặc trích nguồn rõ ràng, gây ảnh hưởng tiêu cực đến bản quyền tác giả.</p>
+<p><b>4. Phá hoại hệ thống và bảo mật website:</b> Cố ý thực hiện các hành vi xâm nhập trái phép, phá hoại mã nguồn, phát tán mã độc (virus, spyware), can thiệp vào cơ sở dữ liệu chung, hoặc lợi dụng quyền hạn sau khi đăng nhập để xóa, chỉnh sửa, làm sai lệch dữ liệu học tập và hình ảnh kỷ niệm của tập thể lớp.</p>
+<p><b>5. Đăng tải thông tin sai lệch (Fake News):</b> Cố tình tạo ra, phát tán hoặc chia sẻ các thông tin giả mạo, sai sự thật liên quan đến hoạt động của lớp học, nhà trường hoặc cá nhân các thành viên nhằm mục đích gây hoang mang, hiểu lầm hoặc mất đoàn kết nội bộ.</p>
+<p><b>6. Lạm dụng không gian chung:</b> Đăng tải các nội dung rác, spam quảng cáo thương mại, nội dung không liên quan đến mục đích học tập và lưu trữ kỷ niệm chung của tập thể 10 Toán 2.</p>
+<br/>
+<p><b>Hình thức xử lý:</b> Bất kỳ thành viên nào vi phạm các điều khoản trên sẽ bị thu hồi quyền truy cập khu vực nội bộ ngay lập tức, gỡ bỏ toàn bộ nội dung vi phạm, đồng thời chịu hoàn toàn trách nhiệm trước tập thể lớp và nhà trường tùy theo mức độ vi phạm.</p>
+</div>
+<div style="display: flex; gap: 10px;">
+<button onclick="closeTermsModal()" style="flex: 1; background: transparent; color: var(--text-main); border: 1px solid var(--border); padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Hủy</button>
+<button disabled="" id="index-agree-btn" onclick="acceptIndexTerms()" style="flex: 1; background: #ccc; color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: 600; cursor: not-allowed;">Tôi đã đọc và Đồng ý</button>
+</div>
+</div>
+</div>
+<div class="custom-modal-overlay" id="login-modal">
+<div class="custom-modal-box">
+<div style="font-size: 2rem; margin-bottom: 8px;">🔐</div>
+<h3 style="color: var(--text-main); margin: 0 0 6px 0; font-size: 1.15rem;">Khu vực nội bộ lớp</h3>
+<p style="color: var(--text-muted); font-size: 0.85rem; margin: 0 0 16px 0;">Nhập mật khẩu để tiếp tục truy cập</p>
+<input id="modal-pass-input" onkeydown="if(event.key === 'Enter') submitLogin()" placeholder="Mật khẩu lớp..." style="width: 100%; background: var(--card-bg); border: 1px solid var(--border); padding: 10px 12px; border-radius: 10px; color: var(--text-main); outline: none; font-size: 0.95rem; box-sizing: border-box; margin-bottom: 12px;" type="password"/>
+<div id="modal-err" style="color: #ef4444; font-size: 0.8rem; margin-bottom: 12px; display: none;">Sai mật khẩu rồi bạn ơi!</div>
+<div style="display: flex; gap: 10px;">
+<button onclick="backToTermsModal()" style="flex: 1; background: transparent; color: var(--text-main); border: 1px solid var(--border); padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Quay lại</button>
+<button onclick="submitLogin()" style="flex: 1; background: var(--accent); color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Xác nhận</button>
+</div>
+</div>
+</div>
+<div class="custom-modal-overlay" id="logout-modal">
+<div class="custom-modal-box">
+<div style="font-size: 2rem; margin-bottom: 8px;">⚠️</div>
+<h3 style="color: var(--text-main); margin: 0 0 8px 0; font-size: 1.15rem;">Xác nhận đăng xuất</h3>
+<p style="color: var(--text-muted); font-size: 0.9rem; margin: 0 0 20px 0;">Bạn có chắc chắn muốn đăng xuất khỏi khu vực nội bộ không?[cite: 3]</p>
+<div style="display: flex; gap: 10px;">
+<button onclick="closeLogoutModal()" style="flex: 1; background: transparent; color: var(--text-main); border: 1px solid var(--border); padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Hủy</button>
+<button onclick="confirmLogout()" style="flex: 1; background: #ef4444; color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Đăng xuất</button>
+</div>
+</div>
+</div>
+<div id="lightbox-modal" onclick="closeLightbox()">
+<img alt="Phóng to ảnh" id="lightbox-img" src=""/>
+</div>
+<script>
+        const CORRECT_PASS = "10toan2k36";
+        window.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('class_unlocked') === 'true') {
+                updateAuthButtonState(true);
+            } else {
+                updateAuthButtonState(false);
+            }
+        });
+        function handleAuthNavAction() {
+            if (localStorage.getItem('class_unlocked') === 'true') {
+                document.getElementById('logout-modal').style.display = 'flex';
+            } else {
+                const scrollBox = document.getElementById('index-terms-scroll');
+                scrollBox.scrollTop = 0;
+                const agreeBtn = document.getElementById('index-agree-btn');
+                agreeBtn.disabled = true;
+                agreeBtn.style.background = '#ccc';
+                agreeBtn.style.cursor = 'not-allowed';
+                document.getElementById('terms-modal').style.display = 'flex';
+            }
+        }
+        function checkTermsScroll() {
+            const scrollBox = document.getElementById('index-terms-scroll');
+            const agreeBtn = document.getElementById('index-agree-btn');
+            if (scrollBox.scrollTop + scrollBox.clientHeight >= scrollBox.scrollHeight - 10) {
+                agreeBtn.disabled = false;
+                agreeBtn.style.background = 'var(--accent)';
+                agreeBtn.style.cursor = 'pointer';
+            }
+        }
+        function closeTermsModal() {
+            document.getElementById('terms-modal').style.display = 'none';
+        }
+        function acceptIndexTerms() {
+            const agreeBtn = document.getElementById('index-agree-btn');
+            if (!agreeBtn.disabled) {
+                closeTermsModal();
+                document.getElementById('modal-pass-input').value = '';
+                document.getElementById('modal-err').style.display = 'none';
+                document.getElementById('login-modal').style.display = 'flex';
+                setTimeout(() => document.getElementById('modal-pass-input').focus(), 100);
+            }
+        }
+        function backToTermsModal() {
+            document.getElementById('login-modal').style.display = 'none';
+            document.getElementById('terms-modal').style.display = 'flex';
+        }
+        function closeLoginModal() {
+            document.getElementById('login-modal').style.display = 'none';
+        }
+        function submitLogin() {
+            const passVal = document.getElementById('modal-pass-input').value;
+            if (passVal === CORRECT_PASS) {
+                localStorage.setItem('class_unlocked', 'true');
+                closeLoginModal();
+                updateAuthButtonState(true);
+                location.reload();
+            } else {
+                document.getElementById('modal-err').style.display = 'block';
+            }
+        }
+        function closeLogoutModal() {
+            document.getElementById('logout-modal').style.display = 'none';
+        }
+        function confirmLogout() {
+            localStorage.removeItem('class_unlocked');
+            updateAuthButtonState(false);
+            location.reload();
+        }
+        function updateAuthButtonState(isLoggedIn) {
+            const btn = document.getElementById('auth-nav-btn');
+            if (!btn) return;
+            if (isLoggedIn) {
+                btn.textContent = '🚪 Đăng xuất';
+                btn.className = 'auth-nav-btn logout-state';
+            } else {
+                btn.textContent = '🔑 Đăng nhập';
+                btn.className = 'auth-nav-btn';
+            }
+        }
+        function openLightbox(url) {
+            document.getElementById('lightbox-img').src = url;
+            document.getElementById('lightbox-modal').style.display = 'flex';
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox-modal').style.display = 'none';
+        }
+        const members = [
+          { "stt": 1, "name": "Nguyễn Thị Phúc An", "birthday": "18/08/2011" },
+          { "stt": 2, "name": "Lê Nhựt An", "birthday": "17/12/2011" },
+          { "stt": 3, "name": "Nguyễn Thị Thùy Dương", "birthday": "09/04/2011" },
+          { "stt": 4, "name": "Nguyễn Thủy Dương", "birthday": "22/07/2011" },
+          { "stt": 5, "name": "Hồ Ngọc Mỹ Duyên", "birthday": "09/03/2011" },
+          { "stt": 6, "name": "Lâm Gia Hưng", "birthday": "13/10/2011" },
+          { "stt": 7, "name": "Ngô Minh Hùng", "birthday": "24/12/2011" },
+          { "stt": 8, "name": "Nguyễn Ngọc Mai Hương", "birthday": "12/02/2011" },
+          { "stt": 9, "name": "Đoàn Nguyễn Vĩnh Khang", "birthday": "19/12/2011" },
+          { "stt": 10, "name": "Huỳnh Nam Khang", "birthday": "16/08/2011" },
+          { "stt": 11, "name": "Nguyễn Phúc Khang", "birthday": "02/06/2011" },
+          { "stt": 12, "name": "Phạm Phúc Khang", "birthday": "29/07/2011" },
+          { "stt": 13, "name": "Huỳnh Tuấn Kiệt", "birthday": "19/10/2011" },
+          { "stt": 14, "name": "Nguyễn Hoàng Minh", "birthday": "27/01/2011" },
+          { "stt": 15, "name": "Trịnh Quang Minh", "birthday": "21/02/2011" },
+          { "stt": 16, "name": "Trần Khánh Nghi", "birthday": "29/04/2011" },
+          { "stt": 17, "name": "Nguyễn Thị Bảo Ngân", "birthday": "02/04/2011" },
+          { "stt": 18, "name": "Đỗ Mai Ngân", "birthday": "11/06/2011" },
+          { "stt": 19, "name": "Lê Thị Kim Ngân", "birthday": "14/05/2011" },
+          { "stt": 20, "name": "Trần Ngọc Kim Ngân", "birthday": "08/11/2011" },
+          { "stt": 21, "name": "Võ Thanh Hồng Ngọc", "birthday": "27/01/2011" },
+          { "stt": 22, "name": "Châu Thanh Kim Nguyên", "birthday": "16/04/2011" },
+          { "stt": 23, "name": "Nguyễn Nhựt Thái Nguyên", "birthday": "22/11/2011" },
+          { "stt": 24, "name": "Trần Huỳnh Như", "birthday": "27/05/2011" },
+          { "stt": 25, "name": "Đặng Nhật Phú", "birthday": "04/09/2011" },
+          { "stt": 26, "name": "Huỳnh Thiên Phú", "birthday": "25/05/2011" },
+          { "stt": 27, "name": "Nguyễn Gia Phúc", "birthday": "26/11/2011" },
+          { "stt": 28, "name": "Phạm Trọng Thạch", "birthday": "26/09/2011" },
+          { "stt": 29, "name": "Phạm Quang Thắng", "birthday": "05/08/2011" },
+          { "stt": 30, "name": "Nguyễn Chí Thiện", "birthday": "02/10/2011" },
+          { "stt": 31, "name": "Nguyễn Hoàng An Thuyên", "birthday": "24/10/2011" },
+          { "stt": 32, "name": "Phan Nguyễn Bạch Tùng", "birthday": "07/12/2011" },
+          { "stt": 33, "name": "Nguyễn Đặng Tường Vy", "birthday": "26/02/2011" },
+          { "stt": 34, "name": "Tô Quang Vinh", "birthday": "06/04/2011" },
+          { "stt": 35, "name": "Lê Nguyễn Đức Trí", "birthday": "20/02/2011" }
+        ];
+        const tbody = document.getElementById('member-list-body');
+        members.forEach(member => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${member.stt}</td>
+                <td>${member.name}</td>
+                <td>${member.birthday}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const body = document.body;
+        if (localStorage.getItem('theme') === 'light') {
+            body.classList.add('light-mode');
+            if (themeToggleBtn) themeToggleBtn.textContent = '☀️ Giao diện';
+        }
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                body.classList.toggle('light-mode');
+                if (body.classList.contains('light-mode')) {
+                    themeToggleBtn.textContent = '☀️ Giao diện';
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    themeToggleBtn.textContent = '🌙 Giao diện';
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+        }
+    </script>
+<script src="js/animation.js"></script>
+<script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const symbols = ['π', '∫', '∑', 'Δ', '√', 'α', 'β', 'θ', '∞', 'f(x)', 'lim', 'φ', '∂', '∇', '∏', 'µ', 'σ', 'Ω', '∀', '∃', '∈', '∉', '⊂', '⊃', '∪', '∩', 'sin', 'cos', 'tan', 'log', 'ln', 'vec{a}', 'lim', 'dx'];
+            const container = document.createElement('div');
+            container.className = 'math-bg-animation';
+            document.body.appendChild(container);
+            const symbolCount = 18; 
+            for (let i = 0; i < symbolCount; i++) {
+                const span = document.createElement('span');
+                span.className = 'math-symbol';
+                span.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                span.style.left = Math.random() * 100 + 'vw';
+                span.style.fontSize = (Math.random() * 1.5 + 1) + 'rem';
+                span.style.animationDuration = (Math.random() * 10 + 10) + 's'; 
+                span.style.animationDelay = (Math.random() * 10) + 's';
+                container.appendChild(span);
+            }
+        });
+    </script>
+<script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const dot = document.createElement('div');
+            dot.className = 'math-ray-dot';
+            const ring = document.createElement('div');
+            ring.className = 'math-ray-ring';
+            const pulse = document.createElement('div');
+            pulse.className = 'math-ray-pulse';
+            document.body.appendChild(dot);
+            document.body.appendChild(ring);
+            document.body.appendChild(pulse);
+            let mouseX = 0, mouseY = 0;
+            let currentX = 0, currentY = 0;
+            window.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+            function renderRayCursor() {
+                currentX += (mouseX - currentX) * 0.25;
+                currentY += (mouseY - currentY) * 0.25;
+                dot.style.left = currentX + 'px';
+                dot.style.top = currentY + 'px';
+                ring.style.left = currentX + 'px';
+                ring.style.top = currentY + 'px';
+                pulse.style.left = currentX + 'px';
+                pulse.style.top = currentY + 'px';
+                requestAnimationFrame(renderRayCursor);
+            }
+            renderRayCursor();
+        });
+    </script>
+<script>
+        window.addEventListener('click', (e) => {
+            if (document.body.classList.contains('fx-disabled')) return;
+            const mathChars = ['+', '-', '×', '÷', '=', 'π', '∫', '∑', 'Δ', '√', '0', '1'];
+            const particleCount = 6; 
+            for (let i = 0; i < particleCount; i++) {
+                const span = document.createElement('span');
+                span.className = 'math-click-particle';
+                span.textContent = mathChars[Math.floor(Math.random() * mathChars.length)];
+                span.style.left = e.clientX + 'px';
+                span.style.top = e.clientY + 'px';
+                const angle = Math.random() * Math.PI * 2;
+                const distance = Math.random() * 80 + 40; 
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
+                const tr = (Math.random() - 0.5) * 360; 
+                span.style.setProperty('--tx', tx + 'px');
+                span.style.setProperty('--ty', ty + 'px');
+                span.style.setProperty('--tr', tr + 'deg');
+                document.body.appendChild(span);
+                setTimeout(() => {
+                    span.remove();
+                }, 800);
+            }
+        });
+    </script>
+<script>
+        function toggleMathEffects() {
+            const isCurrentlyDisabled = document.body.classList.contains('fx-disabled');
+            const fxBtn = document.getElementById('fx-toggle-btn');
+            if (isCurrentlyDisabled) {
+                document.body.classList.remove('fx-disabled');
+                if (fxBtn) fxBtn.innerHTML = '✨ Hiệu ứng: Bật';
+                localStorage.setItem('math_fx_enabled', 'true');
+            } else {
+                document.body.classList.add('fx-disabled');
+                if (fxBtn) fxBtn.innerHTML = '✨ Hiệu ứng: Tắt';
+                localStorage.setItem('math_fx_enabled', 'false');
+            }
+        }
+        window.addEventListener('DOMContentLoaded', () => {
+            const fxEnabled = localStorage.getItem('math_fx_enabled') !== 'false';
+            const fxBtn = document.getElementById('fx-toggle-btn');
+            if (!fxEnabled) {
+                document.body.classList.add('fx-disabled');
+                if (fxBtn) fxBtn.innerHTML = '✨ Hiệu ứng: Tắt';
+            } else {
+                document.body.classList.remove('fx-disabled');
+                if (fxBtn) fxBtn.innerHTML = '✨ Hiệu ứng: Bật';
+            }
+        });
+    </script>
+<iframe allow="autoplay" src="music.html" style="position: fixed; bottom: 20px; right: 20px; width: 150px; height: 50px; border: none; z-index: 9999; background: transparent;"></iframe>
+<script src="time.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('Service Worker đăng ký thành công:', reg.scope))
+        .catch(err => console.log('Đăng ký Service Worker thất bại:', err));
+    });
+  }
+</script>
+</body>
+</html>
