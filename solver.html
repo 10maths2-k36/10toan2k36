@@ -827,12 +827,10 @@
             }
         });
     }
-
     const payload = {
-        model: "gemini-3.6-flash", // Hoặc model web đang dùng
+        model: "gemini-3.6-flash", 
         contents: [{ parts: parts }]
     };
-
     try {
         const response = await fetch("https://raspy-fog-724b.10toan2k36.workers.dev", {
             method: "POST",
@@ -841,19 +839,15 @@
             },
             body: JSON.stringify(payload)
         });
-
         if (!response.ok) {
             const errData = await response.json().catch(() => ({}));
             throw new Error(errData.error?.message || `Lỗi HTTP: ${response.status}`);
         }
-
         const data = await response.json();
-        
-        // Tùy thuộc vào cấu trúc trả về từ Worker của bạn (định dạng chuẩn Gemini API hoặc custom JSON)
         if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts) {
             return data.candidates[0].content.parts[0].text;
         } else if (data.text) {
-            return data.text; // Trường hợp Worker trả về dạng rút gọn { text: "..." }
+            return data.text; 
         } else {
             throw new Error("Phản hồi từ API Worker không hợp lệ!");
         }
