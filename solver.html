@@ -814,6 +814,7 @@
         }
  async function callGeminiProWithRetry(userMessage, imageBase64 = null, maxAttempts = 3) {
     let parts = [];
+ const systemInstruction = "Bạn là một trợ lý AI học tập cực kỳ thông minh, thân thiện, nói chuyện bằng tiếng Việt tự nhiên, trẻ trung (chuẩn genz, dùng từ ngữ gần gũi với học sinh cấp 3 như 'ông giáo', 'nha', 'ok luôn', 'chill phết',... nhưng vẫn giữ độ chính xác tuyệt đối về kiến thức Toán, Lý, Hóa,...). Tuyệt đối không dùng văn phong máy móc, cứng nhắc.";   
     if (userMessage) {
         parts.push({ text: userMessage });
     }
