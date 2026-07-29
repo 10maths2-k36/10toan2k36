@@ -342,15 +342,45 @@
         }
         .chat-message-wrapper {
             display: flex;
-            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
             max-width: 85%;
         }
         .chat-message-wrapper.user {
             align-self: flex-end;
-            align-items: flex-end;
+            flex-direction: row-reverse;
         }
         .chat-message-wrapper.ai {
             align-self: flex-start;
+        }
+        .chat-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            border: 1px solid var(--border);
+        }
+        .chat-avatar.ai {
+            background: #f97316;
+            color: #fff;
+        }
+        .chat-avatar.user {
+            background: #2563eb;
+            color: #fff;
+        }
+        .chat-message-content {
+            display: flex;
+            flex-direction: column;
+            max-width: calc(100% - 48px);
+        }
+        .chat-message-wrapper.user .chat-message-content {
+            align-items: flex-end;
+        }
+        .chat-message-wrapper.ai .chat-message-content {
             align-items: flex-start;
         }
         .chat-message {
@@ -687,13 +717,16 @@
                 </div>
                 <div class="chat-window-body" id="chat-window-body">
                     <div class="chat-message-wrapper ai">
-                        <div class="chat-message ai">Chào bạn! Tôi là trợ lý AI chuyên nghiệp. Hãy gửi bài tập khó để tôi phân tích chi tiết nhé!</div>
-                        <div class="ai-actions-bar">
-                            <button class="ai-action-btn" onclick="copyAiMessage(this)"><i class="ri-file-copy-line"></i> Sao chép</button>
-                            <button class="ai-action-btn" onclick="speakAiMessage(this)"><i class="ri-volume-up-line"></i> Đọc to</button>
-                            <button class="ai-action-btn" onclick="rateAiMessage(this, 'like')" title="Thích"><i class="ri-thumb-up-line"></i></button>
-                            <button class="ai-action-btn" onclick="rateAiMessage(this, 'dislike')" title="Không thích"><i class="ri-thumb-down-line"></i></button>
-                            <button class="ai-action-btn" onclick="regenerateAiMessage(this)" title="Tạo lại phản hồi"><i class="ri-restart-line"></i> Tạo lại</button>
+                        <div class="chat-avatar ai"><i class="ri-robot-2-line"></i></div>
+                        <div class="chat-message-content">
+                            <div class="chat-message ai">Chào bạn! Tôi là trợ lý AI chuyên nghiệp. Hãy gửi bài tập khó để tôi phân tích chi tiết nhé!</div>
+                            <div class="ai-actions-bar">
+                                <button class="ai-action-btn" onclick="copyAiMessage(this)"><i class="ri-file-copy-line"></i> Sao chép</button>
+                                <button class="ai-action-btn" onclick="speakAiMessage(this)"><i class="ri-volume-up-line"></i> Đọc to</button>
+                                <button class="ai-action-btn" onclick="rateAiMessage(this, 'like')" title="Thích"><i class="ri-thumb-up-line"></i></button>
+                                <button class="ai-action-btn" onclick="rateAiMessage(this, 'dislike')" title="Không thích"><i class="ri-thumb-down-line"></i></button>
+                                <button class="ai-action-btn" onclick="regenerateAiMessage(this)" title="Tạo lại phản hồi"><i class="ri-restart-line"></i> Tạo lại</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -806,57 +839,49 @@
         let chatSessions = JSON.parse(localStorage.getItem('k36_solver_sessions')) || [];
         let currentSessionId = localStorage.getItem('k36_active_session_id') || null;
         let isSendingMessage = false; 
-        let currentKeyIndex = 0;
-        function getNextApiKey() {
-            const key = GEMINI_API_KEYS[currentKeyIndex];
-            currentKeyIndex = (currentKeyIndex + 1) % GEMINI_API_KEYS.length;
-            return key;
-        }
- async function callGeminiProWithRetry(userMessage, imageBase64 = null, maxAttempts = 3) {
-    let parts = [];
- const systemInstruction = "Bạn là một trợ lý AI học tập cực kỳ thông minh, thân thiện, nói chuyện bằng tiếng Việt tự nhiên, trẻ trung (chuẩn genz, dùng từ ngữ gần gũi với học sinh cấp 3 như 'ông giáo', 'nha', 'ok luôn', 'chill phết',... nhưng vẫn giữ độ chính xác tuyệt đối về kiến thức Toán, Lý, Hóa,...). Tuyệt đối không dùng văn phong máy móc, cứng nhắc.";   
-    if (userMessage) {
-        parts.push({ text: userMessage });
-    }
-    if (imageBase64) {
-        const base64Data = imageBase64.split(',')[1];
-        const mimeType = imageBase64.substring(imageBase64.indexOf(":") + 1, imageBase64.indexOf(";"));
-        parts.push({
-            inline_data: {
-                mime_type: mimeType,
-                data: base64Data
+        async function callGeminiProWithRetry(userMessage, imageBase64 = null, maxAttempts = 3) {
+            let parts = [];
+            const systemInstruction = "Bạn là một trợ lý AI học tập cực kỳ thông minh, thân thiện, nói chuyện bằng tiếng Việt tự nhiên, trẻ trung (chuẩn genz, dùng từ ngữ gần gũi với học sinh cấp 3 như 'ông giáo', 'nha', 'ok luôn', 'chill phết',... nhưng vẫn giữ độ chính xác tuyệt đối về kiến thức Toán, Lý, Hóa,...). Tuyệt đối không dùng văn phong máy móc, cứng nhắc.";   
+            parts.push({ text: systemInstruction + "\n\nCâu hỏi của người dùng: " + (userMessage || "") });
+            if (imageBase64) {
+                const base64Data = imageBase64.split(',')[1];
+                const mimeType = imageBase64.substring(imageBase64.indexOf(":") + 1, imageBase64.indexOf(";"));
+                parts.push({
+                    inline_data: {
+                        mime_type: mimeType,
+                        data: base64Data
+                    }
+                });
             }
-        });
-    }
-    const payload = {
-        model: "gemini-3.6-flash", 
-        contents: [{ parts: parts }]
-    };
-    try {
-        const response = await fetch("https://raspy-fog-724b.10toan2k36.workers.dev", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(payload)
-        });
-        if (!response.ok) {
-            const errData = await response.json().catch(() => ({}));
-            throw new Error(errData.error?.message || `Lỗi HTTP: ${response.status}`);
+            const payload = {
+                model: "gemini-3.6-flash", 
+                contents: [{ parts: parts }]
+            };
+            try {
+                const response = await fetch("https://raspy-fog-724b.10toan2k36.workers.dev", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(payload)
+                });
+                if (!response.ok) {
+                    const errData = await response.json().catch(() => ({}));
+                    throw new Error(errData.error?.message || `Lỗi HTTP: ${response.status}`);
+                }
+                const data = await response.json();
+                if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts) {
+                    return data.candidates[0].content.parts[0].text;
+                } else if (data.text) {
+                    return data.text; 
+                } else {
+                    throw new Error("Phản hồi từ API Worker không hợp lệ!");
+                }
+            } catch (err) {
+                console.error("Lỗi gọi Worker:", err);
+                throw err;
+            }
         }
-        const data = await response.json();
-        if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts) {
-            return data.candidates[0].content.parts[0].text;
-        } else if (data.text) {
-            return data.text; 
-        } else {
-            throw new Error("Phản hồi từ API Worker không hợp lệ!");
-        }
-    } catch (err) {
-        console.error("Lỗi gọi Worker:", err);
-        throw err;
-    }
-}
         window.addEventListener('DOMContentLoaded', () => {
             if (localStorage.getItem('class_unlogged') === 'true' || localStorage.getItem('class_unlocked') === 'true') {
                 updateAuthButtonState(true);
@@ -1053,13 +1078,16 @@
                 pinned: false,
                 htmlContent: `
                     <div class="chat-message-wrapper ai">
-                        <div class="chat-message ai">Chào bạn! Tôi là trợ lý AI. Hãy gửi bài tập khó để tôi phân tích chi tiết nhé!</div>
-                        <div class="ai-actions-bar">
-                            <button class="ai-action-btn" onclick="copyAiMessage(this)"><i class="ri-file-copy-line"></i> Sao chép</button>
-                            <button class="ai-action-btn" onclick="speakAiMessage(this)"><i class="ri-volume-up-line"></i> Đọc to</button>
-                            <button class="ai-action-btn" onclick="rateAiMessage(this, 'like')" title="Thích"><i class="ri-thumb-up-line"></i></button>
-                            <button class="ai-action-btn" onclick="rateAiMessage(this, 'dislike')" title="Không thích"><i class="ri-thumb-down-line"></i></button>
-                            <button class="ai-action-btn" onclick="regenerateAiMessage(this)" title="Tạo lại phản hồi"><i class="ri-restart-line"></i> Tạo lại</button>
+                        <div class="chat-avatar ai"><i class="ri-robot-2-line"></i></div>
+                        <div class="chat-message-content">
+                            <div class="chat-message ai">Chào bạn! Tôi là trợ lý AI. Hãy gửi bài tập khó để tôi phân tích chi tiết nhé!</div>
+                            <div class="ai-actions-bar">
+                                <button class="ai-action-btn" onclick="copyAiMessage(this)"><i class="ri-file-copy-line"></i> Sao chép</button>
+                                <button class="ai-action-btn" onclick="speakAiMessage(this)"><i class="ri-volume-up-line"></i> Đọc to</button>
+                                <button class="ai-action-btn" onclick="rateAiMessage(this, 'like')" title="Thích"><i class="ri-thumb-up-line"></i></button>
+                                <button class="ai-action-btn" onclick="rateAiMessage(this, 'dislike')" title="Không thích"><i class="ri-thumb-down-line"></i></button>
+                                <button class="ai-action-btn" onclick="regenerateAiMessage(this)" title="Tạo lại phản hồi"><i class="ri-restart-line"></i> Tạo lại</button>
+                            </div>
                         </div>
                     </div>
                 `
@@ -1327,8 +1355,13 @@
             let imageBase64Data = null;
             const userWrapper = document.createElement('div');
             userWrapper.className = 'chat-message-wrapper user';
-            const userMsg = document.createElement('div');
-            userMsg.className = 'chat-message user';
+            userWrapper.innerHTML = `
+                <div class="chat-avatar user"><i class="ri-user-3-line"></i></div>
+                <div class="chat-message-content">
+                    <div class="chat-message user"></div>
+                </div>
+            `;
+            const userMsg = userWrapper.querySelector('.chat-message');
             let displayHtml = text.replace(/\n/g, '<br>');
             if (attachedFile) {
                 if (attachedFile.type.startsWith('image/')) {
@@ -1344,27 +1377,26 @@
             } else {
                 userMsg.innerHTML = displayHtml;
             }
-            userWrapper.appendChild(userMsg);
             body.appendChild(userWrapper);
             input.value = '';
             clearAttachment();
             body.scrollTop = body.scrollHeight;
             const aiWrapper = document.createElement('div');
             aiWrapper.className = 'chat-message-wrapper ai';
-            const aiMsg = document.createElement('div');
-            aiMsg.className = 'chat-message ai';
-            aiMsg.textContent = 'Đang phân tích...';
-            aiWrapper.appendChild(aiMsg);
-            const actionsBar = document.createElement('div');
-            actionsBar.className = 'ai-actions-bar';
-            actionsBar.innerHTML = `
-                <button class="ai-action-btn" onclick="copyAiMessage(this)"><i class="ri-file-copy-line"></i> Copy</button>
-                <button class="ai-action-btn" onclick="speakAiMessage(this)"><i class="ri-volume-up-line"></i> Read</button>
-                <button class="ai-action-btn" onclick="rateAiMessage(this, 'like')" title="Thích"><i class="ri-thumb-up-line"></i></button>
-                <button class="ai-action-btn" onclick="rateAiMessage(this, 'dislike')" title="Không thích"><i class="ri-thumb-down-line"></i></button>
-                <button class="ai-action-btn" onclick="regenerateAiMessage(this)" title="Tạo lại phản hồi"><i class="ri-restart-line"></i> Tạo lại</button>
+            aiWrapper.innerHTML = `
+                <div class="chat-avatar ai"><i class="ri-robot-2-line"></i></div>
+                <div class="chat-message-content">
+                    <div class="chat-message ai">Đang phân tích...</div>
+                    <div class="ai-actions-bar">
+                        <button class="ai-action-btn" onclick="copyAiMessage(this)"><i class="ri-file-copy-line"></i> Sao chép</button>
+                        <button class="ai-action-btn" onclick="speakAiMessage(this)"><i class="ri-volume-up-line"></i> Đọc to</button>
+                        <button class="ai-action-btn" onclick="rateAiMessage(this, 'like')" title="Thích"><i class="ri-thumb-up-line"></i></button>
+                        <button class="ai-action-btn" onclick="rateAiMessage(this, 'dislike')" title="Không thích"><i class="ri-thumb-down-line"></i></button>
+                        <button class="ai-action-btn" onclick="regenerateAiMessage(this)" title="Tạo lại phản hồi"><i class="ri-restart-line"></i> Tạo lại</button>
+                    </div>
+                </div>
             `;
-            aiWrapper.appendChild(actionsBar);
+            const aiMsg = aiWrapper.querySelector('.chat-message');
             body.appendChild(aiWrapper);
             body.scrollTop = body.scrollHeight;
             stopBtn.style.display = 'flex';
