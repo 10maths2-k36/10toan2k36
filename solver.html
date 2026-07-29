@@ -795,7 +795,6 @@
 <img alt="Phóng to ảnh" id="lightbox-img" src=""/>
 </div>
 <iframe allow="autoplay" src="music.html" style="position: fixed; bottom: 20px; right: 20px; width: 150px; height: 50px; border: none; z-index: 9999; background: transparent;"></iframe>
-<script src="config.js"></script>
 <script>
         const CORRECT_PASS = "10toan2k36";
         let currentAbortController = null;
@@ -813,63 +812,56 @@
             currentKeyIndex = (currentKeyIndex + 1) % GEMINI_API_KEYS.length;
             return key;
         }
-        async function callGeminiProWithRetry(userMessage, imageBase64 = null, maxAttempts = 27) {
-            let attempts = 0;
-            let parts = [];
-            if (userMessage) {
-                parts.push({ text: userMessage });
+ async function callGeminiProWithRetry(userMessage, imageBase64 = null, maxAttempts = 3) {
+    let parts = [];
+    if (userMessage) {
+        parts.push({ text: userMessage });
+    }
+    if (imageBase64) {
+        const base64Data = imageBase64.split(',')[1];
+        const mimeType = imageBase64.substring(imageBase64.indexOf(":") + 1, imageBase64.indexOf(";"));
+        parts.push({
+            inline_data: {
+                mime_type: mimeType,
+                data: base64Data
             }
-            if (imageBase64) {
-                const base64Data = imageBase64.split(',')[1];
-                const mimeType = imageBase64.substring(imageBase64.indexOf(":") + 1, imageBase64.indexOf(";"));
-                parts.push({
-                    inline_data: {
-                        mime_type: mimeType,
-                        data: base64Data
-                    }
-                });
-            }
-            const payload = {
-                contents: [{ parts: parts }],
-                system_instruction: {
-                    parts: [{ text: "Mày là trợ lý học tập AI chuyên nghiệp. Khi viết công thức toán học, căn thức, phân số hoặc phương trình, LUÔN LUÔN bọc trong LaTeX chuẩn (dùng $ cho inline và $$ cho phương trình độc lập, ví dụ $\\sqrt{x}$, $\\frac{a}{b}$). Tư duy logic sắc bén, giải thích chi tiết và chính xác tuyệt đối." }]
-                }
-            };
-            while (attempts < maxAttempts) {
-                const apiKey = getNextApiKey();
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
-                try {
-                    const response = await fetch(url, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(payload)
-                    });
-                    if (!response.ok) {
-                        const errData = await response.json().catch(() => ({}));
-                        const errMessage = errData.error?.message || '';
-                        const errStatus = response.status;
-                        if (errStatus === 429 || errMessage.toLowerCase().includes('quota') || errMessage.toLowerCase().includes('rate limit') || errStatus >= 500) {
-                            console.warn(`Key hiện tại gặp lỗi quá hạn mức hoặc quá tải (${errStatus}). Đang chuyển sang key dự phòng tiếp theo...`);
-                            attempts++;
-                            continue; 
-                        }
-                        throw new Error(errMessage || `Lỗi HTTP: ${errStatus}`);
-                    }
-                    const data = await response.json();
-                    if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts) {
-                        return data.candidates[0].content.parts[0].text;
-                    } else {
-                        throw new Error("Phản hồi từ API không hợp lệ!");
-                    }
-                } catch (err) {
-                    attempts++;
-                    if (attempts >= maxAttempts) {
-                        throw err;
-                    }
-                }
-            }
-            throw new Error("Tất cả các API key đều đã vượt quá hạn mức hoặc không phản hồi. Vui lòng thử lại sau!");
+        });
+    }
+
+    const payload = {
+        model: "gemini-3.6-flash", // Hoặc model web đang dùng
+        contents: [{ parts: parts }]
+    };
+
+    try {
+        const response = await fetch("https://raspy-fog-724b.10toan2k36.workers.dev", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+            const errData = await response.json().catch(() => ({}));
+            throw new Error(errData.error?.message || `Lỗi HTTP: ${response.status}`);
         }
+
+        const data = await response.json();
+        
+        // Tùy thuộc vào cấu trúc trả về từ Worker của bạn (định dạng chuẩn Gemini API hoặc custom JSON)
+        if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts) {
+            return data.candidates[0].content.parts[0].text;
+        } else if (data.text) {
+            return data.text; // Trường hợp Worker trả về dạng rút gọn { text: "..." }
+        } else {
+            throw new Error("Phản hồi từ API Worker không hợp lệ!");
+        }
+    } catch (err) {
+        console.error("Lỗi gọi Worker:", err);
+        throw err;
+    }
+}
         window.addEventListener('DOMContentLoaded', () => {
             if (localStorage.getItem('class_unlogged') === 'true' || localStorage.getItem('class_unlocked') === 'true') {
                 updateAuthButtonState(true);
