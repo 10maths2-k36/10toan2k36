@@ -34,6 +34,98 @@
             font-size: 0.9rem;
             color: var(--text-muted);
         }
+        .filter-sort-bar {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            background: var(--card-bg);
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            align-items: center;
+        }
+        .filter-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .filter-group button {
+            background: var(--bg-main, #f9f9f9);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .filter-group button:hover {
+            border-color: var(--accent);
+        }
+        .filter-group button.active {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+        .custom-dropdown {
+            position: relative;
+            user-select: none;
+        }
+        .custom-dropdown-selected {
+            background: var(--bg-main, #f9f9f9);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            min-width: 110px;
+            transition: all 0.2s ease;
+        }
+        .custom-dropdown-selected:hover {
+            border-color: var(--accent);
+        }
+        .custom-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            right: 0;
+            background: var(--card-bg, #fff);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            max-height: 180px;
+            overflow-y: auto;
+            z-index: 1000;
+            padding: 4px;
+        }
+        .custom-dropdown.open .custom-dropdown-menu {
+            display: block;
+        }
+        .custom-dropdown-item {
+            padding: 6px 10px;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background 0.15s ease;
+        }
+        .custom-dropdown-item:hover {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent);
+        }
+        .custom-dropdown-item.selected {
+            background: var(--accent);
+            color: #fff;
+        }
         .member-table {
             width: 100%;
             border-collapse: separate;
@@ -263,7 +355,36 @@
 <section class="card">
 <div class="card-header-box" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
 <h2 style="margin: 0 0 -1px 0; font-weight: 700; font-size: 1.5rem; color: var(--text-color);">10 Toán 2 — K36</h2>
-<p style="margin: 0; color: var(--text-muted); font-size: 0.9rem;">35 thành viên</p>
+<p style="margin: 0; color: var(--text-muted); font-size: 0.9rem;" id="member-count-text">35 thành viên</p>
+</div>
+<div class="filter-sort-bar">
+    <div class="filter-group">
+        <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-main);">Sắp xếp:</span>
+        <button id="sort-az-btn" class="active" onclick="setSortMode('az')">A → Z</button>
+        <button id="sort-za-btn" onclick="setSortMode('za')">Z → A</button>
+        <button onclick="resetFilters()" style="background: transparent; border: 1px solid var(--border);">Đặt lại</button>
+    </div>
+    <div class="filter-group">
+        <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-main);">Lọc sinh nhật:</span>
+        <div class="custom-dropdown" id="dropdown-day">
+            <div class="custom-dropdown-selected" onclick="toggleDropdown('dropdown-day')">
+                <span id="selected-day-text">Tất cả ngày</span>
+                <i class="ri-arrow-down-s-line"></i>
+            </div>
+            <div class="custom-dropdown-menu" id="menu-day">
+                <div class="custom-dropdown-item selected" onclick="selectDay('', 'Tất cả ngày')">Tất cả ngày</div>
+            </div>
+        </div>
+        <div class="custom-dropdown" id="dropdown-month">
+            <div class="custom-dropdown-selected" onclick="toggleDropdown('dropdown-month')">
+                <span id="selected-month-text">Tất cả tháng</span>
+                <i class="ri-arrow-down-s-line"></i>
+            </div>
+            <div class="custom-dropdown-menu" id="menu-month">
+                <div class="custom-dropdown-item selected" onclick="selectMonth('', 'Tất cả tháng')">Tất cả tháng</div>
+            </div>
+        </div>
+    </div>
 </div>
 <table class="member-table">
 <thead>
@@ -349,7 +470,44 @@
             } else {
                 updateAuthButtonState(false);
             }
+            initFilterDropdowns();
+            applyFilterAndSort();
         });
+        window.addEventListener('click', (e) => {
+            if (!e.target.closest('.custom-dropdown')) {
+                document.querySelectorAll('.custom-dropdown').forEach(d => d.classList.remove('open'));
+            }
+        });
+        function toggleDropdown(id) {
+            const dropdown = document.getElementById(id);
+            const isOpen = dropdown.classList.contains('open');
+            document.querySelectorAll('.custom-dropdown').forEach(d => d.classList.remove('open'));
+            if (!isOpen) {
+                dropdown.classList.add('open');
+            }
+        }
+        let selectedDayVal = '';
+        let selectedMonthVal = '';
+        function selectDay(val, text) {
+            selectedDayVal = val;
+            document.getElementById('selected-day-text').textContent = text;
+            document.getElementById('dropdown-day').classList.remove('open');
+            const menu = document.getElementById('menu-day');
+            menu.querySelectorAll('.custom-dropdown-item').forEach(item => {
+                item.classList.toggle('selected', item.getAttribute('data-value') === val);
+            });
+            applyFilterAndSort();
+        }
+        function selectMonth(val, text) {
+            selectedMonthVal = val;
+            document.getElementById('selected-month-text').textContent = text;
+            document.getElementById('dropdown-month').classList.remove('open');
+            const menu = document.getElementById('menu-month');
+            menu.querySelectorAll('.custom-dropdown-item').forEach(item => {
+                item.classList.toggle('selected', item.getAttribute('data-value') === val);
+            });
+            applyFilterAndSort();
+        }
         function handleAuthNavAction() {
             if (localStorage.getItem('class_unlocked') === 'true') {
                 document.getElementById('logout-modal').style.display = 'flex';
@@ -466,17 +624,88 @@
           { "stt": 34, "name": "Tô Quang Vinh", "gender": "Nam", "birthday": "06/04/2011" },
           { "stt": 35, "name": "Lê Nguyễn Đức Trí", "gender": "Nam", "birthday": "20/02/2011" }
         ];
-        const tbody = document.getElementById('member-list-body');
-        members.forEach(member => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${member.stt}</td>
-                <td>${member.name}</td>
-                <td>${member.gender}</td>
-                <td>${member.birthday}</td>
-            `;
-            tbody.appendChild(tr);
-        });
+        let currentSort = 'az';
+        function setSortMode(mode) {
+            currentSort = mode;
+            document.getElementById('sort-az-btn').classList.toggle('active', mode === 'az');
+            document.getElementById('sort-za-btn').classList.toggle('active', mode === 'za');
+            applyFilterAndSort();
+        }
+        function initFilterDropdowns() {
+            const days = new Set();
+            const months = new Set();
+            members.forEach(m => {
+                const parts = m.birthday.split('/');
+                if (parts.length === 3) {
+                    days.add(parts[0]);
+                    months.add(parts[1]);
+                }
+            });
+            for (let i = 1; i <= 31; i++) {
+                days.add(i < 10 ? '0' + i : '' + i);
+            }
+            const dayMenu = document.getElementById('menu-day');
+            const monthMenu = document.getElementById('menu-month');
+            Array.from(days).sort((a,b) => a - b).forEach(d => {
+                const item = document.createElement('div');
+                item.className = 'custom-dropdown-item';
+                item.setAttribute('data-value', d);
+                item.textContent = `Ngày ${d}`;
+                item.onclick = () => selectDay(d, `Ngày ${d}`);
+                dayMenu.appendChild(item);
+            });
+            Array.from(months).sort((a,b) => a - b).forEach(m => {
+                const item = document.createElement('div');
+                item.className = 'custom-dropdown-item';
+                item.setAttribute('data-value', m);
+                item.textContent = `Tháng ${m}`;
+                item.onclick = () => selectMonth(m, `Tháng ${m}`);
+                monthMenu.appendChild(item);
+            });
+        }
+        function resetFilters() {
+            selectDay('', 'Tất cả ngày');
+            selectMonth('', 'Tất cả tháng');
+            setSortMode('az');
+        }
+        function applyFilterAndSort() {
+            const selectedDay = selectedDayVal;
+            const selectedMonth = selectedMonthVal;
+            let filtered = members.filter(m => {
+                const parts = m.birthday.split('/');
+                const d = parts[0];
+                const mth = parts[1];
+                if (selectedDay && d !== selectedDay) return false;
+                if (selectedMonth && mth !== selectedMonth) return false;
+                return true;
+            });
+            if (currentSort === 'az') {
+                filtered.sort((a, b) => {
+                    const nameA = a.name.split(" ").pop();
+                    const nameB = b.name.split(" ").pop();
+                    return nameA.localeCompare(nameB, 'vi');
+                });
+            } else if (currentSort === 'za') {
+                filtered.sort((a, b) => {
+                    const nameA = a.name.split(" ").pop();
+                    const nameB = b.name.split(" ").pop();
+                    return nameB.localeCompare(nameA, 'vi');
+                });
+            }
+            const tbody = document.getElementById('member-list-body');
+            tbody.innerHTML = '';
+            filtered.forEach((member, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${member.name}</td>
+                    <td>${member.gender}</td>
+                    <td>${member.birthday}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+            document.getElementById('member-count-text').textContent = `${filtered.length} thành viên`;
+        }
         const themeToggleBtn = document.getElementById('theme-toggle');
         const body = document.body;
         if (localStorage.getItem('theme') === 'light') {
