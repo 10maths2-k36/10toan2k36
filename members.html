@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+<style>
+    body.dark-mode .filter-group button:not(.active):not(.selected), 
+    body.dark-mode .search-input-box, 
+    body.dark-mode .custom-dropdown-selected,
+    .dark .filter-group button:not(.active):not(.selected), 
+    .dark .search-input-box, 
+    .dark .custom-dropdown-selected {
+        background-color: #1e293b !important;
+        color: #f8fafc !important;
+        border-color: #334155 !important;
+    }
+    body.dark-mode .filter-group button.active,
+    body.dark-mode .filter-group button.selected,
+    .dark .filter-group button.active,
+    .dark .filter-group button.selected {
+        background-color: var(--accent, #0284c7) !important; 
+        color: #ffffff !important;
+        border-color: var(--accent, #0284c7) !important;
+    }
+    body.dark-mode .search-input-box::placeholder,
+    .dark .search-input-box::placeholder {
+        color: #94a3b8 !important;
+        opacity: 1;
+    }
+</style>
 <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -70,6 +95,21 @@
             color: #fff;
             border-color: var(--accent);
         }
+        .search-input-box {
+            background: var(--bg-main, #f9f9f9);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            outline: none;
+            transition: all 0.2s ease;
+            width: 160px;
+        }
+        .search-input-box:focus {
+            border-color: var(--accent);
+            background: var(--card-bg);
+        }
         .custom-dropdown {
             position: relative;
             user-select: none;
@@ -125,6 +165,23 @@
         .custom-dropdown-item.selected {
             background: var(--accent);
             color: #fff;
+        }
+        .birthday-countdown-widget {
+            background: var(--card-bg);
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: var(--text-main);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(10px);
+        }
+        .birthday-countdown-widget i {
+            font-size: 1.8rem;
+            color: var(--accent);
         }
         .member-table {
             width: 100%;
@@ -467,6 +524,25 @@
         .footer-right-logos img:hover {
             transform: scale(1.08);
         }
+        .firework-particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: explodeFirework 1s ease-out forwards;
+            z-index: 10001;
+        }
+        @keyframes explodeFirework {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0.2);
+                opacity: 0;
+            }
+        }
     </style>
     <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0284c7">
@@ -497,7 +573,18 @@
 <h2 style="margin: 0 0 -1px 0; font-weight: 700; font-size: 1.5rem; color: var(--text-color);">10 Toán 2 — K36</h2>
 <p style="margin: 0; color: var(--text-muted); font-size: 0.9rem;" id="member-count-text">35 thành viên</p>
 </div>
+<div class="birthday-countdown-widget" id="birthday-countdown-box">
+    <i class="ri-cake-2-line"></i>
+    <div>
+        <div style="font-weight: 600; font-size: 0.95rem;" id="birthday-widget-title">Sinh nhật sắp tới</div>
+        <div style="font-size: 0.85rem; color: var(--text-muted);" id="birthday-widget-content">Đang tải thông tin sinh nhật...</div>
+    </div>
+</div>
 <div class="filter-sort-bar">
+    <div class="filter-group">
+        <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-main);">Tìm kiếm:</span>
+        <input type="text" id="search-name-input" class="search-input-box" placeholder="Nhập tên thành viên..." oninput="applyFilterAndSort()">
+    </div>
     <div class="filter-group">
         <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-main);">Sắp xếp:</span>
         <button id="sort-az-btn" class="active" onclick="setSortMode('az')">A → Z</button>
@@ -505,7 +592,18 @@
         <button onclick="resetFilters()" style="background: transparent; border: 1px solid var(--border);">Đặt lại</button>
     </div>
     <div class="filter-group">
-        <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-main);">Lọc sinh nhật:</span>
+        <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-main);">Bộ lọc:</span>
+        <div class="custom-dropdown" id="dropdown-gender">
+            <div class="custom-dropdown-selected" onclick="toggleDropdown('dropdown-gender')">
+                <span id="selected-gender-text">Tất cả giới tính</span>
+                <i class="ri-arrow-down-s-line"></i>
+            </div>
+            <div class="custom-dropdown-menu" id="menu-gender">
+                <div class="custom-dropdown-item selected" onclick="selectGender('', 'Tất cả giới tính')">Tất cả giới tính</div>
+                <div class="custom-dropdown-item" onclick="selectGender('Nam', 'Nam')">Nam</div>
+                <div class="custom-dropdown-item" onclick="selectGender('Nữ', 'Nữ')">Nữ</div>
+            </div>
+        </div>
         <div class="custom-dropdown" id="dropdown-day">
             <div class="custom-dropdown-selected" onclick="toggleDropdown('dropdown-day')">
                 <span id="selected-day-text">Tất cả ngày</span>
@@ -586,7 +684,7 @@
             </div>
         </div>
         <div style="font-size: 12.5px; font-style: italic; color: var(--text-main); margin-bottom: 20px; padding: 0 10px; line-height: 1.4; font-weight: 500;">
-            "Học hết sức, chơi hết mình vì màu cờ sắc áo 10 Toán 2!"
+            "Học hết sức, chơi hết mình!"
         </div>
         <button onclick="closeMemberCardDirect()" style="width: 100%; background: linear-gradient(180deg, #1a82ff 0%, #0063e5 100%); color: #fff; border: none; padding: 11px; border-radius: 14px; font-size: 14px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(0, 99, 229, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3); transition: all 0.2s ease;" onmouseover="this.style.filter='brightness(1.05)'" onmouseout="this.style.filter='none'">Đóng thẻ</button>
         <div id="copy-toast">Đã sao chép thông tin thành viên!</div>
@@ -665,6 +763,7 @@
                 updateAuthButtonState(false);
             }
             initFilterDropdowns();
+            initBirthdayCountdown();
             applyFilterAndSort();
         });
         window.addEventListener('click', (e) => {
@@ -682,6 +781,7 @@
         }
         let selectedDayVal = '';
         let selectedMonthVal = '';
+        let selectedGenderVal = '';
         function selectDay(val, text) {
             selectedDayVal = val;
             document.getElementById('selected-day-text').textContent = text;
@@ -697,6 +797,16 @@
             document.getElementById('selected-month-text').textContent = text;
             document.getElementById('dropdown-month').classList.remove('open');
             const menu = document.getElementById('menu-month');
+            menu.querySelectorAll('.custom-dropdown-item').forEach(item => {
+                item.classList.toggle('selected', item.getAttribute('data-value') === val);
+            });
+            applyFilterAndSort();
+        }
+        function selectGender(val, text) {
+            selectedGenderVal = val;
+            document.getElementById('selected-gender-text').textContent = text;
+            document.getElementById('dropdown-gender').classList.remove('open');
+            const menu = document.getElementById('menu-gender');
             menu.querySelectorAll('.custom-dropdown-item').forEach(item => {
                 item.classList.toggle('selected', item.getAttribute('data-value') === val);
             });
@@ -792,7 +902,7 @@
             "Xử Nữ": { date: "23/08 - 22/09", icon: "♍", desc: "Xử Nữ cẩn thận, tỉ mỉ, cầu toàn, thông minh sắc sảo và luôn có trách nhiệm cao trong công việc cũng như học tập." },
             "Thiên Bình": { date: "23/09 - 22/10", icon: "♎", desc: "Thiên Bình yêu chuộng hòa bình, công bằng, có ngoại giao khéo léo, tinh tế và gu thời trang, cái đẹp tuyệt vời." },
             "Bọ Cạp": { date: "23/10 - 21/11", icon: "♏", desc: "Bọ Cạp (Thần Nông) sâu sắc, quyết đoán, mạnh mẽ, sống nội tâm kín đáo và có ý chí kiên cường không gì lay chuyển." },
-            "Nhân Mã": { date: "22/11 - 21/12", icon: "♐", desc: "Nhân Mã phóng khoáng, yêu tự do, lạc quan, hài hước, thích khám phá những điều mới mẻ và luôn tràn đầy năng lượng tích cực." },
+            "Nhân Mã": { date: "22/11 - 21/12", icon: "♐", desc: "Nhân Mã phóng khoảng, yêu tự do, lạc quan, hài hước, thích khám phá những điều mới mẻ và luôn tràn đầy năng lượng tích cực." },
             "Ma Kết": { date: "22/12 - 19/01", icon: "♑", desc: "Ma Kết kỷ luật, chăm chỉ, có tầm nhìn chiến lược, kiên nhẫn và luôn nỗ lực hết mình để đạt được mục tiêu lớn." }
         };
         function getZodiacSign(day, month) {
@@ -965,15 +1075,90 @@
                 monthMenu.appendChild(item);
             });
         }
+        function initBirthdayCountdown() {
+            const today = new Date();
+            const currentYear = today.getFullYear();
+            const todayTime = new Date(currentYear, today.getMonth(), today.getDate()).getTime();
+            let upcoming = [];
+            members.forEach(m => {
+                const parts = m.birthday.split('/');
+                if (parts.length === 3) {
+                    const d = parseInt(parts[0], 10);
+                    const mo = parseInt(parts[1], 10) - 1; 
+                    let bDayThisYear = new Date(currentYear, mo, d);
+                    let bDayTime = bDayThisYear.getTime();
+                    if (bDayTime < todayTime) {
+                        bDayThisYear = new Date(currentYear + 1, mo, d);
+                        bDayTime = bDayThisYear.getTime();
+                    }
+                    const diffTime = bDayTime - todayTime;
+                    const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+                    upcoming.push({ member: m, diff: diffDays });
+                }
+            });
+            upcoming.sort((a, b) => a.diff - b.diff);
+            if (upcoming.length > 0) {
+                const nearest = upcoming[0];
+                const widgetContent = document.getElementById('birthday-widget-content');
+                if (nearest.diff === 0) {
+                    widgetContent.innerHTML = `🎉 Hôm nay là sinh nhật của <b>${nearest.member.name}</b> (${nearest.member.birthday})! Cả lớp cùng gửi lời chúc nhé!`;
+                    triggerBirthdayFireworks();
+                } else {
+                    widgetContent.innerHTML = `Sắp tới sinh nhật của <b>${nearest.member.name}</b> vào ngày <b>${nearest.member.birthday}</b> (còn khoảng ${nearest.diff} ngày nữa).`;
+                }
+            }
+        }
+        function triggerBirthdayFireworks() {
+            const interval = setInterval(() => {
+                createFireworkBurst(Math.random() * window.innerWidth, Math.random() * (window.innerHeight * 0.6));
+            }, 400);
+            setTimeout(() => {
+                clearInterval(interval);
+            }, 5000);
+        }
+        function createFireworkBurst(x, y) {
+            const colors = ['#ff5f56', '#ffbd2e', '#27c93f', '#38bdf8', '#ec4899', '#a855f7'];
+            const particleCount = 25;
+            for (let i = 0; i < particleCount; i++) {
+                const p = document.createElement('div');
+                p.className = 'firework-particle';
+                p.style.left = x + 'px';
+                p.style.top = y + 'px';
+                p.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                const angle = Math.random() * Math.PI * 2;
+                const distance = Math.random() * 120 + 40;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
+                p.style.setProperty('--tx', tx + 'px');
+                p.style.setProperty('--ty', ty + 'px');
+                document.body.appendChild(p);
+                setTimeout(() => p.remove(), 1000);
+            }
+        }
         function resetFilters() {
+            document.getElementById('search-name-input').value = '';
+            selectGender('', 'Tất cả giới tính');
             selectDay('', 'Tất cả ngày');
             selectMonth('', 'Tất cả tháng');
             setSortMode('az');
         }
+        function removeAccents(str) {
+            return str.normalize('NFD')
+                      .replace(/[\u0300-\u036f]/g, '')
+                      .replace(/đ/g, 'd').replace(/Đ/g, 'D');
+        }
         function applyFilterAndSort() {
+            const rawKeyword = document.getElementById('search-name-input').value.trim();
+            const keyword = removeAccents(rawKeyword).toLowerCase();
             const selectedDay = selectedDayVal;
             const selectedMonth = selectedMonthVal;
+            const selectedGender = selectedGenderVal;
             let filtered = members.filter(m => {
+                if (keyword) {
+                    const normalizedMemberName = removeAccents(m.name).toLowerCase();
+                    if (!normalizedMemberName.includes(keyword)) return false;
+                }
+                if (selectedGender && m.gender !== selectedGender) return false;
                 const parts = m.birthday.split('/');
                 const d = parts[0];
                 const mth = parts[1];
@@ -981,18 +1166,31 @@
                 if (selectedMonth && mth !== selectedMonth) return false;
                 return true;
             });
-            if (currentSort === 'az') {
+            if (keyword) {
                 filtered.sort((a, b) => {
-                    const nameA = a.name.split(" ").pop();
-                    const nameB = b.name.split(" ").pop();
-                    return nameA.localeCompare(nameB, 'vi');
+                    const nameA = removeAccents(a.name).toLowerCase();
+                    const nameB = removeAccents(b.name).toLowerCase();
+                    const indexA = nameA.indexOf(keyword);
+                    const indexB = nameB.indexOf(keyword);
+                    if (indexA !== indexB) {
+                        return indexA - indexB; 
+                    }
+                    return 0;
                 });
-            } else if (currentSort === 'za') {
-                filtered.sort((a, b) => {
-                    const nameA = a.name.split(" ").pop();
-                    const nameB = b.name.split(" ").pop();
-                    return nameB.localeCompare(nameA, 'vi');
-                });
+            } else {
+                if (currentSort === 'az') {
+                    filtered.sort((a, b) => {
+                        const nameA = a.name.split(" ").pop();
+                        const nameB = b.name.split(" ").pop();
+                        return nameA.localeCompare(nameB, 'vi');
+                    });
+                } else if (currentSort === 'za') {
+                    filtered.sort((a, b) => {
+                        const nameA = a.name.split(" ").pop();
+                        const nameB = b.name.split(" ").pop();
+                        return nameB.localeCompare(nameA, 'vi');
+                    });
+                }
             }
             const tbody = document.getElementById('member-list-body');
             tbody.innerHTML = '';
@@ -1007,7 +1205,7 @@
                 `;
                 tbody.appendChild(tr);
             });
-            document.getElementById('member-count-text').textContent = `${filtered.length} thành viên (Hiển thị)`;
+            document.getElementById('member-count-text').textContent = `${filtered.length} thành viên`;
         }
         const themeToggleBtn = document.getElementById('theme-toggle');
         const body = document.body;

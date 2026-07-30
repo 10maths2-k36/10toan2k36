@@ -965,46 +965,157 @@ body.dark textarea::placeholder,
 [data-theme="dark"] textarea::placeholder {
     color: #94a3b8 !important;
 }
-        .chat-message-wrapper {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            max-width: 85%;
-        }
-        .chat-message-wrapper.user {
-            align-self: flex-end;
-            flex-direction: row-reverse;
-        }
-        .chat-message-wrapper.ai {
-            align-self: flex-start;
-        }
-        .chat-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            flex-shrink: 0;
-            border: 1px solid var(--border);
-        }
-        .chat-avatar.ai {
-            background: #f97316;
-            color: #fff;
-        }
-        .chat-avatar.user {
-            background: #2563eb;
-            color: #fff;
-        }
-        .chat-message-content {
-            display: flex;
-            flex-direction: column;
-            max-width: calc(100% - 48px);
-        }
-        .chat-message-wrapper.user .chat-message-content {
-            align-items: flex-end;
-        }
-        .chat-message-wrapper.ai .chat-message-content {
-            align-items: flex-start;
-        }
+.chat-message-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    max-width: 85%;
+}
+.chat-message-wrapper.user {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+.chat-message-wrapper.ai {
+    align-self: flex-start;
+}
+.chat-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+}
+.chat-avatar.ai {
+    background: #f97316;
+    color: #fff;
+}
+.chat-avatar.user {
+    background: #2563eb;
+    color: #fff;
+}
+.chat-message-content {
+    display: flex;
+    flex-direction: column;
+    max-width: calc(100% - 48px);
+}
+.chat-message-wrapper.user .chat-message-content {
+    align-items: flex-end;
+}
+.chat-message-wrapper.ai .chat-message-content {
+    align-items: flex-start;
+}
+.seasonal-fx-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 9998;
+}
+.seasonal-particle {
+    position: absolute;
+    top: -10px;
+    user-select: none;
+    pointer-events: none;
+    animation-name: fallAnimation;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+@keyframes fallAnimation {
+    0% {
+        transform: translateY(-20px) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(105vh) rotate(360deg);
+        opacity: 0.2;
+    }
+}
+.firework-particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: explodeFirework 1s ease-out forwards;
+    z-index: 10001;
+}
+@keyframes explodeFirework {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--tx), var(--ty)) scale(0.2);
+        opacity: 0;
+    }
+}
+select, 
+.form-select, 
+input[type="text"], 
+input[type="search"] {
+    background-color: var(--card-bg) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    color: var(--text-main) !important;
+    border: 1px solid var(--border) !important;
+    -webkit-text-fill-color: var(--text-main) !important;
+    border-radius: 99px !important; 
+    padding: 6px 14px;
+}
+select option {
+    background-color: var(--card-bg) !important;
+    color: var(--text-main) !important;
+}
+input::placeholder {
+    color: var(--text-muted) !important;
+    opacity: 0.8 !important;
+    -webkit-text-fill-color: var(--text-muted) !important;
+}
+select:focus, 
+.form-select:focus, 
+input[type="text"]:focus, 
+input[type="search"]:focus {
+    background-color: var(--card-bg) !important;
+    color: var(--text-main) !important;
+    border-color: var(--accent) !important;
+    -webkit-text-fill-color: var(--text-main) !important;
+    box-shadow: 0 4px 15px rgba(2, 132, 199, 0.3) !important;
+    outline: none;
+}
+body.dark-mode select, 
+body.dark-mode .form-select, 
+body.dark-mode input[type="text"], 
+body.dark-mode input[type="search"],
+[data-theme="dark"] select, 
+[data-theme="dark"] .form-select, 
+[data-theme="dark"] input[type="text"], 
+[data-theme="dark"] input[type="search"] {
+    background-color: var(--card-bg) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    color: #0f172a !important; 
+    border: 1px solid var(--border) !important;
+    -webkit-text-fill-color: #0f172a !important;
+    border-radius: 99px !important;
+    padding: 6px 14px;
+}
+body.dark-mode select option,
+[data-theme="dark"] select option {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+}
+body.dark-mode input::placeholder, 
+body.dark-mode input[type="text"]::placeholder,
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] input[type="text"]::placeholder {
+    color: #475569 !important; 
+    opacity: 1 !important;
+    -webkit-text-fill-color: #475569 !important;
+}
