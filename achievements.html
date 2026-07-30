@@ -460,7 +460,7 @@
 <main class="main-content">
 <section class="card">
 <div class="card-header-box" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-<h2 style="margin: 0 0 -5px 0; font-weight: 700; font-size: 1.5rem; color: var(--text-color);">🏆 Thành Tích</h2>
+<h2 style="margin: 0 0 -5px 0; font-weight: 700; font-size: 1.5rem; color: var(--text-color);"><i class="ri-trophy-line"></i> Thành Tích</h2>
 <p style="margin: 0; color: var(--text-muted); font-size: 0.9rem;">Nơi lưu danh các giải thưởng, thành tích Toán học.</p>
 </div>
 <div style="display: flex; gap: 8px; align-items: center; justify-content: flex-end; width: 100%;">
@@ -476,7 +476,7 @@
 <input id="select-all" onchange="toggleSelectAll(this)" style="width: 18px; height: 18px; accent-color: var(--accent);" type="checkbox"/> Chọn tất cả (<span id="selected-count">0</span> đã chọn)
                 </label>
 <button onclick="confirmDeleteSelected()" style="background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600;">
-                    🗑️ Xóa đã chọn
+                    <i class="ri-delete-bin-line"></i> Xóa đã chọn
                 </button>
 </div>
 <div id="empty-notice" style="padding: 30px; text-align: center; background: rgba(128,128,128,0.05); border-radius: 12px; border: 1px dashed var(--border); margin-top: 15px; color: var(--text-muted);">
@@ -498,7 +498,7 @@
 </footer>
 <div class="custom-modal-overlay" id="terms-modal">
 <div class="custom-modal-box" style="max-width: 520px; text-align: left;">
-<div style="font-size: 1.5rem; text-align: center; margin-bottom: 5px;">📜</div>
+<div style="font-size: 1.5rem; text-align: center; margin-bottom: 5px;"><i class="ri-file-text-line" style="color: var(--accent);"></i></div>
 <h3 style="color: var(--text-main); margin: 0 0 5px 0; font-size: 1.15rem; text-align: center;">Điều khoản và Quy định sử dụng</h3>
 <p style="color: var(--text-muted); font-size: 0.85rem; text-align: center; margin-bottom: 12px;">Vui lòng cuộn xuống dưới cùng để mở khóa nút đồng ý.</p>
 <div id="terms-scroll-box" style="height: 200px; overflow-y: auto; border: 1px solid var(--border); padding: 12px; border-radius: 8px; background: rgba(128,128,128,0.03); font-size: 0.83rem; line-height: 1.45; color: var(--text-main); margin-bottom: 15px;">
@@ -522,7 +522,7 @@
 </div>
 <div class="custom-modal-overlay" id="login-modal">
 <div class="custom-modal-box">
-<div style="font-size: 2rem; margin-bottom: 8px;">🔐</div>
+<div style="font-size: 2rem; margin-bottom: 8px;"><i class="ri-lock-password-line" style="color: var(--accent);"></i></div>
 <h3 style="color: var(--text-main); margin: 0 0 6px 0; font-size: 1.15rem;">Khu vực nội bộ lớp</h3>
 <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0 0 16px 0;">Nhập mật khẩu để tiếp tục truy cập</p>
 <input id="modal-pass-input" onkeydown="if(event.key === 'Enter') submitLogin()" placeholder="Mật khẩu lớp..." style="width: 100%; background: var(--card-bg); border: 1px solid var(--border); padding: 10px 12px; border-radius: 10px; color: var(--text-main); outline: none; font-size: 0.95rem; box-sizing: border-box; margin-bottom: 12px;" type="password"/>
@@ -535,7 +535,7 @@
 </div>
 <div class="custom-modal-overlay" id="logout-modal">
 <div class="custom-modal-box">
-<div style="font-size: 2rem; margin-bottom: 8px;">⚠️</div>
+<div style="font-size: 2rem; margin-bottom: 8px;"><i class="ri-error-warning-line" style="color: #ef4444;"></i></div>
 <h3 style="color: var(--text-main); margin: 0 0 8px 0; font-size: 1.15rem;">Xác nhận đăng xuất</h3>
 <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0 0 20px 0;">Bạn có chắc chắn muốn đăng xuất khỏi khu vực nội bộ không?</p>
 <div style="display: flex; gap: 10px;">
@@ -546,7 +546,7 @@
 </div>
 <div class="custom-modal-overlay" id="upload-modal">
 <div class="custom-modal-box" style="text-align: left;">
-<h3 id="modal-title" style="color: var(--accent); margin-top: 0; margin-bottom: 12px; text-align: center;">🏆 Thêm Thành Tích Mới</h3>
+<h3 id="modal-title" style="color: var(--accent); margin-top: 0; margin-bottom: 12px; text-align: center;"><i class="ri-trophy-line"></i> Thêm Thành Tích Mới</h3>
 <div style="margin-bottom: 12px;">
 <label style="display: block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 6px;">Tên học sinh / Nhóm:</label>
 <input id="ach-student-name" placeholder="Ví dụ: Nguyễn Văn A..." style="width: 100%; background: var(--card-bg); border: 1px solid var(--border); padding: 10px; border-radius: 10px; color: var(--text-main); outline: none; font-size: 0.95rem; box-sizing: border-box;" type="text"/>
@@ -563,7 +563,7 @@
 <label style="display: block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 6px;">Hình ảnh minh họa / Giấy khen:</label>
 <input accept="image/*" id="file-input" onchange="previewFile(this)" style="display: none;" type="file"/>
 <label class="custom-file-upload" for="file-input">
-<div style="font-size: 1.4rem; margin-bottom: 2px;">📷</div>
+<div style="font-size: 1.4rem; margin-bottom: 2px;"><i class="ri-camera-line" style="color: var(--accent);"></i></div>
 <div id="file-upload-text" style="font-weight: 600; color: var(--text-main); font-size: 0.9rem;">Bấm vào đây để chọn ảnh</div>
 </label>
 </div>
@@ -581,7 +581,7 @@
 </div>
 <div class="custom-modal-overlay" id="confirm-modal">
 <div class="custom-modal-box">
-<div style="font-size: 2rem; margin-bottom: 8px;">⚠️</div>
+<div style="font-size: 2rem; margin-bottom: 8px;"><i class="ri-error-warning-line" style="color: #ef4444;"></i></div>
 <h3 style="color: var(--text-main); margin: 0 0 8px 0; font-size: 1.15rem;">Xác nhận xóa</h3>
 <p id="confirm-msg" style="color: var(--text-muted); font-size: 0.9rem; margin: 0 0 20px 0;">Bạn có chắc chắn muốn xóa mục này không?</p>
 <div style="display: flex; gap: 10px;">
@@ -682,17 +682,25 @@
             localStorage.removeItem('class_unlocked');
             location.reload();
         }
-function updateAuthButtonState(isLoggedIn) {
-    const btn = document.getElementById('auth-nav-btn');
-    if (!btn) return;
-    if (isLoggedIn) {
-        btn.innerHTML = '<i class="ri-logout-box-r-line"></i> Đăng xuất';
-        btn.className = 'auth-nav-btn logout-state';
-    } else {
-        btn.innerHTML = '<i class="ri-login-box-line"></i> Đăng nhập';
-        btn.className = 'auth-nav-btn';
-    }
-}
+        function updateAuthButtonState(isLoggedIn) {
+            const btn = document.getElementById('auth-nav-btn');
+            const btnUpload = document.getElementById('btn-upload');
+            if (!btn) return;
+            if (isLoggedIn) {
+                btn.innerHTML = '<i class="ri-logout-box-r-line"></i> Đăng xuất';
+                btn.className = 'auth-nav-btn logout-state';
+                if (btnUpload) btnUpload.style.display = 'inline-block';
+            } else {
+                btn.innerHTML = '<i class="ri-login-box-line"></i> Đăng nhập';
+                btn.className = 'auth-nav-btn';
+                if (btnUpload) btnUpload.style.display = 'none';
+                isSelectMode = false;
+                const selectBtn = document.getElementById('select-mode-btn');
+                if(selectBtn) selectBtn.style.display = 'none';
+                const batchToolbar = document.getElementById('batch-toolbar');
+                if(batchToolbar) batchToolbar.style.display = 'none';
+            }
+        }
         function toggleSelectMode() {
             isSelectMode = !isSelectMode;
             const btn = document.getElementById('select-mode-btn');
@@ -719,7 +727,7 @@ function updateAuthButtonState(isLoggedIn) {
         function openUploadModal() {
             if (localStorage.getItem('class_unlocked') !== 'true') return;
             editingId = null;
-            document.getElementById('modal-title').textContent = '🏆 Thêm Thành Tích Mới';
+            document.getElementById('modal-title').innerHTML = '<i class="ri-trophy-line"></i> Thêm Thành Tích Mới';
             document.getElementById('ach-student-name').value = '';
             document.getElementById('ach-title').value = '';
             document.getElementById('ach-link').value = '';
@@ -742,7 +750,7 @@ function updateAuthButtonState(isLoggedIn) {
                 if (error) throw error;
                 if (!data) return;
                 editingId = data.id;
-                document.getElementById('modal-title').textContent = '✏️ Chỉnh Sửa Thành Tích';
+                document.getElementById('modal-title').innerHTML = '<i class="ri-edit-box-line"></i> Chỉnh Sửa Thành Tích';
                 document.getElementById('ach-student-name').value = data.student_name || '';
                 document.getElementById('ach-title').value = data.title || '';
                 document.getElementById('ach-link').value = data.link || '';
@@ -760,7 +768,7 @@ function updateAuthButtonState(isLoggedIn) {
                 document.getElementById('upload-modal').style.display = 'flex';
             } catch (err) {
                 console.error('Lỗi lấy thông tin sửa:', err);
-                showToast('Không thể tải thông tin thành tích.');
+                showToast('<i class="ri-error-warning-line"></i> Không thể tải thông tin thành tích.');
             }
         }
         function closeUploadModal() {
@@ -772,7 +780,7 @@ function updateAuthButtonState(isLoggedIn) {
             if (input.files && input.files[0]) {
                 const file = input.files[0];
                 if (!file.type.startsWith('image/')) {
-                    showToast('Vui lòng chọn file hình ảnh hợp lệ.');
+                    showToast('<i class="ri-error-warning-line"></i> Vui lòng chọn file hình ảnh hợp lệ.');
                     input.value = '';
                     return;
                 }
@@ -802,11 +810,11 @@ function updateAuthButtonState(isLoggedIn) {
             const link = document.getElementById('ach-link').value.trim();
             const desc = document.getElementById('ach-desc').value.trim();
             if (!studentName || !title) {
-                showToast('Vui lòng điền đầy đủ tên học sinh và tên giải thưởng.');
+                showToast('<i class="ri-error-warning-line"></i> Vui lòng điền đầy đủ tên học sinh và tên giải thưởng.');
                 return;
             }
             if (!selectedFileObj) {
-                showToast('Vui lòng đính kèm hình ảnh minh họa hoặc giấy khen.');
+                showToast('<i class="ri-error-warning-line"></i> Vui lòng đính kèm hình ảnh minh họa hoặc giấy khen.');
                 return;
             }
             try {
@@ -840,7 +848,7 @@ function updateAuthButtonState(isLoggedIn) {
                         })
                         .eq('id', editingId);
                     if (updateError) throw updateError;
-                    showToast('Cập nhật thành tích thành công!');
+                    showToast('<i class="ri-checkbox-circle-line"></i> Cập nhật thành tích thành công!');
                 } else {
                     const { error: dbError } = await _supabase
                         .from('achievements')
@@ -856,13 +864,13 @@ function updateAuthButtonState(isLoggedIn) {
                             }
                         ]);
                     if (dbError) throw dbError;
-                    showToast('Thêm thành tích thành công!');
+                    showToast('<i class="ri-checkbox-circle-line"></i> Thêm thành tích thành công!');
                 }
                 closeUploadModal();
                 loadAchievementsFromStorage();
             } catch (error) {
                 console.error('Lỗi:', error.message);
-                showToast('Có lỗi xảy ra: ' + error.message);
+                showToast('<i class="ri-error-warning-line"></i> Có lỗi xảy ra: ' + error.message);
             }
         }
         async function loadAchievementsFromStorage() {
@@ -895,13 +903,13 @@ function updateAuthButtonState(isLoggedIn) {
                     let checkboxHtml = (isSelectMode && isUnlocked) ? `<input type="checkbox" class="achievement-checkbox item-checkbox" data-id="${item.id}" onchange="updateSelectedCount()">` : '';
                     let actionButtonsHtml = isUnlocked ? `
                         <div class="action-btns">
-                            <button class="edit-btn" onclick="editAchievement(${item.id})">Sửa</button>
-                            <button class="delete-btn" onclick="deleteOneItem(${item.id})">Xóa</button>
+                            <button class="edit-btn" onclick="editAchievement(${item.id})"><i class="ri-edit-line"></i> Sửa</button>
+                            <button class="delete-btn" onclick="deleteOneItem(${item.id})"><i class="ri-delete-bin-line"></i> Xóa</button>
                         </div>
                     ` : '';
-                    let newsLinkHtml = item.link ? `<a href="${item.link}" target="_blank" style="display: inline-block; margin-top: 8px; margin-bottom: 8px; background: rgba(59, 130, 246, 0.1); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.2); padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">📰 Xem bài báo gốc</a>` : '';
+                    let newsLinkHtml = item.link ? `<a href="${item.link}" target="_blank" style="display: inline-block; margin-top: 8px; margin-bottom: 8px; background: rgba(59, 130, 246, 0.1); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.2); padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; text-decoration: none;"><i class="ri-newspaper-line"></i> Xem bài báo gốc</a>` : '';
                     let formattedDate = item.created_at ? formatDateTime(item.created_at) : '';
-                    let dateHtml = formattedDate ? `<div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 6px;">📅 Ngày đăng tải: ${formattedDate}</div>` : '';
+                    let dateHtml = formattedDate ? `<div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 6px;"><i class="ri-calendar-line"></i> Ngày đăng tải: ${formattedDate}</div>` : '';
                     card.innerHTML = `
                         ${checkboxHtml}
                         <div class="achievement-img-wrap" onclick="openLightbox('${item.image_url}')">
@@ -910,7 +918,7 @@ function updateAuthButtonState(isLoggedIn) {
                         <div class="achievement-content">
                             <div>
                                 <div style="font-weight: 700; color: var(--text-main); font-size: 1rem; margin-bottom: 4px;">${escapeHtml(item.student_name)}</div>
-                                <div style="font-weight: 600; color: var(--accent); font-size: 0.9rem; margin-bottom: 6px;">🏅 ${escapeHtml(item.title)}</div>
+                                <div style="font-weight: 600; color: var(--accent); font-size: 0.9rem; margin-bottom: 6px;"><i class="ri-award-line"></i> ${escapeHtml(item.title)}</div>
                                 ${newsLinkHtml}
                                 <div style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.4; word-break: break-word;">${escapeHtml(item.description || 'Không có mô tả thêm.')}</div>
                             </div>
@@ -938,11 +946,11 @@ function updateAuthButtonState(isLoggedIn) {
                         .delete()
                         .eq('id', id);
                     if (error) throw error;
-                    showToast('Đã xóa thành công!');
+                    showToast('<i class="ri-checkbox-circle-line"></i> Đã xóa thành công!');
                     loadAchievementsFromStorage();
                 } catch (err) {
                     console.error('Lỗi xóa:', err);
-                    showToast('Không thể xóa mục này.');
+                    showToast('<i class="ri-error-warning-line"></i> Không thể xóa mục này.');
                 }
             });
         }
@@ -950,7 +958,7 @@ function updateAuthButtonState(isLoggedIn) {
             if (localStorage.getItem('class_unlocked') !== 'true') return;
             const checkboxes = document.querySelectorAll('.achievement-checkbox:checked');
             if (checkboxes.length === 0) {
-                showToast('Vui lòng chọn ít nhất một mục để xóa.');
+                showToast('<i class="ri-error-warning-line"></i> Vui lòng chọn ít nhất một mục để xóa.');
                 return;
             }
             showCustomConfirm(`Bạn có chắc chắn muốn xóa vĩnh viễn ${checkboxes.length} mục đã chọn không?`, async () => {
@@ -967,11 +975,11 @@ function updateAuthButtonState(isLoggedIn) {
                     document.getElementById('select-mode-btn').textContent = '+ Chọn';
                     document.getElementById('batch-toolbar').style.display = 'none';
                     document.getElementById('select-all').checked = false;
-                    showToast('Đã xóa các mục đã chọn!');
+                    showToast('<i class="ri-checkbox-circle-line"></i> Đã xóa các mục đã chọn!');
                     loadAchievementsFromStorage();
                 } catch (err) {
                     console.error('Lỗi xóa hàng loạt:', err);
-                    showToast('Không thể xóa các mục đã chọn.');
+                    showToast('<i class="ri-error-warning-line"></i> Không thể xóa các mục đã chọn.');
                 }
             });
         }
@@ -1028,10 +1036,10 @@ if (themeToggleBtn) {
     </script>
 <script src="js/animation.js"></script>
 <div id="toastMessage" style="position: fixed; bottom: 20px; right: 20px; background: var(--card-bg); backdrop-filter: var(--backdrop); border: 1px solid var(--accent); color: var(--text-main); padding: 12px 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transform: translateY(100px); opacity: 0; transition: all 0.4s ease; z-index: 9999;">
-        ✨ Thao tác thành công!
+        <i class="ri-sparkles-line"></i> Thao tác thành công!
     </div>
 <script>
-        function showToast(message = "✨ Thao tác thành công!") {
+        function showToast(message = '<i class="ri-sparkles-line"></i> Thao tác thành công!') {
             let toast = document.getElementById('toastMessage');
             if (!toast) {
                 toast = document.createElement('div');
@@ -1042,7 +1050,7 @@ if (themeToggleBtn) {
             if (typeof message === 'object') {
                 message = JSON.stringify(message);
             }
-            toast.innerText = message;
+            toast.innerHTML = message;
             setTimeout(() => {
                 toast.style.transform = 'translateY(0)';
                 toast.style.opacity = '1';
@@ -1134,30 +1142,30 @@ if (themeToggleBtn) {
     });
 </script>
 <script>
-function toggleMathEffects() {
-    const isCurrentlyDisabled = document.body.classList.contains('fx-disabled');
-    const fxBtn = document.getElementById('fx-toggle-btn');
-    if (isCurrentlyDisabled) {
-        document.body.classList.remove('fx-disabled');
-        if (fxBtn) fxBtn.innerHTML = '<i class="ri-sparkles-line"></i> Hiệu ứng: Bật';
-        localStorage.setItem('math_fx_enabled', 'true');
-    } else {
-        document.body.classList.add('fx-disabled');
-        if (fxBtn) fxBtn.innerHTML = '<i class="ri-sparkles-line"></i> Hiệu ứng: Tắt';
-        localStorage.setItem('math_fx_enabled', 'false');
+    function toggleMathEffects() {
+        const isCurrentlyDisabled = document.body.classList.contains('fx-disabled');
+        const fxBtn = document.getElementById('fx-toggle-btn');
+        if (isCurrentlyDisabled) {
+            document.body.classList.remove('fx-disabled');
+            if (fxBtn) fxBtn.innerHTML = '<i class="ri-sparkles-line"></i> Hiệu ứng: Bật';
+            localStorage.setItem('math_fx_enabled', 'true');
+        } else {
+            document.body.classList.add('fx-disabled');
+            if (fxBtn) fxBtn.innerHTML = '<i class="ri-sparkles-off-line"></i> Hiệu ứng: Tắt';
+            localStorage.setItem('math_fx_enabled', 'false');
+        }
     }
-}
-window.addEventListener('DOMContentLoaded', () => {
-    const fxEnabled = localStorage.getItem('math_fx_enabled') !== 'false';
-    const fxBtn = document.getElementById('fx-toggle-btn');
-    if (!fxEnabled) {
-        document.body.classList.add('fx-disabled');
-        if (fxBtn) fxBtn.innerHTML = '<i class="ri-sparkles-line"></i> Hiệu ứng: Tắt';
-    } else {
-        document.body.classList.remove('fx-disabled');
-        if (fxBtn) fxBtn.innerHTML = '<i class="ri-sparkles-line"></i> Hiệu ứng: Bật';
-    }
-});
+    window.addEventListener('DOMContentLoaded', () => {
+        const fxEnabled = localStorage.getItem('math_fx_enabled') !== 'false';
+        const fxBtn = document.getElementById('fx-toggle-btn');
+        if (!fxEnabled) {
+            document.body.classList.add('fx-disabled');
+            if (fxBtn) fxBtn.innerHTML = '<i class="ri-sparkles-off-line"></i> Hiệu ứng: Tắt';
+        } else {
+            document.body.classList.remove('fx-disabled');
+            if (fxBtn) fxBtn.innerHTML = '<i class="ri-sparkles-line"></i> Hiệu ứng: Bật';
+        }
+    });
     const originalWindowClick = window.onclick;
     window.addEventListener('click', (e) => {
         if (document.body.classList.contains('fx-disabled')) return;
@@ -1227,7 +1235,7 @@ window.addEventListener('DOMContentLoaded', () => {
 <div class="custom-modal-overlay" id="clock-calendar-modal" onclick="closeClockCalendarModal(event)">
     <div class="clock-calendar-card" onclick="event.stopPropagation()">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <h3 style="margin: 0; font-size: 1rem; color: var(--text-main); font-weight: 700;"><i class="ri-calendar-event-line" style="color: var(--accent);"></i>  Time & Calendar</h3>
+            <h3 style="margin: 0; font-size: 1rem; color: var(--text-main); font-weight: 700;"><i class="ri-calendar-event-line" style="color: var(--accent);"></i> Thời Gian & Lịch Lớp</h3>
             <button onclick="closeClockCalendarModalDirect()" style="background: transparent; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted);"><i class="ri-close-line"></i></button>
         </div>
         <div class="analog-clock" id="analog-clock-face">
@@ -1263,7 +1271,7 @@ window.addEventListener('DOMContentLoaded', () => {
 </div>
 <div class="custom-modal-overlay" id="birthday-picker-modal" onclick="closeBirthdayPickerModal(event)" style="z-index: 10020;">
     <div class="custom-modal-box" onclick="event.stopPropagation()" style="max-width: 320px; text-align: center;">
-        <div style="font-size: 1.8rem; margin-bottom: 6px;">🎂</div>
+        <div style="font-size: 1.8rem; margin-bottom: 6px;"><i class="ri-cake-2-line" style="color: #ec4899;"></i></div>
         <h3 id="bday-picker-title" style="color: var(--text-main); margin: 0 0 4px 0; font-size: 1rem;">Sinh nhật ngày...</h3>
         <p style="color: var(--text-muted); font-size: 0.8rem; margin: 0 0 14px 0;">Chọn thành viên để xem thẻ thông tin chi tiết:</p>
         <div id="bday-picker-list" style="display: flex; flex-direction: column; gap: 8px; max-height: 180px; overflow-y: auto; margin-bottom: 14px;"></div>
@@ -1367,7 +1375,7 @@ window.addEventListener('DOMContentLoaded', () => {
             const matchedMembers = birthdaysInThisMonth[d];
             if (matchedMembers) {
                 dayCell.classList.add('has-birthday');
-                contentHTML += `<span class="bday-icon">🎂</span>`;
+                contentHTML += `<span class="bday-icon"><i class="ri-cake-2-fill" style="color: #ec4899;"></i></span>`;
                 dayCell.onclick = (e) => {
                     e.stopPropagation();
                     if (typeof openMemberCard === 'function' && matchedMembers.length === 1) {

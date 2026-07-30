@@ -281,7 +281,6 @@
 <button class="nav-action-btn auth-nav-btn" id="auth-nav-btn" onclick="handleAuthNavAction()"><i class="ri-login-box-line"></i> Đăng nhập</button>
 <button class="nav-action-btn fx-menu-btn" id="fx-toggle-btn" onclick="toggleMathEffects()"><i class="ri-sparkles-line"></i> Hiệu ứng: Bật</button>
     </nav>
-    </nav>
 </header>
 <div class="clock-widget-trigger" onclick="openClockCalendarModal()">
     <i class="ri-time-line" style="font-size: 1.2rem; color: var(--accent);"></i>
@@ -313,11 +312,11 @@
 <div class="custom-modal-overlay" id="welcome-modal" style="display: flex;">
 <div class="custom-modal-box" style="text-align: center; max-width: 400px; position: relative; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
 <div class="mac-window-controls" style="padding: 12px 16px 0 16px; display: flex; gap: 6px;">
-    <button onclick="closeWelcomeModal()" class="mac-dot mac-close" title="Đóng"><span class="mac-icon">×</span></button>
-    <button onclick="minimizeWelcomeModal()" class="mac-dot mac-minimize" title="Thu nhỏ"><span class="mac-icon">−</span></button>
-    <button onclick="maximizeWelcomeModal()" class="mac-dot mac-maximize" title="Phóng to"><span class="mac-icon">+</span></button>
+    <button onclick="closeWelcomeModal()" class="mac-dot mac-close" title="Đóng"><span class="mac-icon"><i class="ri-close-line"></i></span></button>
+    <button onclick="minimizeWelcomeModal()" class="mac-dot mac-minimize" title="Thu nhỏ"><span class="mac-icon"><i class="ri-subtract-line"></i></span></button>
+    <button onclick="maximizeWelcomeModal()" class="mac-dot mac-maximize" title="Phóng to"><span class="mac-icon"><i class="ri-add-line"></i></span></button>
 </div>
-    <div style="font-size: 2.5rem; margin: 10px 0 10px 0;">👋</div>
+    <div style="font-size: 2.5rem; margin: 10px 0 10px 0;"><i class="ri-hand-heart-line" style="color: var(--accent);"></i></div>
 <h3 style="color: var(--text-main); margin: 0 0 10px 0; font-size: 1.2rem;">Chào mừng bạn đến với 10 Toán 2 K36!</h3>
 <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; margin: 0 0 20px 0; padding: 0 10px;">
                 Cảm ơn bạn đã ghé thăm không gian lưu giữ thanh xuân của chúng mình dưới mái trường THPT Chuyên Bến Tre.
@@ -335,7 +334,7 @@
 </div>
 <div class="custom-modal-overlay" id="terms-modal">
 <div class="custom-modal-box" style="max-width: 520px; text-align: left;">
-<div style="font-size: 1.5rem; text-align: center; margin-bottom: 5px;">📜</div>
+<div style="font-size: 1.5rem; text-align: center; margin-bottom: 5px;"><i class="ri-file-text-line" style="color: var(--accent);"></i></div>
 <h3 style="color: var(--text-main); margin: 0 0 5px 0; font-size: 1.15rem; text-align: center;">Điều khoản và Quy định sử dụng</h3>
 <p style="color: var(--text-muted); font-size: 0.85rem; text-align: center; margin-bottom: 12px;">Vui lòng cuộn xuống dưới cùng để mở khóa nút đồng ý.</p>
 <div id="index-terms-scroll" onscroll="checkTermsScroll()" style="height: 200px; overflow-y: auto; border: 1px solid var(--border); padding: 12px; border-radius: 8px; background: var(--bg-main, #f9f9f9); font-size: 0.83rem; line-height: 1.45; color: var(--text-main); margin-bottom: 15px;">
@@ -359,7 +358,7 @@
 </div>
 <div class="custom-modal-overlay" id="login-modal">
 <div class="custom-modal-box">
-<div style="font-size: 2rem; margin-bottom: 8px;">🔐</div>
+<div style="font-size: 2rem; margin-bottom: 8px;"><i class="ri-lock-password-line" style="color: var(--accent);"></i></div>
 <h3 style="color: var(--text-main); margin: 0 0 6px 0; font-size: 1.15rem;">Khu vực nội bộ lớp</h3>
 <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0 0 16px 0;">Nhập mật khẩu để tiếp tục truy cập</p>
 <input id="modal-pass-input" onkeydown="if(event.key === 'Enter') submitLogin()" placeholder="Mật khẩu lớp..." style="width: 100%; background: var(--card-bg); border: 1px solid var(--border); padding: 10px 12px; border-radius: 10px; color: var(--text-main); outline: none; font-size: 0.95rem; box-sizing: border-box; margin-bottom: 12px;" type="password"/>
@@ -372,7 +371,7 @@
 </div>
 <div class="custom-modal-overlay" id="logout-modal">
 <div class="custom-modal-box">
-<div style="font-size: 2rem; margin-bottom: 8px;">⚠️</div>
+<div style="font-size: 2rem; margin-bottom: 8px;"><i class="ri-error-warning-line" style="color: #ef4444;"></i></div>
 <h3 style="color: var(--text-main); margin: 0 0 8px 0; font-size: 1.15rem;">Xác nhận đăng xuất</h3>
 <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0 0 20px 0;">Bạn có chắc chắn muốn đăng xuất khỏi khu vực nội bộ không?</p>
 <div style="display: flex; gap: 10px;">
@@ -694,7 +693,7 @@ window.addEventListener('DOMContentLoaded', () => {
 </div>
 <div class="custom-modal-overlay" id="birthday-picker-modal" onclick="closeBirthdayPickerModal(event)" style="z-index: 10020;">
     <div class="custom-modal-box" onclick="event.stopPropagation()" style="max-width: 320px; text-align: center;">
-        <div style="font-size: 1.8rem; margin-bottom: 6px;">🎂</div>
+        <div style="font-size: 1.8rem; margin-bottom: 6px;"><i class="ri-cake-2-line" style="color: #ec4899;"></i></div>
         <h3 id="bday-picker-title" style="color: var(--text-main); margin: 0 0 4px 0; font-size: 1rem;">Sinh nhật ngày...</h3>
         <p style="color: var(--text-muted); font-size: 0.8rem; margin: 0 0 14px 0;">Chọn thành viên để xem thẻ thông tin chi tiết:</p>
         <div id="bday-picker-list" style="display: flex; flex-direction: column; gap: 8px; max-height: 180px; overflow-y: auto; margin-bottom: 14px;"></div>
@@ -711,14 +710,14 @@ window.addEventListener('DOMContentLoaded', () => {
             const picker = document.getElementById('accent-color-picker');
             const label = document.getElementById('accent-color-label');
             if (picker) picker.value = savedAccent;
-            if (label) label.textContent = savedAccent;
+            if (label) label.innerHTML = savedAccent;
         }
     });
     function changeAccentColor(colorHex) {
         applyAccentColor(colorHex);
         localStorage.setItem('site_accent_color', colorHex);
         const label = document.getElementById('accent-color-label');
-        if (label) label.textContent = colorHex;
+        if (label) label.innerHTML = colorHex;
     }
     function applyAccentColor(colorHex) {
         document.documentElement.style.setProperty('--accent', colorHex);
@@ -732,11 +731,11 @@ window.addEventListener('DOMContentLoaded', () => {
             const sStr = String(seconds).padStart(2, '0');
             const triggerText = document.getElementById('trigger-clock-text');
             if (triggerText) {
-                triggerText.textContent = `${hStr}:${mStr}:${sStr} - ${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()}`;
+                triggerText.innerHTML = `${hStr}:${mStr}:${sStr} - ${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()}`;
             }
             const modalDig = document.getElementById('modal-digital-text');
             if (modalDig) {
-                modalDig.textContent = `${hStr}:${mStr}:${sStr} (${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()})`;
+                modalDig.innerHTML = `${hStr}:${mStr}:${sStr} (${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()})`;
             }
             const secondDeg = (seconds / 60) * 360;
             const minuteDeg = ((minutes + seconds / 60) / 60) * 360;
@@ -767,7 +766,7 @@ window.addEventListener('DOMContentLoaded', () => {
         const now = new Date();
         const monthNames = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"];
         const titleEl = document.getElementById('calendar-month-title');
-        if (titleEl) titleEl.textContent = `${monthNames[month]} năm ${year}`;
+        if (titleEl) titleEl.innerHTML = `${monthNames[month]} năm ${year}`;
         const listMembers = typeof members !== 'undefined' ? members : [];
         const birthdaysInThisMonth = {};
         listMembers.forEach(m => {
@@ -798,7 +797,7 @@ window.addEventListener('DOMContentLoaded', () => {
             const matchedMembers = birthdaysInThisMonth[d];
             if (matchedMembers) {
                 dayCell.classList.add('has-birthday');
-                contentHTML += `<span class="bday-icon">🎂</span>`;
+                contentHTML += `<span class="bday-icon"><i class="ri-cake-2-fill"></i></span>`;
                 dayCell.onclick = (e) => {
                     e.stopPropagation();
                     if (typeof openMemberCard === 'function' && matchedMembers.length === 1) {

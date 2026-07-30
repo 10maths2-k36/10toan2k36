@@ -632,7 +632,6 @@
 <button class="nav-action-btn auth-nav-btn" id="auth-nav-btn" onclick="handleAuthNavAction()"><i class="ri-login-box-line"></i> Đăng nhập</button>
 <button class="nav-action-btn fx-menu-btn" id="fx-toggle-btn" onclick="toggleMathEffects()"><i class="ri-sparkles-line"></i> Hiệu ứng: Bật</button>
     </nav>
-    </nav>
 </header>
 <div class="clock-widget-trigger" onclick="openClockCalendarModal()">
     <i class="ri-time-line" style="font-size: 1.2rem; color: var(--accent);"></i>
@@ -645,13 +644,13 @@
     <p class="card-sub-info" style="text-align: center;">Nơi lưu giữ hình ảnh và tài liệu học tập của tập thể 10 Toán 2</p>
 </div>
 <div class="sub-tabs">
-<a class="sub-tab-btn active" href="#images" id="tab-btn-images" onclick="switchTab('images', event)">📷 Khoảnh Khắc Kỷ Niệm</a>
-<a class="sub-tab-btn" href="#documents" id="tab-btn-resources" onclick="switchTab('resources', event)">📚 Tài Liệu Học Tập</a>
+<a class="sub-tab-btn active" href="#images" id="tab-btn-images" onclick="switchTab('images', true, event)"><i class="ri-image-line"></i> Khoảnh Khắc Kỷ Niệm</a>
+<a class="sub-tab-btn" href="#documents" id="tab-btn-resources" onclick="switchTab('resources', true, event)"><i class="ri-book-open-line"></i> Tài Liệu Học Tập</a>
 </div>
 <div class="tab-pane active" id="pane-gallery">
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px;">
 <div>
-<h3 style="color: var(--accent); margin: 0;">📸 Khoảnh Khắc Kỷ Niệm</h3>
+<h3 style="color: var(--accent); margin: 0; display: flex; align-items: center; gap: 8px;"><i class="ri-camera-lens-line"></i> Khoảnh Khắc Kỷ Niệm</h3>
 <p style="color: var(--text-muted); margin: 4px 0 0 0; font-size: 0.9rem;">Hình ảnh hoạt động của lớp.</p>
 </div>
 <div style="display: flex; gap: 8px; align-items: center;">
@@ -667,8 +666,8 @@
 <label style="display: flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer; color: var(--text-main); font-size: 0.9rem;">
 <input id="select-all-gallery" onchange="toggleSelectAll('gallery', this)" style="width: 18px; height: 18px; accent-color: var(--accent);" type="checkbox"/> Chọn tất cả (<span id="selected-count-gallery">0</span> đã chọn)
                     </label>
-<button onclick="confirmDeleteSelected('gallery')" style="background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600;">
-                        🗑️ Xóa đã chọn
+<button onclick="confirmDeleteSelected('gallery')" style="background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+                        <i class="ri-delete-bin-line"></i> Xóa đã chọn
                     </button>
 </div>
 <div id="empty-notice-gallery" style="padding: 25px; text-align: center; background: rgba(128,128,128,0.05); border-radius: 12px; border: 1px dashed var(--border); margin-top: 15px; color: var(--text-muted);">
@@ -679,7 +678,7 @@
 <div class="tab-pane" id="pane-resources">
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px;">
 <div>
-<h3 style="color: var(--accent); margin: 0;">📚 Tài Liệu Học Tập</h3>
+<h3 style="color: var(--accent); margin: 0; display: flex; align-items: center; gap: 8px;"><i class="ri-file-text-line"></i> Tài Liệu Học Tập</h3>
 <p style="color: var(--text-muted); margin: 4px 0 0 0; font-size: 0.9rem;">Tài liệu của lớp.</p>
 </div>
 <div style="display: flex; gap: 8px; align-items: center;">
@@ -692,18 +691,18 @@
 </div>
 </div>
 <div class="subject-filter-tabs" style="display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap;">
-    <button class="filter-btn active" data-subject="all" onclick="filterDocuments('all')">📚 Tất cả</button>
-    <button class="filter-btn" data-subject="toan" onclick="filterDocuments('toan')">📐 Toán Chuyên</button>
-    <button class="filter-btn" data-subject="anh" onclick="filterDocuments('anh')">🇬🇧 Tiếng Anh</button>
-    <button class="filter-btn" data-subject="van" onclick="filterDocuments('van')">✍️ Ngữ Văn</button>
-    <button class="filter-btn" data-subject="khac" onclick="filterDocuments('khac')">📁 Khác</button>
+    <button class="filter-btn active" data-subject="all" onclick="filterDocuments('all')"><i class="ri-folder-shared-line"></i> Tất cả</button>
+    <button class="filter-btn" data-subject="toan" onclick="filterDocuments('toan')"><i class="ri-calculator-line"></i> Toán Chuyên</button>
+    <button class="filter-btn" data-subject="anh" onclick="filterDocuments('anh')"><i class="ri-global-line"></i> Tiếng Anh</button>
+    <button class="filter-btn" data-subject="van" onclick="filterDocuments('van')"><i class="ri-quill-pen-line"></i> Ngữ Văn</button>
+    <button class="filter-btn" data-subject="khac" onclick="filterDocuments('khac')"><i class="ri-folder-2-line"></i> Khác</button>
 </div>
 <div class="batch-toolbar" id="batch-toolbar-resources">
 <label style="display: flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer; color: var(--text-main); font-size: 0.9rem;">
 <input id="select-all-resources" onchange="toggleSelectAll('resources', this)" style="width: 18px; height: 18px; accent-color: var(--accent);" type="checkbox"/> Chọn tất cả (<span id="selected-count-resources">0</span> đã chọn)
                     </label>
-<button onclick="confirmDeleteSelected('resources')" style="background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600;">
-                        🗑️ Xóa đã chọn
+<button onclick="confirmDeleteSelected('resources')" style="background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+                        <i class="ri-delete-bin-line"></i> Xóa đã chọn
                     </button>
 </div>
 <div id="empty-notice-resources" style="padding: 25px; text-align: center; background: rgba(128,128,128,0.05); border-radius: 12px; border: 1px dashed var(--border); margin-top: 15px; color: var(--text-muted);">
@@ -715,7 +714,7 @@
 </main>
 <div class="custom-modal-overlay" id="terms-modal">
 <div class="custom-modal-box" style="max-width: 520px; text-align: left;">
-<div style="font-size: 1.5rem; text-align: center; margin-bottom: 5px;">📜</div>
+<div style="font-size: 1.5rem; text-align: center; margin-bottom: 5px;"><i class="ri-scroll-line" style="color: var(--accent);"></i></div>
 <h3 style="color: var(--text-main); margin: 0 0 5px 0; font-size: 1.15rem; text-align: center;">Điều khoản và Quy định sử dụng</h3>
 <p style="color: var(--text-muted); font-size: 0.85rem; text-align: center; margin-bottom: 12px;">Vui lòng cuộn xuống dưới cùng để mở khóa nút đồng ý.</p>
 <div id="index-terms-scroll" onscroll="checkTermsScroll()" style="height: 200px; overflow-y: auto; border: 1px solid var(--border); padding: 12px; border-radius: 8px; background: var(--bg-main, #f9f9f9); font-size: 0.83rem; line-height: 1.45; color: var(--text-main); margin-bottom: 15px;">
@@ -739,7 +738,7 @@
 </div>
 <div class="custom-modal-overlay" id="login-modal">
 <div class="custom-modal-box">
-<div style="font-size: 2rem; margin-bottom: 8px;">🔐</div>
+<div style="font-size: 2rem; margin-bottom: 8px;"><i class="ri-lock-password-line" style="color: var(--accent);"></i></div>
 <h3 style="color: var(--text-main); margin: 0 0 6px 0; font-size: 1.15rem;">Khu vực nội bộ lớp</h3>
 <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0 0 16px 0;">Nhập mật khẩu để tiếp tục truy cập</p>
 <input id="modal-pass-input" onkeydown="if(event.key === 'Enter') submitLogin()" placeholder="Mật khẩu lớp..." style="width: 100%; background: var(--card-bg); border: 1px solid var(--border); padding: 10px 12px; border-radius: 10px; color: var(--text-main); outline: none; font-size: 0.95rem; box-sizing: border-box; margin-bottom: 12px;" type="password"/>
@@ -752,7 +751,7 @@
 </div>
 <div class="custom-modal-overlay" id="logout-modal">
 <div class="custom-modal-box">
-<div style="font-size: 2rem; margin-bottom: 8px;">⚠️</div>
+<div style="font-size: 2rem; margin-bottom: 8px;"><i class="ri-error-warning-line" style="color: #ef4444;"></i></div>
 <h3 style="color: var(--text-main); margin: 0 0 8px 0; font-size: 1.15rem;">Xác nhận đăng xuất</h3>
 <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0 0 20px 0;">Bạn có chắc chắn muốn đăng xuất khỏi khu vực nội bộ không?</p>
 <div style="display: flex; gap: 10px;">
@@ -776,7 +775,7 @@
 <label id="modal-file-label" style="display: block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 6px;">Chọn file:</label>
 <input id="file-input" multiple="" onchange="previewFiles(this)" style="display: none;" type="file"/>
 <label class="custom-file-upload" for="file-input">
-<div style="font-size: 1.4rem; margin-bottom: 2px;">📁</div>
+<div style="font-size: 1.4rem; margin-bottom: 2px;"><i class="ri-folder-add-line" style="color: var(--accent);"></i></div>
 <div id="file-upload-text" style="font-weight: 600; color: var(--text-main); font-size: 0.9rem;">Bấm vào đây để chọn file</div>
 <div id="file-upload-subtext" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Hỗ trợ chọn nhiều file</div>
 </label>
@@ -785,16 +784,16 @@
 <div id="subject-select-wrapper" style="margin-bottom: 12px;">
     <label style="display: block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 6px;">Chọn môn học:</label>
     <div class="custom-dropdown" id="subject-dropdown" onclick="toggleCustomDropdown('subject', event)">
-        <div class="dropdown-selected">
-            <span id="subject-selected-text">📐 Toán Chuyên</span>
-            <i class="ri-arrow-down-s-line" style="transition: transform 0.3s ease;"></i>
-        </div>
-        <div class="dropdown-options-box">
-            <div class="dropdown-option-item" onclick="selectCustomOption('subject', 'toan', '📐 Toán Chuyên', event)">📐 Toán Chuyên</div>
-            <div class="dropdown-option-item" onclick="selectCustomOption('subject', 'anh', '🇬🇧 Tiếng Anh', event)">🇬🇧 Tiếng Anh</div>
-            <div class="dropdown-option-item" onclick="selectCustomOption('subject', 'van', '✍️ Ngữ Văn', event)">✍️ Ngữ Văn</div>
-            <div class="dropdown-option-item" onclick="selectCustomOption('subject', 'khac', '📁 Khác', event)">📁 Khác</div>
-        </div>
+<div class="dropdown-selected" onclick="toggleCustomDropdown(this)">
+    <span id="subject-selected-text"><i class="ri-calculator-line"></i> Toán Chuyên</span>
+    <i class="ri-arrow-down-s-line" style="transition: transform 0.3s ease;"></i>
+    <div class="dropdown-options-box">
+        <div class="dropdown-option-item" onclick="selectCustomOption('subject', 'toan', '<i class=&quot;ri-calculator-line&quot;></i> Toán Chuyên', event)"><i class="ri-calculator-line"></i> Toán Chuyên</div>
+        <div class="dropdown-option-item" onclick="selectCustomOption('subject', 'anh', '<i class=&quot;ri-global-line&quot;></i> Tiếng Anh', event)"><i class="ri-global-line"></i> Tiếng Anh</div>
+        <div class="dropdown-option-item" onclick="selectCustomOption('subject', 'van', '<i class=&quot;ri-quill-pen-line&quot;></i> Ngữ Văn', event)"><i class="ri-quill-pen-line"></i> Ngữ Văn</div>
+        <div class="dropdown-option-item" onclick="selectCustomOption('subject', 'khac', '<i class=&quot;ri-folder-2-line&quot;></i> Khác', event)"><i class="ri-folder-2-line"></i> Khác</div>
+    </div>
+</div>
     </div>
     <input type="hidden" id="file-subject" value="toan">
 </div>
@@ -810,8 +809,8 @@
             <i class="ri-arrow-down-s-line" style="transition: transform 0.3s ease;"></i>
         </div>
         <div class="dropdown-options-box">
-            <div class="dropdown-option-item" onclick="selectCustomOption('visibility', 'public', '🌐 Công Khai (Mọi người đều xem được)', event)">🌐 Công Khai (Mọi người đều xem được)</div>
-            <div class="dropdown-option-item" onclick="selectCustomOption('visibility', 'private', '🔒 Riêng Tư (Chỉ thành viên nội bộ thấy khi đăng nhập)', event)">🔒 Riêng Tư (Chỉ thành viên nội bộ thấy khi đăng nhập)</div>
+            <div class="dropdown-option-item" onclick="selectCustomOption('visibility', 'public', '<i class=&quot;ri-earth-line&quot;></i> Công Khai (Mọi người đều xem được)', event)"><i class="ri-earth-line"></i> Công Khai (Mọi người đều xem được)</div>
+            <div class="dropdown-option-item" onclick="selectCustomOption('visibility', 'private', '<i class=&quot;ri-lock-line&quot;></i> Riêng Tư (Chỉ thành viên nội bộ thấy khi đăng nhập)', event)"><i class="ri-lock-line"></i> Riêng Tư (Chỉ thành viên nội bộ thấy khi đăng nhập)</div>
         </div>
     </div>
     <input type="hidden" id="file-visibility" value="public">
@@ -824,7 +823,7 @@
 </div>
 <div class="custom-modal-overlay" id="custom-confirm-modal" style="z-index: 3500;">
 <div class="custom-modal-box">
-<div style="font-size: 2.2rem; margin-bottom: 10px;">⚠️</div>
+<div style="font-size: 2.2rem; margin-bottom: 10px;"><i class="ri-error-warning-fill" style="color: #ef4444;"></i></div>
 <h3 style="color: var(--text-main); margin-top: 0; margin-bottom: 8px; font-size: 1.2rem;">Xác nhận thao tác</h3>
 <p id="confirm-msg" style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; line-height: 1.5;">Bạn có chắc chắn muốn thực hiện hành động này không?</p>
 <div style="display: flex; justify-content: center; gap: 10px;">
@@ -955,41 +954,47 @@
         function closeLoginModal() {
             document.getElementById('login-modal').style.display = 'none';
         }
-        function submitLogin() {
-            const passVal = document.getElementById('modal-pass-input').value;
-            if (passVal === CORRECT_PASS) {
-                localStorage.setItem('class_unlocked', 'true');
-                closeLoginModal();
-                updateAuthButtonState(true);
-                loadGalleryFromStorage();
-                loadResourcesFromStorage();
-                showToast('✨ Đăng nhập thành công!');
-            } else {
-                document.getElementById('modal-err').style.display = 'block';
-            }
-        }
-        function closeLogoutModal() {
-            document.getElementById('logout-modal').style.display = 'none';
-        }
-        function confirmLogout() {
-            localStorage.removeItem('class_unlocked');
-            closeLogoutModal();
-            updateAuthButtonState(false);
-            loadGalleryFromStorage();
-            loadResourcesFromStorage();
-            showToast('✨ Đã đăng xuất!');
-        }
-function updateAuthButtonState(isLoggedIn) {
-    const btn = document.getElementById('auth-nav-btn');
-    if (!btn) return;
-    if (isLoggedIn) {
-        btn.innerHTML = '<i class="ri-logout-box-r-line"></i> Đăng xuất';
-        btn.className = 'auth-nav-btn logout-state';
+function submitLogin() {
+    const passVal = document.getElementById('modal-pass-input').value;
+    if (passVal === CORRECT_PASS) {
+        localStorage.setItem('class_unlocked', 'true');
+        closeLoginModal();
+        updateAuthButtonState(true);
+        loadGalleryFromStorage();
+        loadResourcesFromStorage();
+        showToast('Đăng nhập thành công!');
     } else {
-        btn.innerHTML = '<i class="ri-login-box-line"></i> Đăng nhập';
-        btn.className = 'auth-nav-btn';
+        document.getElementById('modal-err').style.display = 'block';
     }
 }
+function closeLogoutModal() {
+    document.getElementById('logout-modal').style.display = 'none';
+}
+function confirmLogout() {
+    localStorage.removeItem('class_unlocked');
+    closeLogoutModal();
+    updateAuthButtonState(false);
+    loadGalleryFromStorage();
+    loadResourcesFromStorage();
+    showToast('Đã đăng xuất!');
+}
+        function updateAuthButtonState(isLoggedIn) {
+            const btn = document.getElementById('auth-nav-btn');
+            const btnUploadGallery = document.getElementById('btn-upload-gallery');
+            const btnUploadResources = document.getElementById('btn-upload-resources');
+            if (!btn) return;
+            if (isLoggedIn) {
+                btn.innerHTML = '<i class="ri-logout-box-r-line"></i> Đăng xuất';
+                btn.className = 'auth-nav-btn logout-state';
+                if (btnUploadGallery) btnUploadGallery.style.display = 'inline-block';
+                if (btnUploadResources) btnUploadResources.style.display = 'inline-block';
+            } else {
+                btn.innerHTML = '<i class="ri-login-box-line"></i> Đăng nhập';
+                btn.className = 'auth-nav-btn';
+                if (btnUploadGallery) btnUploadGallery.style.display = 'none';
+                if (btnUploadResources) btnUploadResources.style.display = 'none';
+            }
+        }
         function switchTab(tabName, updateHash = true, event = null) {
             if (event) event.preventDefault();
             currentActiveTab = tabName;
@@ -997,13 +1002,15 @@ function updateAuthButtonState(isLoggedIn) {
             const btnResources = document.getElementById('tab-btn-resources');
             const paneGallery = document.getElementById('pane-gallery');
             const paneResources = document.getElementById('pane-resources');
-            if (tabName === 'gallery') {
+            if (tabName === 'gallery' || tabName === 'images') {
+                currentActiveTab = 'gallery';
                 btnImages.classList.add('active');
                 btnResources.classList.remove('active');
                 paneGallery.classList.add('active');
                 paneResources.classList.remove('active');
                 if (updateHash) history.pushState(null, null, '#images');
             } else {
+                currentActiveTab = 'resources';
                 btnResources.classList.add('active');
                 btnImages.classList.remove('active');
                 paneResources.classList.add('active');
@@ -1062,17 +1069,17 @@ function updateAuthButtonState(isLoggedIn) {
             const title = document.getElementById('modal-title');
             const subjectWrapper = document.getElementById('subject-select-wrapper');
             if (tab === 'gallery') {
-                title.textContent = '📤 Đăng Ảnh Kỷ Niệm';
+                title.innerHTML = '<i class="ri-upload-cloud-line"></i> Đăng Ảnh Kỷ Niệm';
                 if (subjectWrapper) subjectWrapper.style.display = 'none';
             } else {
-                title.textContent = '📤 Đăng Tài Liệu Học Tập';
+                title.innerHTML = '<i class="ri-upload-cloud-line"></i> Đăng Tài Liệu Học Tập';
                 if (subjectWrapper) subjectWrapper.style.display = 'block';
             }
             document.getElementById('file-author').value = '';
             document.getElementById('file-title-input').value = '';
             document.getElementById('file-caption').value = '';
-            setCustomDropdownValue('visibility', 'public', '🌐 Công Khai (Mọi người đều xem được)');
-            setCustomDropdownValue('subject', 'toan', '📐 Toán Chuyên');
+            setCustomDropdownValue('visibility', 'public', '<i class="ri-earth-line"></i> Công Khai (Mọi người đều xem được)');
+            setCustomDropdownValue('subject', 'toan', '<i class="ri-calculate-line"></i> Toán Chuyên');
             document.getElementById('submit-btn').textContent = 'Đăng tải';
             document.getElementById('upload-modal').style.display = 'flex';
         }
@@ -1086,20 +1093,20 @@ function updateAuthButtonState(isLoggedIn) {
             fileInputWrapper.style.display = 'none'; 
             const subjectWrapper = document.getElementById('subject-select-wrapper');
             if (tab === 'gallery') {
-                title.textContent = '✏️ Chỉnh Sửa Ảnh Kỷ Niệm';
+                title.innerHTML = '<i class="ri-edit-box-line"></i> Chỉnh Sửa Ảnh Kỷ Niệm';
                 if (subjectWrapper) subjectWrapper.style.display = 'none';
             } else {
-                title.textContent = '✏️ Chỉnh Sửa Tài Liệu Học Tập';
+                title.innerHTML = '<i class="ri-edit-box-line"></i> Chỉnh Sửa Tài Liệu Học Tập';
                 if (subjectWrapper) {
                     subjectWrapper.style.display = 'block';
                     const sub = item.subject || 'khac';
                     const subTexts = {
-                        'toan': '📐 Toán Chuyên',
-                        'anh': '🇬🇧 Tiếng Anh',
-                        'van': '✍️ Ngữ Văn',
-                        'khac': '📁 Khác'
+                        'toan': '<i class="ri-calculate-line"></i> Toán Chuyên',
+                        'anh': '<i class="ri-global-line"></i> Tiếng Anh',
+                        'van': '<i class="ri-quill-pen-line"></i> Ngữ Văn',
+                        'khac': '<i class="ri-folder-line"></i> Khác'
                     };
-                    setCustomDropdownValue('subject', sub, subTexts[sub] || '📁 Khác');
+                    setCustomDropdownValue('subject', sub, subTexts[sub] || '<i class="ri-folder-line"></i> Khác');
                 }
             }
             document.getElementById('file-author').value = item.student_name || '';
@@ -1107,16 +1114,18 @@ function updateAuthButtonState(isLoggedIn) {
             document.getElementById('file-caption').value = item.description || '';
             const vis = item.visibility || 'public';
             const visTexts = {
-                'public': '🌐 Công Khai (Mọi người đều xem được)',
-                'private': '🔒 Riêng Tư (Chỉ thành viên nội bộ thấy khi đăng nhập)'
+                'public': '<i class="ri-earth-line"></i> Công Khai (Mọi người đều xem được)',
+                'private': '<i class="ri-lock-line"></i> Riêng Tư (Chỉ thành viên nội bộ thấy khi đăng nhập)',
+                'class': '<i class="ri-team-line"></i> Chỉ Thành Viên Lớp (Chỉ học sinh/giáo viên cùng lớp xem được)',
+                'password': '<i class="ri-key-line"></i> Dùng Mật Khẩu (Ai có mật khẩu mới xem được)'
             };
-            setCustomDropdownValue('visibility', vis, visTexts[vis]);
+            setCustomDropdownValue('visibility', vis, visTexts[vis] || '<i class="ri-earth-line"></i> Công Khai (Mọi người đều xem được)');
             document.getElementById('submit-btn').textContent = 'Lưu thay đổi';
             document.getElementById('upload-modal').style.display = 'flex';
         }
         function setCustomDropdownValue(type, value, text) {
             document.getElementById('file-' + type).value = value;
-            document.getElementById(type + '-selected-text').textContent = text;
+            document.getElementById(type + '-selected-text').innerHTML = text;
         }
         function toggleCustomDropdown(type, event) {
             event.stopPropagation();
@@ -1189,7 +1198,7 @@ function updateAuthButtonState(isLoggedIn) {
                     div.style.padding = '6px 10px';
                     div.style.borderRadius = '6px';
                     div.innerHTML = `
-                        <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 320px;">📄 ${file.name}</span>
+                        <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 320px;"><i class="ri-file-text-line" style="color: var(--accent);"></i> ${file.name}</span>
                         <button type="button" class="remove-preview-btn" onclick="removePreviewItem(${index})">Xóa</button>
                     `;
                     previewContainer.appendChild(div);
@@ -1219,7 +1228,7 @@ function updateAuthButtonState(isLoggedIn) {
                     div.style.padding = '6px 10px';
                     div.style.borderRadius = '6px';
                     div.innerHTML = `
-                        <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 320px;">📄 ${item.name}</span>
+                        <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 320px;"><i class="ri-file-text-line" style="color: var(--accent);"></i> ${item.name}</span>
                         <button type="button" class="remove-preview-btn" onclick="removePreviewItem(${idx})">Xóa</button>
                     `;
                     previewContainer.appendChild(div);
@@ -1432,7 +1441,7 @@ function updateAuthButtonState(isLoggedIn) {
                         itemEl.innerHTML = `
                             <div class="resource-left">
                                 ${checkboxHtml}
-                                <div class="file-icon">📄</div>
+                                <div class="file-icon"><i class="ri-file-text-line" style="color: var(--accent);"></i></div>
                                 <div class="file-details">
                                     <span class="file-name" title="${escapeHtml(displayTitle)}">
                                         ${escapeHtml(displayTitle)} 
@@ -1446,7 +1455,7 @@ function updateAuthButtonState(isLoggedIn) {
                                 </div>
                             </div>
                             <div class="resource-right">
-                                <a href="${fileLink}" download class="action-btn-sm download-btn" target="_blank">⬇️ Tải về</a>
+                                <a href="${fileLink}" download class="action-btn-sm download-btn" target="_blank"><i class="ri-download-2-line"></i> Tải về</a>
                                 ${adminActionsHtml}
                             </div>
                         `;
@@ -1655,30 +1664,30 @@ if (themeToggleBtn) {
     });
 </script>
 <script>
-function toggleMathEffects() {
-    const isCurrentlyDisabled = document.body.classList.contains('fx-disabled');
-    const fxBtn = document.getElementById('fx-toggle-btn');
-    if (isCurrentlyDisabled) {
-        document.body.classList.remove('fx-disabled');
-        if (fxBtn) fxBtn.innerHTML = '<i class="ri-sparkles-line"></i> Hiệu ứng: Bật';
-        localStorage.setItem('math_fx_enabled', 'true');
-    } else {
-        document.body.classList.add('fx-disabled');
-        if (fxBtn) fxBtn.innerHTML = '<i class="ri-sparkles-line"></i> Hiệu ứng: Tắt';
-        localStorage.setItem('math_fx_enabled', 'false');
+    function toggleMathEffects() {
+        const isCurrentlyDisabled = document.body.classList.contains('fx-disabled');
+        const fxBtn = document.getElementById('fx-toggle-btn');
+        if (isCurrentlyDisabled) {
+            document.body.classList.remove('fx-disabled');
+            if (fxBtn) fxBtn.innerHTML = '✨ Hiệu ứng: Bật';
+            localStorage.setItem('math_fx_enabled', 'true');
+        } else {
+            document.body.classList.add('fx-disabled');
+            if (fxBtn) fxBtn.innerHTML = '✨ Hiệu ứng: Tắt';
+            localStorage.setItem('math_fx_enabled', 'false');
+        }
     }
-}
-window.addEventListener('DOMContentLoaded', () => {
-    const fxEnabled = localStorage.getItem('math_fx_enabled') !== 'false';
-    const fxBtn = document.getElementById('fx-toggle-btn');
-    if (!fxEnabled) {
-        document.body.classList.add('fx-disabled');
-        if (fxBtn) fxBtn.innerHTML = '<i class="ri-sparkles-line"></i> Hiệu ứng: Tắt';
-    } else {
-        document.body.classList.remove('fx-disabled');
-        if (fxBtn) fxBtn.innerHTML = '<i class="ri-sparkles-line"></i> Hiệu ứng: Bật';
-    }
-});
+    window.addEventListener('DOMContentLoaded', () => {
+        const fxEnabled = localStorage.getItem('math_fx_enabled') !== 'false';
+        const fxBtn = document.getElementById('fx-toggle-btn');
+        if (!fxEnabled) {
+            document.body.classList.add('fx-disabled');
+            if (fxBtn) fxBtn.innerHTML = '✨ Hiệu ứng: Tắt';
+        } else {
+            document.body.classList.remove('fx-disabled');
+            if (fxBtn) fxBtn.innerHTML = '✨ Hiệu ứng: Bật';
+        }
+    });
 </script>
 <script src="time.js"></script>
 <script>
@@ -1693,7 +1702,7 @@ window.addEventListener('DOMContentLoaded', () => {
 <div class="custom-modal-overlay" id="clock-calendar-modal" onclick="closeClockCalendarModal(event)">
     <div class="clock-calendar-card" onclick="event.stopPropagation()">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <h3 style="margin: 0; font-size: 1rem; color: var(--text-main); font-weight: 700;"><i class="ri-calendar-event-line" style="color: var(--accent);"></i>  Time & Calendar</h3>
+            <h3 style="margin: 0; font-size: 1rem; color: var(--text-main); font-weight: 700;"><i class="ri-calendar-event-line" style="color: var(--accent);"></i> Time & Calendar</h3>
             <button onclick="closeClockCalendarModalDirect()" style="background: transparent; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted);"><i class="ri-close-line"></i></button>
         </div>
         <div class="analog-clock" id="analog-clock-face">
@@ -1729,7 +1738,7 @@ window.addEventListener('DOMContentLoaded', () => {
 </div>
 <div class="custom-modal-overlay" id="birthday-picker-modal" onclick="closeBirthdayPickerModal(event)" style="z-index: 10020;">
     <div class="custom-modal-box" onclick="event.stopPropagation()" style="max-width: 320px; text-align: center;">
-        <div style="font-size: 1.8rem; margin-bottom: 6px;">🎂</div>
+        <div style="font-size: 1.8rem; margin-bottom: 6px;"><i class="ri-cake-2-line" style="color: var(--accent);"></i></div>
         <h3 id="bday-picker-title" style="color: var(--text-main); margin: 0 0 4px 0; font-size: 1rem;">Sinh nhật ngày...</h3>
         <p style="color: var(--text-muted); font-size: 0.8rem; margin: 0 0 14px 0;">Chọn thành viên để xem thẻ thông tin chi tiết:</p>
         <div id="bday-picker-list" style="display: flex; flex-direction: column; gap: 8px; max-height: 180px; overflow-y: auto; margin-bottom: 14px;"></div>
@@ -1833,7 +1842,7 @@ window.addEventListener('DOMContentLoaded', () => {
             const matchedMembers = birthdaysInThisMonth[d];
             if (matchedMembers) {
                 dayCell.classList.add('has-birthday');
-                contentHTML += `<span class="bday-icon">🎂</span>`;
+                contentHTML += `<span class="bday-icon"><i class="ri-cake-2-line"></i></span>`;
                 dayCell.onclick = (e) => {
                     e.stopPropagation();
                     if (typeof openMemberCard === 'function' && matchedMembers.length === 1) {

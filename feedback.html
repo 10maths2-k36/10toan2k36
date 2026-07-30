@@ -435,7 +435,6 @@
 <button class="nav-action-btn auth-nav-btn" id="auth-nav-btn" onclick="handleAuthNavAction()"><i class="ri-login-box-line"></i> Đăng nhập</button>
 <button class="nav-action-btn fx-menu-btn" id="fx-toggle-btn" onclick="toggleMathEffects()"><i class="ri-sparkles-line"></i> Hiệu ứng: Bật</button>
     </nav>
-    </nav>
 </header>
 <div class="clock-widget-trigger" onclick="openClockCalendarModal()">
     <i class="ri-time-line" style="font-size: 1.2rem; color: var(--accent);"></i>
@@ -443,7 +442,7 @@
 </div>
 <main class="main-content">
 <section class="card animate-on-scroll" style="max-width: 700px; margin: 20px auto; text-align: center;">
-<h2>💬 Feedback</h2>
+<h2><i class="ri-chat-3-line" style="color: var(--accent);"></i> Feedback</h2>
 <p style="color: var(--text-muted); margin-bottom: 24px; font-size: 0.95rem;">
                 Bạn có ý tưởng cải thiện website lớp, báo cáo lỗi, hay muốn gửi lời nhắn nhủ đến tập thể <strong>10 Toán 2</strong>? Hãy chia sẻ với chúng mình nhé!
             </p>
@@ -465,12 +464,12 @@
             <i class="ri-arrow-down-s-line" id="dropdown-arrow"></i>
         </div>
         <div class="dropdown-options" id="dropdown-options-list">
-            <div class="dropdown-option" onclick="selectRating('5 Sao - Rất tuyệt vời', '5 Sao ⭐⭐⭐⭐⭐ - Rất tuyệt vời, mượt mà và đúng ý hoàn toàn!')">5 Sao ⭐⭐⭐⭐⭐ - Rất tuyệt vời, mượt mà và đúng ý hoàn toàn!</div>
-            <div class="dropdown-option" onclick="selectRating('4 Sao - Tốt', '4 Sao ⭐⭐⭐⭐ - Tốt, đáp ứng đúng nhu cầu.')">4 Sao ⭐⭐⭐⭐ - Tốt, đáp ứng đúng nhu cầu.</div>
-            <div class="dropdown-option" onclick="selectRating('3 Sao - Bình thường', '3 Sao ⭐⭐⭐ - Bình thường, tạm ổn.')">3 Sao ⭐⭐⭐ - Bình thường, tạm ổn.</div>
-            <div class="dropdown-option" onclick="selectRating('2 Sao - Chưa ưng ý lắm', '2 Sao ⭐⭐ - Chưa ưng ý lắm, cần cải thiện thêm.')">2 Sao ⭐⭐ - Chưa ưng ý lắm, cần cải thiện thêm.</div>
-            <div class="dropdown-option" onclick="selectRating('1 Sao - Trải nghiệm tệ', '1 Sao ⭐ - Trải nghiệm tệ, gặp nhiều lỗi.')">1 Sao ⭐ - Trải nghiệm tệ, gặp nhiều lỗi.</div>
-            <div class="dropdown-option" onclick="selectRating('0 Sao - Rất không hài lòng', '0 Sao ⭐ - Rất không hài lòng.')">0 Sao ⭐ - Rất không hài lòng.</div>
+            <div class="dropdown-option" onclick="selectRating('5 Sao - Rất tuyệt vời', '5 Sao <i class=\'ri-star-fill\' style=\'color: #f59e0b;\'></i><i class=\'ri-star-fill\' style=\'color: #f59e0b;\'></i><i class=\'ri-star-fill\' style=\'color: #f59e0b;\'></i><i class=\'ri-star-fill\' style=\'color: #f59e0b;\'></i><i class=\'ri-star-fill\' style=\'color: #f59e0b;\'></i> - Rất tuyệt vời, mượt mà và đúng ý hoàn toàn!')">5 Sao <i class="ri-star-fill" style="color: #f59e0b;"></i><i class="ri-star-fill" style="color: #f59e0b;"></i><i class="ri-star-fill" style="color: #f59e0b;"></i><i class="ri-star-fill" style="color: #f59e0b;"></i><i class="ri-star-fill" style="color: #f59e0b;"></i> - Rất tuyệt vời, mượt mà và đúng ý hoàn toàn!</div>
+            <div class="dropdown-option" onclick="selectRating('4 Sao - Tốt', '4 Sao <i class=\'ri-star-fill\' style=\'color: #f59e0b;\'></i><i class=\'ri-star-fill\' style=\'color: #f59e0b;\'></i><i class=\'ri-star-fill\' style=\'color: #f59e0b;\'></i><i class=\'ri-star-fill\' style=\'color: #f59e0b;\'></i> - Tốt, đáp ứng đúng nhu cầu.')">4 Sao <i class="ri-star-fill" style="color: #f59e0b;"></i><i class="ri-star-fill" style="color: #f59e0b;"></i><i class="ri-star-fill" style="color: #f59e0b;"></i><i class="ri-star-fill" style="color: #f59e0b;"></i> - Tốt, đáp ứng đúng nhu cầu.</div>
+            <div class="dropdown-option" onclick="selectRating('3 Sao - Bình thường', '3 Sao <i class=\'ri-star-fill\' style=\'color: #f59e0b;\'></i><i class=\'ri-star-fill\' style=\'color: #f59e0b;\'></i><i class=\'ri-star-fill\' style=\'color: #f59e0b;\'></i> - Bình thường, tạm ổn.')">3 Sao <i class="ri-star-fill" style="color: #f59e0b;"></i><i class="ri-star-fill" style="color: #f59e0b;"></i><i class="ri-star-fill" style="color: #f59e0b;"></i> - Bình thường, tạm ổn.</div>
+            <div class="dropdown-option" onclick="selectRating('2 Sao - Chưa ưng ý lắm', '2 Sao <i class=\'ri-star-fill\' style=\'color: #f59e0b;\'></i><i class=\'ri-star-fill\' style=\'color: #f59e0b;\'></i> - Chưa ưng ý lắm, cần cải thiện thêm.')">2 Sao <i class="ri-star-fill" style="color: #f59e0b;"></i><i class="ri-star-fill" style="color: #f59e0b;"></i> - Chưa ưng ý lắm, cần cải thiện thêm.</div>
+            <div class="dropdown-option" onclick="selectRating('1 Sao - Trải nghiệm tệ', '1 Sao <i class=\'ri-star-fill\' style=\'color: #f59e0b;\'></i> - Trải nghiệm tệ, gặp nhiều lỗi.')">1 Sao <i class="ri-star-fill" style="color: #f59e0b;"></i> - Trải nghiệm tệ, gặp nhiều lỗi.</div>
+            <div class="dropdown-option" onclick="selectRating('0 Sao - Rất không hài lòng', '0 Sao <i class=\'ri-star-line\'></i> - Rất không hài lòng.')">0 Sao <i class="ri-star-line"></i> - Rất không hài lòng.</div>
         </div>
         <input type="hidden" id="fb-rating" name="rating" required />
     </div>
@@ -479,7 +478,7 @@
 <label for="fb-content">Nội dung góp ý:</label>
 <textarea id="fb-content" name="message" placeholder="Nhập nội dung bạn muốn gửi gắm..." required="" rows="5"></textarea>
 </div>
-<button class="form-submit-btn" id="submit-btn" type="submit">🚀 Gửi Góp Ý</button>
+<button class="form-submit-btn" id="submit-btn" type="submit"><i class="ri-send-plane-fill"></i> Gửi Góp Ý</button>
 </form>
 </section>
 </main>
@@ -496,7 +495,7 @@
 </footer>
 <div class="custom-modal-overlay" id="terms-modal">
 <div class="custom-modal-box" style="max-width: 520px; text-align: left;">
-<div style="font-size: 1.5rem; text-align: center; margin-bottom: 5px;">📜</div>
+<div style="font-size: 1.5rem; text-align: center; margin-bottom: 5px;"><i class="ri-file-text-line" style="color: var(--accent);"></i></div>
 <h3 style="color: var(--text-main); margin: 0 0 5px 0; font-size: 1.15rem; text-align: center;">Điều khoản và Quy định sử dụng</h3>
 <p style="color: var(--text-muted); font-size: 0.85rem; text-align: center; margin-bottom: 12px;">Vui lòng cuộn xuống dưới cùng để mở khóa nút đồng ý.</p>
 <div id="index-terms-scroll" onscroll="checkTermsScroll()" style="height: 200px; overflow-y: auto; border: 1px solid var(--border); padding: 12px; border-radius: 8px; background: var(--bg-main, #f9f9f9); font-size: 0.83rem; line-height: 1.45; color: var(--text-main); margin-bottom: 15px;">
@@ -520,7 +519,7 @@
 </div>
 <div class="custom-modal-overlay" id="login-modal">
 <div class="custom-modal-box">
-<div style="font-size: 2rem; margin-bottom: 8px;">🔐</div>
+<div style="font-size: 2rem; margin-bottom: 8px;"><i class="ri-lock-password-line" style="color: var(--accent);"></i></div>
 <h3 style="color: var(--text-main); margin: 0 0 6px 0; font-size: 1.15rem;">Khu vực nội bộ lớp</h3>
 <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0 0 16px 0;">Nhập mật khẩu để tiếp tục truy cập</p>
 <input id="modal-pass-input" onkeydown="if(event.key === 'Enter') submitLogin()" placeholder="Mật khẩu lớp..." style="width: 100%; background: var(--card-bg); border: 1px solid var(--border); padding: 10px 12px; border-radius: 10px; color: var(--text-main); outline: none; font-size: 0.95rem; box-sizing: border-box; margin-bottom: 12px;" type="password"/>
@@ -533,9 +532,9 @@
 </div>
 <div class="custom-modal-overlay" id="logout-modal">
 <div class="custom-modal-box">
-<div style="font-size: 2rem; margin-bottom: 8px;">⚠️</div>
+<div style="font-size: 2rem; margin-bottom: 8px;"><i class="ri-error-warning-line" style="color: #ef4444;"></i></div>
 <h3 style="color: var(--text-main); margin: 0 0 8px 0; font-size: 1.15rem;">Xác nhận đăng xuất</h3>
-<p style="color: var(--text-muted); font-size: 0.9rem; margin: 0 0 20px 0;">Bạn có chắc chắn muốn đăng xuất khỏi khu vực nội bộ không?[cite: 3]</p>
+<p style="color: var(--text-muted); font-size: 0.9rem; margin: 0 0 20px 0;">Bạn có chắc chắn muốn đăng xuất khỏi khu vực nội bộ không?</p>
 <div style="display: flex; gap: 10px;">
 <button onclick="closeLogoutModal()" style="flex: 1; background: transparent; color: var(--text-main); border: 1px solid var(--border); padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Hủy</button>
 <button onclick="confirmLogout()" style="flex: 1; background: #ef4444; color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Đăng xuất</button>
@@ -555,7 +554,7 @@
         }
         function selectRating(value, displayText) {
             document.getElementById('fb-rating').value = value;
-            document.getElementById('selected-text').textContent = displayText;
+            document.getElementById('selected-text').innerHTML = displayText;
             document.getElementById('selected-text').style.color = 'var(--text-main)';
             document.getElementById('custom-rating-dropdown').classList.remove('active');
         }
@@ -579,7 +578,7 @@
             const submitBtn = document.getElementById('submit-btn');
             const statusBox = document.getElementById('form-status');
             submitBtn.disabled = true;
-            submitBtn.textContent = '⏳ Đang gửi lên hệ thống...';
+            submitBtn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Đang gửi lên hệ thống...';
             statusBox.style.display = 'none';
             const name = document.getElementById('fb-name').value.trim();
             const email = document.getElementById('fb-email').value.trim();
@@ -594,17 +593,17 @@
                     throw error;
                 }
                 statusBox.className = 'form-status-msg success';
-                statusBox.textContent = '🎉 Cảm ơn bạn! Góp ý của bạn đã được lưu trực tiếp vào cơ sở dữ liệu của lớp.';
+                statusBox.innerHTML = '<i class="ri-checkbox-circle-line"></i> Cảm ơn bạn! Góp ý của bạn đã được lưu trực tiếp vào cơ sở dữ liệu của lớp.';
                 form.reset();
-                document.getElementById('selected-text').textContent = '-- Chọn mức độ đánh giá --';
+                document.getElementById('selected-text').innerHTML = '-- Chọn mức độ đánh giá --';
             } catch (error) {
                 console.error('Lỗi khi gửi feedback:', error.message);
                 statusBox.style.display = 'block';
                 statusBox.className = 'form-status-msg error';
-                statusBox.textContent = '❌ Gửi thất bại: ' + (error.message || 'Vui lòng thử lại sau.');
+                statusBox.innerHTML = '<i class="ri-close-circle-line"></i> Gửi thất bại: ' + (error.message || 'Vui lòng thử lại sau.');
             } finally {
                 submitBtn.disabled = false;
-                submitBtn.textContent = '🚀 Gửi Góp Ý';
+                submitBtn.innerHTML = '<i class="ri-send-plane-fill"></i> Gửi Góp Ý';
             }
         }
         function handleAuthNavAction() {
@@ -870,7 +869,7 @@ window.addEventListener('DOMContentLoaded', () => {
 </div>
 <div class="custom-modal-overlay" id="birthday-picker-modal" onclick="closeBirthdayPickerModal(event)" style="z-index: 10020;">
     <div class="custom-modal-box" onclick="event.stopPropagation()" style="max-width: 320px; text-align: center;">
-        <div style="font-size: 1.8rem; margin-bottom: 6px;">🎂</div>
+        <div style="font-size: 1.8rem; margin-bottom: 6px;"><i class="ri-cake-2-line" style="color: #ec4899;"></i></div>
         <h3 id="bday-picker-title" style="color: var(--text-main); margin: 0 0 4px 0; font-size: 1rem;">Sinh nhật ngày...</h3>
         <p style="color: var(--text-muted); font-size: 0.8rem; margin: 0 0 14px 0;">Chọn thành viên để xem thẻ thông tin chi tiết:</p>
         <div id="bday-picker-list" style="display: flex; flex-direction: column; gap: 8px; max-height: 180px; overflow-y: auto; margin-bottom: 14px;"></div>
@@ -974,7 +973,7 @@ window.addEventListener('DOMContentLoaded', () => {
             const matchedMembers = birthdaysInThisMonth[d];
             if (matchedMembers) {
                 dayCell.classList.add('has-birthday');
-                contentHTML += `<span class="bday-icon">🎂</span>`;
+                contentHTML += `<span class="bday-icon"><i class="ri-cake-fill" style="color: #ec4899;"></i></span>`;
                 dayCell.onclick = (e) => {
                     e.stopPropagation();
                     if (typeof openMemberCard === 'function' && matchedMembers.length === 1) {
