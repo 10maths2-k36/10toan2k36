@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clock Widget</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: flex-start;  
+            justify-content: flex-start; 
+            height: 100vh;
+            background: transparent;
+            font-family: inherit;
+        }
+        .clock-widget {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--text-main, #fff);
+            padding: 10px 16px;
+            border-radius: 50px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            user-select: none;
+        }
+        .clock-widget:hover {
+            background: var(--accent, #0284c7);
+            border-color: var(--accent, #0284c7);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(2, 132, 199, 0.3);
+        }
+        .clock-widget i {
+            font-size: 1.25rem;
+        }
+        .clock-info {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+        .clock-time {
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .clock-date {
+            font-size: 0.72rem;
+            opacity: 0.85;
+            letter-spacing: 0.2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="clock-widget">
+        <i class="ri-time-line"></i>
+        <div class="clock-info">
+            <span class="clock-time" id="clockTime">00:00:00</span>
+            <span class="clock-date" id="clockDate">Đang tải...</span>
+        </div>
+    </div>
+    <script>
+        function updateClock() {
+            const now = new Date();
+            let hours = String(now.getHours()).padStart(2, '0');
+            let minutes = String(now.getMinutes()).padStart(2, '0');
+            let seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('clockTime').textContent = `${hours}:${minutes}:${seconds}`;
+            const daysOfWeek = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
+            let dayName = daysOfWeek[now.getDay()];
+            let day = now.getDate();
+            let month = now.getMonth() + 1;
+            let year = now.getFullYear();
+            document.getElementById('clockDate').textContent = `${dayName}, ${day} thg ${month}, ${year}`;
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+    </script>
+</body>
+</html>

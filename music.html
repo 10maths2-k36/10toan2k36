@@ -2,67 +2,248 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Background Music</title>
-</head>
-<body style="margin: 0; background: transparent;">
-    <div id="youtube-player-container" style="display: none;"></div>
-    <button id="music-toggle-btn" onclick="toggleYouTubeMusic()" style="background: #ef4444; border: none; color: white; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: 0.2s; position: fixed; bottom: 0; right: 0;">
-        🎵
-    </button>
-    <div id="music-widget" style="position: fixed; bottom: 2px; right: 45px; background: var(--card-bg, #ffffff); padding: 4px 10px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 8px; border: 1px solid var(--border, #eaeaea); font-family: sans-serif;">
-        <span style="font-size: 11px; font-weight: 600; color: #333;">Lofi YouTube</span>
-        <span id="music-status" style="font-size: 9px; color: #666;">Đang phát...</span>
-    </div>
-    <script src="https://www.youtube.com/iframe_api"></script>
-    <script>
-        let player;
-        const btn = document.getElementById('music-toggle-btn');
-        const statusText = document.getElementById('music-status');
-        const youtubeVideoId = 'JdqL89ZZwFw'; 
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('youtube-player-container', {
-                height: '0',
-                width: '0',
-                videoId: youtubeVideoId,
-                playerVars: {
-                    'autoplay': 1,
-                    'loop': 1,
-                    'playlist': youtubeVideoId
-                },
-                events: {
-                    'onReady': onPlayerReady
-                }
-            });
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            height: 100vh;
+            background: transparent;
+            font-family: inherit;
         }
-        function onPlayerReady(event) {
-            player.setVolume(30);
-            const musicState = localStorage.getItem('isYoutubeMusicPlaying');
-            if (musicState === null || musicState === 'true') {
-                player.playVideo();
-                btn.style.background = '#ef4444';
-                statusText.textContent = 'Đang phát...';
-                localStorage.setItem('isYoutubeMusicPlaying', 'true');
+        .music-widget-wrapper {
+            position: relative;
+        }
+        .music-toggle-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--text-main, #fff);
+            padding: 10px 16px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            outline: none;
+            text-decoration: none;
+        }
+        .music-toggle-btn:hover {
+            background: var(--accent, #0284c7);
+            color: #fff;
+            border-color: var(--accent, #0284c7);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(2, 132, 199, 0.3);
+        }
+        .music-toggle-btn i {
+            font-size: 1.25rem;
+            transition: transform 0.3s ease;
+        }
+        .music-toggle-btn.active i.disc-icon {
+            animation: spinDisc 3s linear infinite;
+        }
+        @keyframes spinDisc {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .music-text {
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+        .music-popup-window {
+            display: none;
+            position: absolute;
+            bottom: 60px;
+            right: 0;
+            width: 320px;
+            background: rgba(20, 20, 30, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            overflow: hidden;
+            animation: fadeInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(12px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .popup-header {
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .popup-header .close-btn {
+            background: none;
+            border: none;
+            color: #aaa;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: color 0.2s;
+        }
+        .popup-header .close-btn:hover {
+            color: #fff;
+        }
+        .popup-body {
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; 
+            height: 0;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #000;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .change-song-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .change-song-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="music-widget-wrapper">
+        <button class="music-toggle-btn" id="musicBtn" onclick="toggleMusicPopup(event)">
+            <i class="ri-disc-line disc-icon" id="musicIcon"></i>
+            <span class="music-text" id="musicText">Phát nhạc</span>
+        </button>
+        <div class="music-popup-window" id="musicPopup">
+            <div class="popup-header">
+                <span>Trình phát YouTube</span>
+                <button class="close-btn" onclick="closeMusicPopup()"><i class="ri-close-line"></i></button>
+            </div>
+            <div class="popup-body">
+                <div class="video-container" id="playerContainer">
+                    <iframe id="ytIframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                </div>
+                <button class="change-song-btn" onclick="changeSong()"><i class="ri-shuffle-line"></i> Đổi bài / Nhập Link YouTube khác</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const btn = document.getElementById('musicBtn');
+        const icon = document.getElementById('musicIcon');
+        const text = document.getElementById('musicText');
+        const popup = document.getElementById('musicPopup');
+        const ytIframe = document.getElementById('ytIframe');
+        let isOpen = false;
+        let currentVideoId = "CLeZyIID9Bo"; 
+        function toggleMusicPopup(event) {
+            event.stopPropagation();
+            if (!isOpen) {
+                openMusicPopup();
             } else {
-                player.pauseVideo();
-                btn.style.background = '#4f46e5';
-                statusText.textContent = 'Đang tắt';
+                closeMusicPopup();
             }
         }
-        function toggleYouTubeMusic() {
-            if (!player) return;
-            const state = player.getPlayerState();
-            if (state === YT.PlayerState.PLAYING) {
-                player.pauseVideo();
-                btn.style.background = '#4f46e5';
-                statusText.textContent = 'Đang tắt';
-                localStorage.setItem('isYoutubeMusicPlaying', 'false');
-            } else {
-                player.playVideo();
-                btn.style.background = '#ef4444';
-                statusText.textContent = 'Đang phát...';
-                localStorage.setItem('isYoutubeMusicPlaying', 'true');
+        function openMusicPopup() {
+            isOpen = true;
+            popup.style.display = 'block';
+            btn.classList.add('active');
+            icon.className = 'ri-disc-fill disc-icon';
+            text.textContent = 'Đang mở';
+            if (!ytIframe.src || ytIframe.src === window.location.href) {
+                ytIframe.src = `https://www.youtube.com/embed/${currentVideoId}?autoplay=1`;
+            }
+        }
+        function closeMusicPopup() {
+            isOpen = false;
+            popup.style.display = 'none';
+            btn.classList.remove('active');
+            icon.className = 'ri-disc-line disc-icon';
+            text.textContent = 'Phát nhạc';
+            ytIframe.src = "";
+        }
+        function extractYouTubeID(urlOrId) {
+            let match = urlOrId.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+            return match ? match[1] : (urlOrId.length === 11 ? urlOrId : null);
+        }
+        function changeSong() {
+            let input = prompt("Dán đường dẫn (link) hoặc ID bài hát YouTube bạn muốn nghe:", "https://www.youtube.com/watch?v=...");
+            if (input) {
+                let videoId = extractYouTubeID(input.trim());
+                if (videoId) {
+                    currentVideoId = videoId;
+                    ytIframe.src = `https://www.youtube.com/embed/${currentVideoId}?autoplay=1`;
+                } else {
+                    showToast("Link hoặc ID YouTube không hợp lệ!");
+                }
+            }
+        }
+        window.onclick = function(event) {
+            if (!event.target.closest('.music-widget-wrapper')) {
+                closeMusicPopup();
             }
         }
     </script>
+<div id="toastMessage" style="position: fixed; bottom: 20px; right: 20px; background: var(--card-bg); backdrop-filter: var(--backdrop); border: 1px solid var(--accent); color: var(--text-main); padding: 12px 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transform: translateY(100px); opacity: 0; transition: all 0.4s ease; z-index: 9999;">
+    ✨ Thao tác thành công!
+</div>
+<script>
+    function showToast(message = "✨ Thao tác thành công!") {
+        let toast = document.getElementById('toastMessage');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'toastMessage';
+            toast.style.cssText = "position: fixed; bottom: 20px; right: 20px; background: var(--card-bg); backdrop-filter: var(--backdrop); border: 1px solid var(--accent); color: var(--text-main); padding: 12px 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transform: translateY(100px); opacity: 0; transition: all 0.4s ease; z-index: 9999;";
+            document.body.appendChild(toast);
+        }
+        if (typeof message === 'object') {
+            message = JSON.stringify(message);
+        }
+        toast.innerText = message;
+        setTimeout(() => {
+            toast.style.transform = 'translateY(0)';
+            toast.style.opacity = '1';
+        }, 100);
+        setTimeout(() => {
+            toast.style.transform = 'translateY(100px)';
+            toast.style.opacity = '0';
+        }, 3000);
+    }
+</script>
 </body>
 </html>
