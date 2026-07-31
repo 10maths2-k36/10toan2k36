@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Không tìm thấy trang | 10 Toán 2 K36</title>
+    <meta name="theme-color" content="#000000">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet"/>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-main, #000000);
+            color: var(--text-main, #ffffff);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .error-card {
+            background: var(--card-bg, #0b0f19);
+            border: 1px solid var(--border, #27272a);
+            border-radius: 20px;
+            padding: 40px 30px;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            animation: modalScaleIn 0.3s ease;
+        }
+        @keyframes modalScaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .error-code {
+            font-size: 5.5rem;
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--text-main, #ffffff) 0%, var(--accent, #38bdf8) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .error-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-main, #ffffff);
+        }
+        .error-desc {
+            font-size: 0.92rem;
+            color: var(--text-muted, #a1a1aa);
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+        .btn-home {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background-color: var(--accent, #38bdf8);
+            color: #ffffff;
+            padding: 10px 22px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.92rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .btn-home:hover {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(56, 189, 248, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <main class="main-content">
+        <div class="error-card">
+            <div class="error-code">404</div>
+            <h1 class="error-title"><i class="ri-error-warning-line" style="color: var(--accent);"></i> Không tìm thấy trang yêu cầu</h1>
+            <p class="error-desc">Đường dẫn bạn vừa truy cập có thể đã bị thay đổi, xóa đi hoặc không tồn tại. Hãy quay lại trang chủ để tiếp tục trải nghiệm nhé!</p>
+            <a href="index.html" class="btn-home">
+                <i class="ri-home-4-line"></i> Về Trang Chủ
+            </a>
+        </div>
+    </main>
+</body>
+</html>

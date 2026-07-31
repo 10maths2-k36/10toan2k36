@@ -789,7 +789,7 @@ body.dark-mode .member-table th,
         }
     </style>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0284c7">
+<meta name="theme-color" content="#000000">
 </head>
 <body>
 <header class="header-nav">
@@ -818,8 +818,14 @@ body.dark-mode .member-table th,
 <main class="main-content">
 <section class="card">
 <div class="card-header-box" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-<h2 style="margin: 0 0 -1px 0; font-weight: 700; font-size: 1.5rem; color: var(--text-color);">10 Toán 2 — K36</h2>
-<p style="margin: 0; color: var(--text-muted); font-size: 0.9rem;" id="member-count-text">35 thành viên</p>
+<div style="text-align: center;">
+    <h2 style="margin: 0; font-weight: 700; font-size: 1.5rem; color: var(--text-color);">10 Toán 2 — K36</h2>
+    <div style="width: 50px; height: 2px; background: linear-gradient(to right, transparent, var(--border), transparent); margin: 2px auto;"></div>
+    <p style="margin: 0; color: var(--text-muted); font-size: 0.9rem; display: inline-flex; align-items: center; gap: 6px;">
+        <i class="ri-user-heart-line" style="color: var(--accent);"></i> 
+        <span id="member-count-text">35 thành viên</span>
+    </p>
+</div>
 </div>
 <div class="birthday-countdown-widget" id="birthday-countdown-box">
     <i class="ri-cake-2-line"></i>
@@ -843,37 +849,37 @@ body.dark-mode .member-table th,
         <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-main);">Bộ lọc:</span>
         <div class="custom-dropdown" id="dropdown-gender">
             <div class="custom-dropdown-selected" onclick="toggleDropdown('dropdown-gender')">
-                <span id="selected-gender-text">Tất cả giới tính</span>
+                <span id="selected-gender-text">Giới tính</span>
                 <i class="ri-arrow-down-s-line"></i>
             </div>
             <div class="custom-dropdown-menu" id="menu-gender">
-                <div class="custom-dropdown-item selected" onclick="selectGender('', 'Tất cả giới tính')">Tất cả giới tính</div>
+                <div class="custom-dropdown-item selected" onclick="selectGender('', 'Tất cả giới tính')">Giới tính</div>
                 <div class="custom-dropdown-item" onclick="selectGender('Nam', 'Nam')">Nam</div>
                 <div class="custom-dropdown-item" onclick="selectGender('Nữ', 'Nữ')">Nữ</div>
             </div>
         </div>
         <div class="custom-dropdown" id="dropdown-day">
             <div class="custom-dropdown-selected" onclick="toggleDropdown('dropdown-day')">
-                <span id="selected-day-text">Tất cả ngày</span>
+                <span id="selected-day-text">Ngày</span>
                 <i class="ri-arrow-down-s-line"></i>
             </div>
             <div class="custom-dropdown-menu" id="menu-day">
-                <div class="custom-dropdown-item selected" onclick="selectDay('', 'Tất cả ngày')">Tất cả ngày</div>
+                <div class="custom-dropdown-item selected" onclick="selectDay('', 'Ngày')">Ngày</div>
             </div>
         </div>
         <div class="custom-dropdown" id="dropdown-month">
             <div class="custom-dropdown-selected" onclick="toggleDropdown('dropdown-month')">
-                <span id="selected-month-text">Tất cả tháng</span>
+                <span id="selected-month-text">Tháng</span>
                 <i class="ri-arrow-down-s-line"></i>
             </div>
             <div class="custom-dropdown-menu" id="menu-month">
-                <div class="custom-dropdown-item selected" onclick="selectMonth('', 'Tất cả tháng')">Tất cả tháng</div>
+                <div class="custom-dropdown-item selected" onclick="selectMonth('', 'Tháng')">Tháng</div>
             </div>
         </div>
     </div>
     <div class="filter-group">
-        <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-main);">Màu chủ đạo:</span>
-        <label class="color-picker-container" title="Chọn màu chủ đạo tùy ý" style="background: var(--card-bg); border: 1px solid var(--border);">
+        <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-main);">Màu Web:</span>
+        <label class="color-picker-container" title="Chọn màu tùy thích" style="background: var(--card-bg); border: 1px solid var(--border);">
             <input type="color" id="accent-color-picker" value="#0284c7" onchange="changeAccentColor(this.value)">
             <span id="accent-color-label" style="font-size: 0.8rem; font-weight: 500; color: var(--text-main);">#0284c7</span>
         </label>
@@ -963,30 +969,30 @@ body.dark-mode .member-table th,
         <div style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--accent); background: var(--card-bg); border: 1px solid var(--border); padding: 5px 12px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
             <i class="ri-shield-user-line"></i> 10 Toán 2 - THPT Chuyên Bến Tre
         </div>
-        <div style="background: var(--bg-main, #f9f9f9); border: 1px solid var(--border); border-radius: 16px; padding: 6px 14px; margin-bottom: 18px; text-align: left;">
+        <div style="background: var(--glass-bg, rgba(255, 255, 255, 0.1)); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.2)); border-radius: 16px; padding: 10px 14px; margin-bottom: 16px; text-align: left; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);">
             <div class="member-card-info-row">
-                <span class="member-card-label">Số thứ tự</span>
-                <span class="member-card-value" id="modal-member-stt">--</span>
+                <span class="member-card-label" style="color: var(--text-main);">Số thứ tự</span>
+                <span class="member-card-value" id="modal-member-stt" style="color: var(--text-main);">--</span>
             </div>
             <div class="member-card-info-row">
-                <span class="member-card-label">Giới tính</span>
-                <span class="member-card-value" id="modal-member-gender">--</span>
+                <span class="member-card-label" style="color: var(--text-main);">Giới tính</span>
+                <span class="member-card-value" id="modal-member-gender" style="color: var(--text-main);">--</span>
             </div>
             <div class="member-card-info-row">
-                <span class="member-card-label">Ngày sinh</span>
-                <span class="member-card-value" id="modal-member-birthday">--</span>
+                <span class="member-card-label" style="color: var(--text-main);">Ngày sinh</span>
+                <span class="member-card-value" id="modal-member-birthday" style="color: var(--text-main);">--</span>
             </div>
             <div class="member-card-info-row">
-                <span class="member-card-label">Cung hoàng đạo</span>
-                <span class="member-card-value"><span id="modal-member-zodiac" class="zodiac-clickable" onclick="openZodiacInfo(event)">--</span></span>
+                <span class="member-card-label" style="color: var(--text-main);">Cung hoàng đạo</span>
+                <span class="member-card-value"><span id="modal-member-zodiac" class="zodiac-clickable" onclick="openZodiacInfo(event)" style="color: var(--text-main);">--</span></span>
             </div>
             <div class="member-card-info-row">
-                <span class="member-card-label">Chức vụ</span>
-                <span class="member-card-value" style="color: var(--text-muted); font-style: italic; font-weight: 500;">Chưa có</span>
+                <span class="member-card-label" style="color: var(--text-main);">Chức vụ</span>
+                <span class="member-card-value" id="modal-member-role" style="color: var(--text-muted); font-style: italic; font-weight: 500;">Chưa có</span>
             </div>
         </div>
-        <div style="font-size: 12.5px; font-style: italic; color: var(--text-main); margin-bottom: 20px; padding: 0 10px; line-height: 1.4; font-weight: 500;">
-            "Học hết sức, chơi hết mình!"
+        <div id="modal-member-quote" style="font-size: 12.5px; font-style: italic; color: var(--text-main); margin-bottom: 20px; padding: 0 10px; line-height: 1.4; font-weight: 500; opacity: 0.9;">
+            "Học không bằng ai - Chơi không ai bằng"
         </div>
         <button onclick="closeMemberCardDirect()" style="width: 100%; background: var(--accent); color: #fff; border: none; padding: 11px; border-radius: 14px; font-size: 14px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); transition: all 0.2s ease;" onmouseover="this.style.filter='brightness(1.05)'" onmouseout="this.style.filter='none'">Đóng thẻ</button>
         <div id="copy-toast">Đã sao chép thông tin thành viên!</div>

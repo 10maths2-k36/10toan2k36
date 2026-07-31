@@ -25,10 +25,11 @@ body[data-theme="dark"] {
 }
 * {
     box-sizing: border-box;
+    font-family: "SF Pro Display", sans-serif !important;
 }
 body {
     margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "SF Pro Display", sans-serif !important;
     background-image: var(--bg-image) !important;
     background-size: cover !important;
     background-position: center center !important;
@@ -256,7 +257,6 @@ body::after {
 .math-symbol {
     position: absolute;
     color: var(--text-main); 
-    font-family: serif;
     font-style: italic;
     opacity: 0.15; 
     user-select: none;
@@ -277,7 +277,6 @@ body::after {
 .math-click-particle {
     position: fixed;
     font-size: 1rem;
-    font-family: serif;
     font-style: italic;
     color: var(--accent);
     pointer-events: none;
@@ -390,7 +389,6 @@ input[type="text"], input[type="password"], textarea, input, p, span, h1, h2, h3
     color: var(--text-main, #fff);
     font-size: 0.9rem;
     font-weight: 500;
-    font-family: inherit;
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -451,7 +449,6 @@ textarea {
     padding: 10px 14px;
     border: 1px solid #ccc;
     border-radius: 14px !important; 
-    font-family: inherit; 
     font-size: 14px;
     resize: vertical; 
     box-sizing: border-box;
@@ -729,7 +726,6 @@ body[data-theme="dark"] .nav-indicator {
 .custom-select-dropdown {
     position: relative;
     width: 100%;
-    font-family: inherit;
 }
 .dropdown-selected {
     width: 100%;
@@ -801,7 +797,6 @@ body[data-theme="dark"] .nav-indicator {
     box-shadow: var(--shadow) !important;
     color: var(--text-main) !important;
     padding: 18px;
-    font-family: inherit;
     border-radius: 28px !important;
     box-sizing: border-box;
     display: flex;
