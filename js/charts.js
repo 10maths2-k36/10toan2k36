@@ -162,9 +162,18 @@ document.addEventListener('DOMContentLoaded', async function () {
                 guestViews = existingData.guest_views || 0;
                 memberViews = existingData.member_views || 0;
             }
-            const viewStatsEl = document.getElementById('view-stats');
+const viewStatsEl = document.getElementById('view-stats');
             if (viewStatsEl) {
-                viewStatsEl.textContent = `Khách: ${guestViews.toLocaleString()} | Thành viên: ${memberViews.toLocaleString()}`;
+                viewStatsEl.innerHTML = `
+                    <div style="display: flex; gap: 15px; font-size: 0.95rem; font-weight: 600; margin-top: 4px;">
+                        <span style="display: flex; align-items: center; color: #38bdf8;">
+                            <i class="ri-user-shared-line" style="margin-right: 5px; font-size: 1.1rem;"></i> Khách: ${guestViews.toLocaleString()}
+                        </span>
+                        <span style="display: flex; align-items: center; color: #34d399;">
+                            <i class="ri-user-star-line" style="margin-right: 5px; font-size: 1.1rem;"></i> Thành viên: ${memberViews.toLocaleString()}
+                        </span>
+                    </div>
+                `;
             }
             const { data: chartRows, error: chartRowsErr } = await supabaseClient
                 .from('class_activities')
