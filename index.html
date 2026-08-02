@@ -360,37 +360,96 @@
 <img alt="Logo 10 Toán 2 K36" class="class-logo" onclick="openLightbox('10_t2_logo.jpeg')" src="10_t2_logo.jpeg" title="Bấm để phóng to logo Lớp"/>
 </div>
 </footer>
-<div class="custom-modal-overlay" id="welcome-modal" style="display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); justify-content: center; align-items: center; z-index: 9999;">
-    <div class="custom-modal-box" style="background: var(--bg-card, rgba(255, 255, 255, 0.85)); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.4); text-align: center; max-width: 420px; width: 90%; position: relative; border-radius: 24px; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.3);">
-        <div class="mac-window-controls" style="padding: 12px 16px 0 16px; display: flex; gap: 6px;">
-            <button onclick="closeWelcomeModal()" class="mac-dot mac-close" title="Đóng"><span class="mac-icon"><i class="ri-close-line"></i></span></button>
-            <button onclick="minimizeWelcomeModal()" class="mac-dot mac-minimize" title="Thu nhỏ"><span class="mac-icon"><i class="ri-subtract-line"></i></span></button>
-            <button onclick="maximizeWelcomeModal()" class="mac-dot mac-maximize" title="Phóng to"><span class="mac-icon"><i class="ri-add-line"></i></span></button>
+<div class="custom-modal-overlay" id="welcome-modal" style="display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); justify-content: center; align-items: center; z-index: 9999;">
+    <div class="custom-modal-box" style="background: rgba(30, 41, 59, 0.65); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid rgba(255, 255, 255, 0.2); text-align: center; max-width: 480px; width: 90%; position: relative; border-radius: 28px; overflow: hidden; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3); padding: 35px 20px;">
+        <div style="margin-bottom: 12px; display: flex; justify-content: center;">
+            <img src="10_t2_logo.jpeg" alt="Logo Toán 2 K36" style="width: 85px; height: 85px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255, 255, 255, 0.3); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);">
         </div>
-        <div style="font-size: 2.8rem; margin: 10px 0 5px 0;">
-            <i class="ri-error-warning-line" style="color: #f59e0b;"></i>
+        <div style="font-size: 0.95rem; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 5px;">
+            Welcome to
         </div>
-        <h3 style="color: var(--text-main, #111827); margin: 0 0 10px 0; font-size: 1.2rem; font-weight: 700;">Cảnh báo: Khu vực chứa toàn "nhân tài"!</h3>
-        <p style="color: var(--text-muted, #4b5563); font-size: 0.95rem; line-height: 1.5; margin: 0 0 15px 0; padding: 0 20px; font-weight: 500;">
-            Cảnh báo nguy hiểm! Bước qua đây bạn phải tự chịu trách nhiệm bởi hành vi của mình. Từ chối nhận lại mọi khiếu nại nếu bị ngợp trước vẻ đẹp ngoạn mục của trang web này!
-        </p>
-        <div id="countdown-text" style="font-style: italic; color: var(--text-muted, #6b7280); font-size: 0.85rem; margin-bottom: 20px;">
-            Sẽ tự vào web sau <span id="countdown-number" style="font-weight: 700; color: var(--text-main, #111827);">15</span>giây
+        <div style="width: 100%; display: flex; justify-content: center; align-items: center; margin: 10px 0;">
+            <svg viewBox="0 0 500 120" style="width: 100%; max-width: 420px; height: 110px;">
+                <text x="50%" y="50%" dy=".35em" class="text-path">10 Toán 2 K36</text>
+            </svg>
         </div>
-        <div style="background: rgba(128, 128, 128, 0.08); border: 1px solid var(--border, rgba(0,0,0,0.1)); padding: 10px; border-radius: 14px; margin: 0 20px 20px 20px;">
-            <div style="font-size: 0.75rem; color: var(--text-main, #111827); opacity: 0.75; margin-bottom: 2px; font-weight: 500;">Được thiết kế & xây dựng bởi:</div>
-            <div style="font-weight: 700; color: var(--text-main, #111827); font-size: 0.9rem;">Thành viên lớp 10T2</div>
+        <div style="margin: 15px 0 10px 0;">
+            <div id="loading-text" style="font-size: 0.9rem; font-weight: 500; color: #94a3b8; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                <i class="ri-loader-4-line" style="animation: spin 1s linear infinite;"></i> Đang tải dữ liệu... (<span id="countdown-number">5</span>s)
+            </div>
+            <div style="width: 100%; height: 6px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; overflow: hidden;">
+                <div id="loading-progress-bar" style="width: 0%; height: 100%; background: #38bdf8; transition: width 1s linear; border-radius: 10px;"></div>
+            </div>
         </div>
-        <div style="padding: 0 20px 25px 20px; display: flex; gap: 10px; align-items: center;">
-            <button onclick="closeWelcomeModal()" style="flex: 1; background: var(--accent, #2563eb); color: #fff; border: none; padding: 12px; border-radius: 14px; font-weight: 600; cursor: pointer; font-size: 0.95rem; box-sizing: border-box; transition: transform 0.2s ease, opacity 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 6px;">
-                <i class="ri-rocket-2-line"></i> Chấp nhận!
-            </button>
-            <button id="runaway-btn" onmouseover="moveButton()" onclick="moveButton()" style="background: rgba(128, 128, 128, 0.1); color: var(--text-main, #111827); border: 1px solid var(--border, rgba(0,0,0,0.15)); padding: 12px 14px; border-radius: 14px; font-size: 0.85rem; font-weight: 600; cursor: pointer; position: relative; transition: 0.1s; white-space: nowrap; display: flex; align-items: center; gap: 4px;">
-                <i class="ri-ghost-line"></i> Thôi đừng có sợ
+        <div style="margin-top: 25px;">
+            <button onclick="closeWelcomeModal()" style="width: 100%; background: rgba(56, 189, 248, 0.9); backdrop-filter: blur(10px); color: #0f172a; border: 1px solid rgba(255, 255, 255, 0.4); padding: 12px; border-radius: 14px; font-weight: 700; cursor: pointer; font-size: 0.95rem; transition: transform 0.2s ease, opacity 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 8px 25px rgba(56,189,248,0.4);">
+                <i class="ri-rocket-2-line"></i> Vào trang web ngay
             </button>
         </div>
     </div>
 </div>
+<style>
+    .text-path {
+        font-size: 48px;
+        font-weight: 900;
+        text-anchor: middle;
+        fill: none;
+        stroke: #38bdf8;
+        stroke-width: 2px;
+        stroke-dasharray: 600;
+        stroke-dashoffset: 600;
+        animation: drawText 3.5s ease-in-out forwards infinite alternate;
+    }
+    @keyframes drawText {
+        0% {
+            stroke-dashoffset: 600;
+            fill: transparent;
+        }
+        50% {
+            stroke-dashoffset: 0;
+            fill: transparent;
+        }
+        100% {
+            stroke-dashoffset: 0;
+            fill: #38bdf8;
+        }
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+<script>
+    let welcomeTimeLeft = 5;
+    const countdownElement = document.getElementById('countdown-number');
+    const progressBar = document.getElementById('loading-progress-bar');
+    const countdownTimer = setInterval(() => {
+        welcomeTimeLeft--;
+        if (countdownElement) {
+            countdownElement.textContent = welcomeTimeLeft > 0 ? welcomeTimeLeft : 0;
+        }
+        if (progressBar) {
+            const progressPercent = ((5 - welcomeTimeLeft) / 5) * 100;
+            progressBar.style.width = progressPercent + '%';
+        }
+        if (welcomeTimeLeft <= 0) {
+            clearInterval(countdownTimer);
+            closeWelcomeModal();
+        }
+    }, 1000);
+    function closeWelcomeModal() {
+        clearInterval(countdownTimer);
+        const modal = document.getElementById('welcome-modal');
+        if (modal) {
+            modal.style.opacity = '0';
+            modal.style.transition = 'opacity 0.3s ease';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+            sessionStorage.setItem('welcomed', 'true');
+        }
+    }
+</script>
 <div class="custom-modal-overlay" id="terms-modal">
 <div class="custom-modal-box" style="max-width: 520px; text-align: left;">
 <div style="font-size: 1.5rem; text-align: center; margin-bottom: 5px;"><i class="ri-file-text-line" style="color: var(--accent);"></i></div>
@@ -444,195 +503,123 @@
 </div>
 <iframe allow="autoplay" src="music.html" style="position: fixed; bottom: 20px; right: 20px; width: 150px; height: 50px; border: none; z-index: 9999; background: transparent;"></iframe>
 <script>
-    let timeLeft = 15;
-    const countdownElement = document.getElementById('countdown-number');
-    const countdownTimer = setInterval(() => {
-        timeLeft--;
-        if (countdownElement) {
-            if (timeLeft > 0) {
-                countdownElement.textContent = timeLeft + "...";
-            } else {
-                countdownElement.textContent = "0";
-            }
+    const CORRECT_PASS = "10toan2k36";
+    window.addEventListener('DOMContentLoaded', () => {
+        if (localStorage.getItem('class_unlocked') === 'true') {
+            updateAuthButtonState(true);
+        } else {
+            updateAuthButtonState(false);
         }
-        if (timeLeft <= 0) {
-            clearInterval(countdownTimer);
-            closeWelcomeModal();
+        if (sessionStorage.getItem('welcomed') === 'true') {
+            const welcomeModal = document.getElementById('welcome-modal');
+            if (welcomeModal) welcomeModal.style.display = 'none';
         }
-    }, 1000);
-    function closeWelcomeModal() {
-        clearInterval(countdownTimer);
-        const modal = document.getElementById('welcome-modal');
-        if (modal) {
-            modal.style.display = 'none';
-        }
-    }
-    function moveButton() {
-        const btn = document.getElementById('runaway-btn');
-        const randomX = (Math.random() - 0.5) * 100;
-        const randomY = (Math.random() - 0.5) * 50;
-        btn.style.transform = `translate(${randomX}px, ${randomY}px)`;
-    }
-    function closeWelcomeModal() {
-        document.getElementById('welcome-modal').style.display = 'none';
-    }
-    function moveButton() {
-        const btn = document.getElementById('runaway-btn');
-        const randomX = (Math.random() - 0.5) * 100;
-        const randomY = (Math.random() - 0.5) * 50;
-        btn.style.transform = `translate(${randomX}px, ${randomY}px)`;
-    }
-        const CORRECT_PASS = "10toan2k36";
-        window.addEventListener('DOMContentLoaded', () => {
-            if (localStorage.getItem('class_unlocked') === 'true') {
-                updateAuthButtonState(true);
-            } else {
-                updateAuthButtonState(false);
-            }
-            if (sessionStorage.getItem('welcomed') === 'true') {
-                const welcomeModal = document.getElementById('welcome-modal');
-                if (welcomeModal) welcomeModal.style.display = 'none';
-            }
-        });
-        function closeWelcomeModal() {
-            const modal = document.getElementById('welcome-modal');
-            if (modal) {
-                modal.style.display = 'none';
-                sessionStorage.setItem('welcomed', 'true');
-            }
-        }
-        function minimizeWelcomeModal() {
-    const modalBox = document.querySelector('.custom-modal-box');
-    if (!modalBox) return;
-    const isMinimized = modalBox.getAttribute('data-minimized') === 'true';
-    const contentElements = modalBox.querySelectorAll('h3, p, div:not(.mac-window-controls), button:not(.mac-dot)');
-    contentElements.forEach(el => {
-        el.style.display = isMinimized ? '' : 'none';
     });
-    modalBox.style.height = isMinimized ? 'auto' : '50px';
-    modalBox.setAttribute('data-minimized', !isMinimized);
-}
-        function maximizeWelcomeModal() {
-    const modalBox = document.querySelector('.custom-modal-box');
-    if (!modalBox) return;
-    const isMaximized = modalBox.getAttribute('data-maximized') === 'true';
-    if (!isMaximized) {
-        modalBox.dataset.oldWidth = modalBox.style.width;
-        modalBox.dataset.oldMaxW = modalBox.style.maxWidth;
-        modalBox.style.width = '90vw';
-        modalBox.style.maxWidth = '900px';
-        modalBox.setAttribute('data-maximized', 'true');
-    } else {
-        modalBox.style.width = modalBox.dataset.oldWidth || '';
-        modalBox.style.maxWidth = modalBox.dataset.oldMaxW || '400px';
-        modalBox.setAttribute('data-maximized', 'false');
-    }
-}
-        function handleAuthNavAction() {
-            if (localStorage.getItem('class_unlocked') === 'true') {
-                document.getElementById('logout-modal').style.display = 'flex';
-            } else {
-                const scrollBox = document.getElementById('index-terms-scroll');
-                scrollBox.scrollTop = 0;
-                const agreeBtn = document.getElementById('index-agree-btn');
-                agreeBtn.disabled = true;
-                agreeBtn.style.background = '#ccc';
-                agreeBtn.style.cursor = 'not-allowed';
-                document.getElementById('terms-modal').style.display = 'flex';
-            }
-        }
-        function checkTermsScroll() {
+    function handleAuthNavAction() {
+        if (localStorage.getItem('class_unlocked') === 'true') {
+            document.getElementById('logout-modal').style.display = 'flex';
+        } else {
             const scrollBox = document.getElementById('index-terms-scroll');
+            scrollBox.scrollTop = 0;
             const agreeBtn = document.getElementById('index-agree-btn');
-            if (scrollBox.scrollTop + scrollBox.clientHeight >= scrollBox.scrollHeight - 10) {
-                agreeBtn.disabled = false;
-                agreeBtn.style.background = 'var(--accent)';
-                agreeBtn.style.cursor = 'pointer';
-            }
-        }
-        function closeTermsModal() {
-            document.getElementById('terms-modal').style.display = 'none';
-        }
-        function acceptIndexTerms() {
-            const agreeBtn = document.getElementById('index-agree-btn');
-            if (!agreeBtn.disabled) {
-                closeTermsModal();
-                document.getElementById('modal-pass-input').value = '';
-                document.getElementById('modal-err').style.display = 'none';
-                document.getElementById('login-modal').style.display = 'flex';
-                setTimeout(() => document.getElementById('modal-pass-input').focus(), 100);
-            }
-        }
-        function backToTermsModal() {
-            document.getElementById('login-modal').style.display = 'none';
+            agreeBtn.disabled = true;
+            agreeBtn.style.background = '#ccc';
+            agreeBtn.style.cursor = 'not-allowed';
             document.getElementById('terms-modal').style.display = 'flex';
         }
-        function closeLoginModal() {
-            document.getElementById('login-modal').style.display = 'none';
+    }
+    function checkTermsScroll() {
+        const scrollBox = document.getElementById('index-terms-scroll');
+        const agreeBtn = document.getElementById('index-agree-btn');
+        if (scrollBox.scrollTop + scrollBox.clientHeight >= scrollBox.scrollHeight - 10) {
+            agreeBtn.disabled = false;
+            agreeBtn.style.background = 'var(--accent)';
+            agreeBtn.style.cursor = 'pointer';
         }
-        function submitLogin() {
-            const passVal = document.getElementById('modal-pass-input').value;
-            if (passVal === CORRECT_PASS) {
-                localStorage.setItem('class_unlocked', 'true');
-                closeLoginModal();
-                updateAuthButtonState(true);
-                location.reload();
+    }
+    function closeTermsModal() {
+        document.getElementById('terms-modal').style.display = 'none';
+    }
+    function acceptIndexTerms() {
+        const agreeBtn = document.getElementById('index-agree-btn');
+        if (!agreeBtn.disabled) {
+            closeTermsModal();
+            document.getElementById('modal-pass-input').value = '';
+            document.getElementById('modal-err').style.display = 'none';
+            document.getElementById('login-modal').style.display = 'flex';
+            setTimeout(() => document.getElementById('modal-pass-input').focus(), 100);
+        }
+    }
+    function backToTermsModal() {
+        document.getElementById('login-modal').style.display = 'none';
+        document.getElementById('terms-modal').style.display = 'flex';
+    }
+    function closeLoginModal() {
+        document.getElementById('login-modal').style.display = 'none';
+    }
+    function submitLogin() {
+        const passVal = document.getElementById('modal-pass-input').value;
+        if (passVal === CORRECT_PASS) {
+            localStorage.setItem('class_unlocked', 'true');
+            closeLoginModal();
+            updateAuthButtonState(true);
+            location.reload();
+        } else {
+            document.getElementById('modal-err').style.display = 'block';
+        }
+    }
+    function closeLogoutModal() {
+        document.getElementById('logout-modal').style.display = 'none';
+    }
+    function confirmLogout() {
+        localStorage.removeItem('class_unlocked');
+        updateAuthButtonState(false);
+        location.reload();
+    }
+    function updateAuthButtonState(isLoggedIn) {
+        const btn = document.getElementById('auth-nav-btn');
+        if (!btn) return;
+        if (isLoggedIn) {
+            btn.innerHTML = '<i class="ri-logout-box-r-line"></i> Đăng xuất';
+            btn.className = 'auth-nav-btn logout-state';
+        } else {
+            btn.innerHTML = '<i class="ri-login-box-line"></i> Đăng nhập';
+            btn.className = 'auth-nav-btn';
+        }
+    }
+    function openLightbox(url) {
+        document.getElementById('lightbox-img').src = url;
+        document.getElementById('lightbox-modal').style.display = 'flex';
+    }
+    function closeLightbox() {
+        document.getElementById('lightbox-modal').style.display = 'none';
+    }
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const body = document.body;
+    function updateThemeIcon(isLight) {
+        if (themeToggleBtn) {
+            if (isLight) {
+                themeToggleBtn.innerHTML = '<i class="ri-sun-line"></i> Giao diện';
             } else {
-                document.getElementById('modal-err').style.display = 'block';
+                themeToggleBtn.innerHTML = '<i class="ri-moon-line"></i> Giao diện';
             }
         }
-        function closeLogoutModal() {
-            document.getElementById('logout-modal').style.display = 'none';
-        }
-        function confirmLogout() {
-            localStorage.removeItem('class_unlocked');
-            updateAuthButtonState(false);
-            location.reload();
-        }
-function updateAuthButtonState(isLoggedIn) {
-    const btn = document.getElementById('auth-nav-btn');
-    if (!btn) return;
-    if (isLoggedIn) {
-        btn.innerHTML = '<i class="ri-logout-box-r-line"></i> Đăng xuất';
-        btn.className = 'auth-nav-btn logout-state';
+    }
+    if (localStorage.getItem('theme') === 'light') {
+        body.classList.add('light-mode');
+        updateThemeIcon(true);
     } else {
-        btn.innerHTML = '<i class="ri-login-box-line"></i> Đăng nhập';
-        btn.className = 'auth-nav-btn';
+        updateThemeIcon(false);
     }
-}
-        function openLightbox(url) {
-            document.getElementById('lightbox-img').src = url;
-            document.getElementById('lightbox-modal').style.display = 'flex';
-        }
-        function closeLightbox() {
-            document.getElementById('lightbox-modal').style.display = 'none';
-        }
-const themeToggleBtn = document.getElementById('theme-toggle');
-const body = document.body;
-function updateThemeIcon(isLight) {
     if (themeToggleBtn) {
-        if (isLight) {
-            themeToggleBtn.innerHTML = '<i class="ri-sun-line"></i> Giao diện';
-        } else {
-            themeToggleBtn.innerHTML = '<i class="ri-moon-line"></i> Giao diện';
-        }
+        themeToggleBtn.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            const isLight = body.classList.contains('light-mode');
+            updateThemeIcon(isLight);
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        });
     }
-}
-if (localStorage.getItem('theme') === 'light') {
-    body.classList.add('light-mode');
-    updateThemeIcon(true);
-} else {
-    updateThemeIcon(false);
-}
-if (themeToggleBtn) {
-    themeToggleBtn.addEventListener('click', () => {
-        body.classList.toggle('light-mode');
-        const isLight = body.classList.contains('light-mode');
-        updateThemeIcon(isLight);
-        localStorage.setItem('theme', isLight ? 'light' : 'dark');
-    });
-}
-    </script>
+</script>
 <script src="js/animation.js"></script>
 <script>
         window.addEventListener('DOMContentLoaded', () => {
