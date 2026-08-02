@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>10 Toán 2 K36 - Trang Chủ</title><span id="live-clock" style="font-size: 0.85rem; color: var(--text-muted, #ccc); font-weight: 500; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 12px;"></span>
 <link href="css/style.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
         html, body {
             height: 100%;
@@ -298,7 +301,53 @@
 <p><i class="ri-cup-line" style="color: var(--accent); margin-right: 6px;"></i><strong>Những Giờ Phút Thư Giãn Nhẹ Nhàng:</strong> Sau những giờ phút đấu trí căng thẳng với các bài toán khó, góc thư giãn của lớp lại rộn rã tiếng cười với đủ loại trò chơi và câu chuyện vui nhộn. Đó là không gian để mọi khoảng cách bị xóa nhòa, để chúng ta lắng nghe và thấu hiểu nhau hơn sau áp lực thi cử. Những phút giây bình yên ấy tiếp thêm nguồn năng lượng tích cực cho chặng đường dài phía trước.</p>
 <p><i class="ri-rocket-2-line" style="color: var(--accent); margin-right: 6px;"></i><strong>Sẵn Sàng Cho Những Chặng Đường Mới:</strong> Dù chặng đường phía trước vẫn còn nhiều thử thách và kỳ thi quan trọng đang chờ đón, với nền tảng vững chắc và sự đồng hành của những người bạn tri kỷ, chúng ta hoàn toàn tự tin bước tiếp. Hãy cứ bay cao với những ước mơ lớn, vì ở nơi đây, tập thể <strong>10 Toán 2</strong> luôn là hậu phương vững chắc nhất, sẵn sàng chia sẻ mọi buồn vui và cùng nhau viết tiếp câu chuyện thanh xuân rực rỡ nhất cuộc đời.</p>
 </section>
-</main>
+<section class="card" style="margin-top: 20px;">
+    <h2 style="margin: 0 0 15px 0; font-weight: 700; font-size: 1.3rem; color: var(--text-color); display: flex; align-items: center; gap: 8px;">
+        <i class="ri-bar-chart-box-line" style="color: var(--accent);"></i> Thống Kê Hoạt Động 10 Ngày Qua
+    </h2>
+<div class="stats-cards-container" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px;">
+<div class="stat-card">
+    <div class="stat-title">
+        <i class="ri-eye-line" style="margin-right: 6px; color: #3b82f6;"></i> Phân Loại Lượt Xem
+    </div>
+    <div class="stat-value" id="view-stats">Khách: 0 | Thành viên: 0</div>
+</div>
+    <div class="stat-card">
+        <div class="stat-title">
+            <i class="ri-file-text-line" style="margin-right: 6px; color: #10b981;"></i> Thư Viện
+        </div>
+        <div class="stat-value" id="total-documents">0</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-title">
+            <i class="ri-trophy-line" style="margin-right: 6px; color: #f59e0b;"></i> Thành Tích
+        </div>
+        <div class="stat-value" id="total-achievements">0</div>
+    </div>
+</div>
+    <div style="background: var(--glass-bg, rgba(255, 255, 255, 0.05)); border: 1px solid var(--border); padding: 16px; border-radius: 14px; margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span style="font-size: 0.95rem; font-weight: 700; color: var(--text-color); display: flex; align-items: center; gap: 6px;">
+                <i class="ri-file-list-3-line" style="color: #f59e0b;"></i> Tài liệu mới đăng gần đây
+            </span>
+            <a href="gallery.html#documents" style="font-size: 0.85rem; color: #38bdf8; text-decoration: none; font-weight: 600;">Xem tất cả &rarr;</a>
+        </div>
+        <div id="recentDocsPreview" style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="font-size: 0.85rem; color: var(--text-muted); text-align: center; padding: 10px;">Đang tải danh sách tài liệu...</div>
+        </div>
+    </div>
+    <style>
+        .stat-card:hover, .doc-preview-item:hover {
+            transform: translateY(-2px);
+            border-color: rgba(56, 189, 248, 0.4);
+        }
+        .doc-preview-item {
+            transition: all 0.2s ease;
+        }
+    </style>
+<div style="width: 100%; height: 260px; position: relative;">
+    <canvas id="classActivityChart"></canvas>
+</div>
 </main>
 <footer class="site-footer">
 <div class="footer-left-content">
@@ -341,7 +390,6 @@
             </button>
         </div>
     </div>
-</div>
 </div>
 <div class="custom-modal-overlay" id="terms-modal">
 <div class="custom-modal-box" style="max-width: 520px; text-align: left;">
@@ -860,5 +908,11 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     }
 </script>
+<script>
+        const SUPABASE_URL = 'https://mwyjcrpwxpghieizswfa.supabase.co';
+        const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_9Ow2Q57vi9ArOtQRPr3bfw_olVCoAfD';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+</script>
+<script src="js/charts.js"></script>
 </body>
 </html>
