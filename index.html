@@ -11,6 +11,18 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0284c7">
     <style>
+.dynamic-doc-title {
+    color: #ffffff !important;
+}
+body.light-mode .dynamic-doc-title {
+    color: #000000 !important;
+}
+.dynamic-text-color {
+    color: #ffffff !important;
+}
+body.light-mode .dynamic-text-color {
+    color: #000000 !important;
+}
         @font-face {
             font-family: "SF Pro Display";
             font-style: normal;
@@ -322,7 +334,9 @@
 <p><i class="ri-rocket-2-line" style="color: var(--accent); margin-right: 6px;"></i><strong>Sẵn Sàng Cho Những Chặng Đường Mới:</strong> Dù chặng đường phía trước vẫn còn nhiều thử thách và kỳ thi quan trọng đang chờ đón, với nền tảng vững chắc và sự đồng hành của những người bạn tri kỷ, chúng ta hoàn toàn tự tin bước tiếp. Hãy cứ bay cao với những ước mơ lớn, vì ở nơi đây, tập thể <strong>10 Toán 2</strong> luôn là hậu phương vững chắc nhất, sẵn sàng chia sẻ mọi buồn vui và cùng nhau viết tiếp câu chuyện thanh xuân rực rỡ nhất cuộc đời.</p>
 </section>
 <section class="card" style="margin-top: 20px;">
-    <h2 class="section-title" style="color: var(--text-main);">Thống Kê Hoạt Động 10 Ngày Qua</h2>
+    <h2 class="section-title" style="color: var(--text-main); display: flex; align-items: center; gap: 10px;">
+    <i class="ri-line-chart-line" style="color: #000000; font-size: 1.2rem;"></i> Thống Kê Hoạt Động 10 Ngày Qua
+</h2>
     <div id="date-range" style="font-size: 0.85rem; color: var(--text-muted, #94a3b8); margin: 6px 0 16px 0; font-weight: 500;">
         Từ ngày: <span style="color: var(--text-main); font-weight: 600;">--/--/---- đến --/--/----</span>
     </div>
@@ -334,11 +348,10 @@
         </div>
         <div style="display: flex; flex-direction: column; gap: 12px; justify-content: space-between;">
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px;">
-                <div style="background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 14px; padding: 12px 14px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);">
-                    <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted, #94a3b8); display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+<div style="background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 14px; padding: 12px 14px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);">                    <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted, #94a3b8); display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
                         <i class="ri-eye-line" style="color: #38bdf8; font-size: 0.95rem;"></i> Lượt Xem
                     </div>
-                    <div style="display: flex; gap: 10px; font-size: 0.85rem; font-weight: 700;">
+                    <div style="display: flex; gap: 10px; font-size: 1.2rem; font-weight: 800;">
                         <span style="color: #38bdf8;">Khách: <span id="stat-guest-views">0</span></span>
                         <span style="color: #34d399;">Thành Viên: <span id="stat-member-views">0</span></span>
                     </div>

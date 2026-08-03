@@ -59,6 +59,22 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         }
     });
+    function animateValue(element, start, end, duration) {
+        if (!element) return;
+        let startTimestamp = null;
+        const step = (timestamp) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            const currentVal = Math.floor(progress * (end - start) + start);
+            element.innerText = currentVal.toLocaleString();
+            if (progress < 1) {
+                window.requestAnimationFrame(step);
+            } else {
+                element.innerText = end.toLocaleString();
+            }
+        };
+        window.requestAnimationFrame(step);
+    }
     const observer = new MutationObserver(() => {
         const updatedColors = getColors();
         classActivityChart.options.plugins.legend.labels.color = updatedColors.textColor;
@@ -173,8 +189,12 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
             const guestEl = document.getElementById('stat-guest-views');
             const memberEl = document.getElementById('stat-member-views');
-            if (guestEl) guestEl.innerText = totalGuestViews.toLocaleString();
-            if (memberEl) memberEl.innerText = totalMemberViews.toLocaleString();
+            const libEl = document.getElementById('stat-library'); 
+            const achEl = document.getElementById('stat-achievements'); 
+            if (guestEl) animateValue(guestEl, 0, totalGuestViews, 1000);
+            if (memberEl) animateValue(memberEl, 0, totalMemberViews, 1000);
+            if (libEl) animateValue(libEl, 0, totalGallery, 1000);
+            if (achEl) animateValue(achEl, 0, totalAchievements, 1000);
             const viewStatsEl = document.getElementById('view-stats');
             if (viewStatsEl) {
                 const viewTitleSpan = viewStatsEl.querySelector('.ri-eye-line');
@@ -203,7 +223,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                         <div style="display: flex; flex-direction: column; gap: 8px;">
                             ${recentDocs.map(doc => `
                                 <a href="gallery.html#documents" class="doc-preview-item" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; text-decoration: none;">
-                                    <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%; display: flex; align-items: center; gap: 8px;">
+                                    <span class="dynamic-text-color" style="font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%; display: flex; align-items: center; gap: 8px;">
                                         <i class="ri-file-list-line" style="color: #38bdf8; font-size: 1rem;"></i> ${doc.title || 'Tài liệu học tập'}
                                     </span>
                                     <div class="svg-btn-wrapper">
@@ -236,7 +256,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                         <div style="display: flex; flex-direction: column; gap: 8px;">
                             ${recentImages.map(img => `
                                 <a href="gallery.html#images" class="doc-preview-item" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; text-decoration: none;">
-                                    <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%; display: flex; align-items: center; gap: 8px;">
+                                    <span class="dynamic-text-color" style="font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%; display: flex; align-items: center; gap: 8px;">
                                         <i class="ri-image-2-line" style="color: #34d399; font-size: 1rem;"></i> ${img.title || 'Khoảnh khắc kỷ niệm'}
                                     </span>
                                     <div class="svg-btn-wrapper">
@@ -269,7 +289,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                         <div style="display: flex; flex-direction: column; gap: 8px;">
                             ${recentAchievements.map(ach => `
                                 <a href="achievements.html" class="doc-preview-item" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; text-decoration: none;">
-                                    <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%; display: flex; align-items: center; gap: 8px;">
+                                    <span class="dynamic-text-color" style="font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%; display: flex; align-items: center; gap: 8px;">
                                         <i class="ri-award-line" style="color: #fbbf24; font-size: 1rem;"></i> ${ach.student_name ? `${ach.student_name} - ` : ''}${ach.title || 'Thành tích lớp học'}
                                     </span>
                                     <div class="svg-btn-wrapper">
