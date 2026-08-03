@@ -339,6 +339,8 @@
             flex-direction: column;
             gap: 16px;
             background: var(--bg-main, #f9f9f9);
+            background-size: cover;
+            background-position: center;
         }
         .chat-message-wrapper {
             display: flex;
@@ -396,13 +398,13 @@
             to { opacity: 1; transform: translateY(0); }
         }
         .chat-message.user {
-            background: #2563eb;
-            color: #fff;
+            background: var(--user-bubble-bg, #2563eb);
+            color: var(--user-bubble-color, #fff);
             border-bottom-right-radius: 4px;
         }
         .chat-message.ai {
-            background: #f97316;
-            color: #fff;
+            background: var(--ai-bubble-bg, #f97316);
+            color: var(--ai-bubble-color, #fff);
             border-bottom-left-radius: 4px;
         }
         .ai-actions-bar {
@@ -812,6 +814,23 @@
             <div class="embedded-chat-container">
                 <div class="chat-window-header">
                     <span><i class="ri-robot-2-line"></i> AI - Hỗ trợ bài tập chuyên sâu</span>
+                    <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: normal;">
+                        <label title="Đổi màu nền khung chat" style="display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                            <i class="ri-palette-line"></i> Nền:
+                            <input type="color" id="chat-bg-color-picker" onchange="changeChatBgColor(this.value)" style="width: 24px; height: 24px; border: none; cursor: pointer; background: none; vertical-align: middle;">
+                        </label>
+                        <label title="Tải ảnh nền khung chat" style="display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                            <i class="ri-image-add-line"></i> Ảnh nền:
+                            <input type="file" id="chat-bg-img-input" accept="image/*" onchange="uploadChatBgImage(event)" style="display: none;">
+                        </label>
+                        <button onclick="document.getElementById('chat-bg-img-input').click()" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: #fff; padding: 2px 6px; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Tải ảnh</button>
+                        <label title="Màu bong bóng AI" style="display: flex; align-items: center; gap: 2px; cursor: pointer;">
+                            AI: <input type="color" id="ai-bubble-color-picker" value="#f97316" onchange="changeAiBubbleColor(this.value)" style="width: 20px; height: 20px; border: none; cursor: pointer; background: none;">
+                        </label>
+                        <label title="Màu bong bóng User" style="display: flex; align-items: center; gap: 2px; cursor: pointer;">
+                            User: <input type="color" id="user-bubble-color-picker" value="#2563eb" onchange="changeUserBubbleColor(this.value)" style="width: 20px; height: 20px; border: none; cursor: pointer; background: none;">
+                        </label>
+                    </div>
                 </div>
                 <div class="formula-quick-bar">
                     <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); display:inline-flex; align-items:center;">Công thức:</span>
@@ -1045,6 +1064,65 @@ window.addEventListener('DOMContentLoaded', () => {
         let chatSessions = JSON.parse(localStorage.getItem('k36_solver_sessions')) || [];
         let currentSessionId = localStorage.getItem('k36_active_session_id') || null;
         let isSendingMessage = false; 
+        function changeChatBgColor(color) {
+            const chatBody = document.getElementById('chat-window-body');
+            if(chatBody) {
+                chatBody.style.backgroundImage = 'none';
+                chatBody.style.backgroundColor = color;
+                localStorage.setItem('k36_chat_bg', color);
+                localStorage.removeItem('k36_chat_bg_img');
+            }
+        }
+        function uploadChatBgImage(event) {
+            const file = event.target.files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Img = e.target.result;
+                const chatBody = document.getElementById('chat-window-body');
+                if(chatBody) {
+                    chatBody.style.backgroundImage = `url('${base64Img}')`;
+                    localStorage.setItem('k36_chat_bg_img', base64Img);
+                    localStorage.removeItem('k36_chat_bg');
+                    showToast('Đã lưu ảnh nền khung chat vào localStorage! 🖼️');
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+        function changeAiBubbleColor(color) {
+            document.documentElement.style.setProperty('--ai-bubble-bg', color);
+            localStorage.setItem('k36_ai_bubble_color', color);
+        }
+        function changeUserBubbleColor(color) {
+            document.documentElement.style.setProperty('--user-bubble-bg', color);
+            localStorage.setItem('k36_user_bubble_color', color);
+        }
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedChatBg = localStorage.getItem('k36_chat_bg');
+            const savedChatBgImg = localStorage.getItem('k36_chat_bg_img');
+            const savedAiBubble = localStorage.getItem('k36_ai_bubble_color');
+            const savedUserBubble = localStorage.getItem('k36_user_bubble_color');
+            const chatBody = document.getElementById('chat-window-body');
+            if(chatBody) {
+                if(savedChatBgImg) {
+                    chatBody.style.backgroundImage = `url('${savedChatBgImg}')`;
+                } else if(savedChatBg) {
+                    chatBody.style.backgroundColor = savedChatBg;
+                    const picker = document.getElementById('chat-bg-color-picker');
+                    if(picker) picker.value = savedChatBg;
+                }
+            }
+            if(savedAiBubble) {
+                document.documentElement.style.setProperty('--ai-bubble-bg', savedAiBubble);
+                const aiPicker = document.getElementById('ai-bubble-color-picker');
+                if(aiPicker) aiPicker.value = savedAiBubble;
+            }
+            if(savedUserBubble) {
+                document.documentElement.style.setProperty('--user-bubble-bg', savedUserBubble);
+                const userPicker = document.getElementById('user-bubble-color-picker');
+                if(userPicker) userPicker.value = savedUserBubble;
+            }
+        });
         async function callGeminiProWithRetry(userMessage, imageBase64 = null, maxAttempts = 3) {
             let parts = [];
             const systemInstruction = "Bạn là một trợ lý AI học tập cực kỳ thông minh, thân thiện, nói chuyện bằng tiếng Việt tự nhiên, trẻ trung (chuẩn genz, dùng từ ngữ gần gũi với học sinh cấp 3 như 'ông giáo', 'nha', 'ok luôn', 'chill phết',... nhưng vẫn giữ độ chính xác tuyệt đối về kiến thức Toán, Lý, Hóa,...). Tuyệt đối không dùng văn phong máy móc, cứng nhắc.";   
