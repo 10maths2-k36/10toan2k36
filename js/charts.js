@@ -16,10 +16,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             datasets: [{
                 data: [0, 0, 0, 0],
                 backgroundColor: [
-                    'rgba(56, 189, 248, 0.85)',
-                    'rgba(14, 165, 233, 0.95)',
-                    'rgba(52, 211, 153, 0.85)',
-                    'rgba(251, 191, 36, 0.85)'
+                    '#38bdf8', 
+                    '#34d399', 
+                    '#f59e0b', 
+                    '#ec4899'  
                 ],
                 borderColor: 'rgba(255, 255, 255, 0.15)',
                 borderWidth: 2,
@@ -28,8 +28,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false,
-            cutout: '65%',
+            maintainAspectRatio: false, 
+            cutout: '70%', 
             animation: {
                 animateScale: true,
                 animateRotate: true
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                         borderRadius: 7,
                         font: { family: 'inherit', size: 12, weight: '700' },
                         color: initialColors.textColor, 
-                        padding: 20
+                        padding: 15
                     }
                 },
                 tooltip: {
