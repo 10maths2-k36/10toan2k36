@@ -122,37 +122,45 @@
         }
         .action-btns {
             display: flex;
-            gap: 5px;
+            gap: 6px;
         }
         .edit-btn {
-            background: rgba(59, 130, 246, 0.1);
+            background: rgba(59, 130, 246, 0.12);
             color: #3b82f6;
-            border: none;
-            padding: 4px 8px;
-            border-radius: 6px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 5px 10px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 0.75rem;
+            font-size: 0.78rem;
             font-weight: 600;
-            transition: background 0.2s;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }
         .edit-btn:hover {
             background: #3b82f6;
             color: #fff;
+            transform: translateY(-1px);
         }
         .delete-btn {
-            background: rgba(239, 68, 68, 0.1);
+            background: rgba(239, 68, 68, 0.12);
             color: #ef4444;
-            border: none;
-            padding: 4px 8px;
-            border-radius: 6px;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            padding: 5px 10px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 0.75rem;
+            font-size: 0.78rem;
             font-weight: 600;
-            transition: background 0.2s;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }
         .delete-btn:hover {
             background: #ef4444;
             color: #fff;
+            transform: translateY(-1px);
         }
         .badge-status {
             font-size: 0.7rem;
@@ -267,22 +275,25 @@
             gap: 4px;
         }
         .download-btn {
-            background: rgba(16, 185, 129, 0.1);
+            background: rgba(16, 185, 129, 0.12);
             color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.2);
         }
         .download-btn:hover {
             background: #10b981;
             color: #fff;
+            transform: translateY(-1px);
         }
         .remove-preview-btn {
-            background: rgba(239, 68, 68, 0.1);
+            background: rgba(239, 68, 68, 0.12);
             color: #ef4444;
-            border: none;
+            border: 1px solid rgba(239, 68, 68, 0.2);
             border-radius: 6px;
             padding: 4px 8px;
             font-size: 0.75rem;
             font-weight: 600;
             cursor: pointer;
+            transition: all 0.2s;
         }
         .remove-preview-btn:hover {
             background: #ef4444;
@@ -433,6 +444,39 @@
             max-height: 90vh;
             border-radius: 8px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        #lightbox-prev-btn, #lightbox-next-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px 16px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            border-radius: 50%;
+            transition: all 0.2s;
+            z-index: 3010;
+        }
+        #lightbox-prev-btn:hover, #lightbox-next-btn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+        #lightbox-prev-btn { left: 20px; }
+        #lightbox-next-btn { right: 20px; }
+        #lightbox-counter {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         .filter-btn {
             background: var(--card-bg);
@@ -762,7 +806,7 @@
 </div>
 <div id="upload-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 2500; justify-content: center; align-items: center; padding: 20px;">
 <div style="background: var(--card-bg); border: 1px solid var(--border); padding: 22px; border-radius: 16px; max-width: 500px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;">
-<h3 id="modal-title" style="color: var(--accent); margin-top: 0; margin-bottom: 12px;">📤 Đăng Nội Dung</h3>
+<h3 id="modal-title" style="color: var(--accent); margin-top: 0; margin-bottom: 12px;"><i class="ri-upload-cloud-line"></i> Đăng Nội Dung</h3>
 <div style="margin-bottom: 12px;">
 <label style="display: block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 6px;">Tên người đăng / Tác giả:</label>
 <input id="file-author" placeholder="Ví dụ: Nguyễn Văn A..." style="width: 100%; background: var(--card-bg); border: 1px solid var(--border); padding: 10px; border-radius: 10px; color: var(--text-main); outline: none; font-size: 0.95rem; box-sizing: border-box;" type="text"/>
@@ -805,7 +849,7 @@
     <label style="display: block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 6px;">Trạng thái hiển thị:</label>
     <div class="custom-dropdown" id="visibility-dropdown" onclick="toggleCustomDropdown('visibility', event)">
         <div class="dropdown-selected">
-            <span id="visibility-selected-text">🌐 Công Khai (Mọi người đều xem được)</span>
+            <span id="visibility-selected-text"><i class="ri-earth-line"></i> Công Khai (Mọi người đều xem được)</span>
             <i class="ri-arrow-down-s-line" style="transition: transform 0.3s ease;"></i>
         </div>
         <div class="dropdown-options-box">
@@ -832,8 +876,11 @@
 </div>
 </div>
 </div>
-<div id="lightbox-modal" onclick="closeLightbox()">
-<img alt="Phóng to ảnh" id="lightbox-img" src=""/>
+<div id="lightbox-modal">
+    <button id="lightbox-prev-btn" onclick="changeLightboxSlide(-1)"><i class="ri-arrow-left-s-line"></i></button>
+    <button id="lightbox-next-btn" onclick="changeLightboxSlide(1)"><i class="ri-arrow-right-s-line"></i></button>
+    <div id="lightbox-counter">1 / 1</div>
+    <img alt="Phóng to ảnh" id="lightbox-img" src="" onclick="event.stopPropagation()"/>
 </div>
 <div id="toastMessage" style="position: fixed; bottom: 20px; right: 20px; background: var(--card-bg); backdrop-filter: var(--backdrop); border: 1px solid var(--accent); color: var(--text-main); padding: 12px 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transform: translateY(100px); opacity: 0; transition: all 0.4s ease; z-index: 9999;">
         ✨ Thao tác thành công!
@@ -1079,7 +1126,7 @@ function confirmLogout() {
             document.getElementById('file-title-input').value = '';
             document.getElementById('file-caption').value = '';
             setCustomDropdownValue('visibility', 'public', '<i class="ri-earth-line"></i> Công Khai (Mọi người đều xem được)');
-            setCustomDropdownValue('subject', 'toan', '<i class="ri-calculate-line"></i> Toán Chuyên');
+            setCustomDropdownValue('subject', 'toan', '<i class="ri-calculator-line"></i> Toán Chuyên');
             document.getElementById('submit-btn').textContent = 'Đăng tải';
             document.getElementById('upload-modal').style.display = 'flex';
         }
@@ -1101,12 +1148,12 @@ function confirmLogout() {
                     subjectWrapper.style.display = 'block';
                     const sub = item.subject || 'khac';
                     const subTexts = {
-                        'toan': '<i class="ri-calculate-line"></i> Toán Chuyên',
+                        'toan': '<i class="ri-calculator-line"></i> Toán Chuyên',
                         'anh': '<i class="ri-global-line"></i> Tiếng Anh',
                         'van': '<i class="ri-quill-pen-line"></i> Ngữ Văn',
-                        'khac': '<i class="ri-folder-line"></i> Khác'
+                        'khac': '<i class="ri-folder-2-line"></i> Khác'
                     };
-                    setCustomDropdownValue('subject', sub, subTexts[sub] || '<i class="ri-folder-line"></i> Khác');
+                    setCustomDropdownValue('subject', sub, subTexts[sub] || '<i class="ri-folder-2-line"></i> Khác');
                 }
             }
             document.getElementById('file-author').value = item.student_name || '';
@@ -1235,88 +1282,91 @@ function confirmLogout() {
                 });
             }
         }
-        async function submitFiles() {
-            if (localStorage.getItem('class_unlocked') !== 'true') {
-                showToast('Vui lòng đăng nhập!');
+async function submitFiles() {
+    if (localStorage.getItem('class_unlocked') !== 'true') {
+        showToast('Vui lòng đăng nhập!');
+        return;
+    }
+    const captionInput = document.getElementById('file-caption');
+    const titleInput = document.getElementById('file-title-input');
+    const authorInput = document.getElementById('file-author');
+    const visibility = document.getElementById('file-visibility').value;
+    const subjectVal = document.getElementById('file-subject').value;
+    const customTitle = titleInput ? titleInput.value.trim() : '';
+    const customAuthor = authorInput ? authorInput.value.trim() : '';
+    const finalAuthor = customAuthor !== '' ? customAuthor : 'Thành viên 10 Toán 2';
+    const userDescription = captionInput ? captionInput.value.trim() : '';
+    try {
+        if (isEditMode && editingItemId) {
+            const updateData = {
+                title: customTitle !== '' ? customTitle : 'Không có tiêu đề',
+                student_name: finalAuthor,
+                description: userDescription !== '' ? userDescription : null,
+                visibility: visibility
+            };
+            if (currentActiveTab === 'resources') {
+                updateData.subject = subjectVal;
+            }
+            const { error: updateError } = await _supabase
+                .from('gallery')
+                .update(updateData)
+                .eq('id', editingItemId);
+            if (updateError) throw updateError;
+            showToast('Cập nhật thành công!');
+            closeUploadModal();
+            loadGalleryFromStorage();
+            loadResourcesFromStorage();
+        } else {
+            const fileInput = document.getElementById('file-input');
+            if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+                showToast('Vui lòng chọn tệp tin!');
                 return;
             }
-            const captionInput = document.getElementById('file-caption');
-            const titleInput = document.getElementById('file-title-input');
-            const authorInput = document.getElementById('file-author');
-            const visibility = document.getElementById('file-visibility').value;
-            const subjectVal = document.getElementById('file-subject').value;
-            const customTitle = titleInput ? titleInput.value.trim() : '';
-            const finalTitle = customTitle !== '' ? customTitle : 'Không có tiêu đề';
-            const customAuthor = authorInput ? authorInput.value.trim() : '';
-            const finalAuthor = customAuthor !== '' ? customAuthor : 'Thành viên 10 Toán 2';
-            const userDescription = captionInput ? captionInput.value.trim() : '';
-            try {
-                if (isEditMode && editingItemId) {
-                    const updateData = {
-                        title: finalTitle,
-                        student_name: finalAuthor,
-                        description: userDescription !== '' ? userDescription : null,
-                        visibility: visibility
-                    };
-                    if (currentActiveTab === 'resources') {
-                        updateData.subject = subjectVal;
-                    }
-                    const { error: updateError } = await _supabase
-                        .from('gallery')
-                        .update(updateData)
-                        .eq('id', editingItemId);
-                    if (updateError) throw updateError;
-                    showToast('Cập nhật thành công!');
-                    closeUploadModal();
-                    loadGalleryFromStorage();
-                    loadResourcesFromStorage();
-                } else {
-                    const fileInput = document.getElementById('file-input');
-                    if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
-                        showToast('Vui lòng chọn tệp tin!');
-                        return;
-                    }
-                    const file = fileInput.files[0];
-                    const fileExt = file.name.split('.').pop().toLowerCase();
-                    const uniqueStorageName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
-                    const isImage = currentActiveTab === 'gallery';
-                    const folder = isImage ? 'gallery' : 'resources';
-                    const filePath = `${folder}/${uniqueStorageName}`;
-                    const { error: uploadError } = await _supabase.storage
-                        .from('gallery_images')
-                        .upload(filePath, file);
-                    if (uploadError) throw uploadError;
-                    const { data: publicUrlData } = _supabase.storage
-                        .from('gallery_images')
-                        .getPublicUrl(filePath);
-                    const fileUrl = publicUrlData.publicUrl;
-                    const { error: dbError } = await _supabase
-                        .from('gallery')
-                        .insert([
-                            { 
-                                id: Date.now(),
-                                title: customTitle !== '' ? customTitle : file.name,
-                                student_name: finalAuthor,
-                                image_url: isImage ? fileUrl : null,
-                                link: fileUrl,
-                                description: userDescription !== '' ? userDescription : null,
-                                subject: isImage ? null : subjectVal,
-                                visibility: visibility,
-                                created_at: new Date().toISOString()
-                            }
-                        ]);
-                    if (dbError) throw dbError;
-                    showToast('Tải lên thành công!');
-                    closeUploadModal();
-                    loadGalleryFromStorage();
-                    loadResourcesFromStorage();
-                }
-            } catch (error) {
-                console.error('Lỗi:', error.message);
-                showToast('Có lỗi xảy ra: ' + error.message);
+            const files = Array.from(fileInput.files);
+            const isImage = currentActiveTab === 'gallery';
+            const folder = isImage ? 'gallery' : 'resources';
+            const uploadedUrls = [];
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const fileExt = file.name.split('.').pop().toLowerCase();
+                const uniqueStorageName = `${Date.now()}_${i}_${Math.random().toString(36).substring(2)}.${fileExt}`;
+                const filePath = `${folder}/${uniqueStorageName}`;
+                const { error: uploadError } = await _supabase.storage
+                    .from('gallery_images')
+                    .upload(filePath, file);
+                if (uploadError) throw uploadError;
+                const { data: publicUrlData } = _supabase.storage
+                    .from('gallery_images')
+                    .getPublicUrl(filePath);
+                uploadedUrls.push(publicUrlData.publicUrl);
             }
+            const { error: dbError } = await _supabase
+                .from('gallery')
+                .insert([
+                    { 
+                        id: Date.now(), 
+                        title: customTitle !== '' ? customTitle : (files.length > 1 ? `Bộ ảnh (${files.length} ảnh)` : files[0].name),
+                        student_name: finalAuthor,
+                        image_url: isImage ? JSON.stringify(uploadedUrls) : null,
+                        link: !isImage ? uploadedUrls[0] : null,
+                        description: userDescription !== '' ? userDescription : null,
+                        subject: isImage ? null : subjectVal,
+                        visibility: visibility,
+                        created_at: new Date().toISOString()
+                    }
+                ]);
+            if (dbError) throw dbError;
+            showToast(`Đã tạo bài đăng với ${files.length} tệp thành công!`);
+            closeUploadModal();
+            loadGalleryFromStorage();
+            loadResourcesFromStorage();
         }
-        async function loadGalleryFromStorage() {
+    } catch (error) {
+        console.error('Lỗi:', error.message);
+        showToast('Có lỗi xảy ra: ' + error.message);
+    }
+}
+async function loadGalleryFromStorage() {
             const gridEl = document.getElementById('image-grid');
             const noticeEl = document.getElementById('empty-notice-gallery');
             const selectBtn = document.getElementById('gallery-select-mode-btn');
@@ -1345,8 +1395,8 @@ function confirmLogout() {
                         let checkboxHtml = (isSelectModeGallery && isUnlocked) ? `<input type="checkbox" class="gallery-checkbox item-checkbox" data-id="${item.id}" onchange="updateSelectedCount('gallery')">` : '';
                         let actionButtonsHtml = isUnlocked ? `
                             <div class="action-btns">
-                                <button class="edit-btn" onclick='openEditModal(${JSON.stringify(item)}, "gallery")'>Sửa</button>
-                                <button class="delete-btn" onclick="deleteSupabaseItem(${item.id}, 'gallery')">Xóa</button>
+                                <button class="edit-btn" onclick='openEditModal(${JSON.stringify(item)}, "gallery")'><i class="ri-edit-line"></i> Sửa</button>
+                                <button class="delete-btn" onclick="deleteSupabaseItem(${item.id}, 'gallery')"><i class="ri-delete-bin-line"></i> Xóa</button>
                             </div>
                         ` : '';
                         let badgeHtml = '';
@@ -1356,9 +1406,21 @@ function confirmLogout() {
                         const displayTitle = item.title || 'Ảnh kỷ niệm';
                         const displayAuthor = item.student_name ? `<span style="font-size: 0.75rem; color: var(--accent);">Đăng bởi: ${escapeHtml(item.student_name)}</span>` : '';
                         const formattedDate = formatDateTime(item.created_at);
+                        let imageUrls = [];
+                        try {
+                            const parsed = JSON.parse(item.image_url);
+                            if (Array.isArray(parsed)) {
+                                imageUrls = parsed;
+                            } else if (typeof item.image_url === 'string') {
+                                imageUrls = [item.image_url];
+                            }
+                        } catch (e) {
+                            imageUrls = [item.image_url];
+                        }
+                        const firstImage = imageUrls[0] || '';
                         card.innerHTML = `
                             ${checkboxHtml}
-                            <img src="${item.image_url}" alt="Kỷ niệm lớp" onclick="openLightbox('${item.image_url}')">
+                            <img src="${firstImage}" alt="Kỷ niệm lớp" onclick='openLightbox(${JSON.stringify(imageUrls)})'>
                             <div class="gallery-info" style="flex-direction: column; align-items: flex-start; gap: 4px;">
                                 <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
                                     <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 120px;" title="${escapeHtml(displayTitle)}">
@@ -1368,9 +1430,9 @@ function confirmLogout() {
                                     ${actionButtonsHtml}
                                 </div>
                                 ${displayAuthor}
-                                <div style="font-size: 0.75rem; color: var(--text-muted);">
-                                    ${formattedDate}
-                                </div>
+<div style="font-size: 0.75rem; color: var(--text-muted);">
+    ${formattedDate} ${imageUrls.length > 1 ? `<i class="ri-image-line"></i> ${imageUrls.length} ảnh` : ''}
+</div>
                             </div>
                         `;
                         gridEl.appendChild(card);
@@ -1430,8 +1492,8 @@ function confirmLogout() {
                             }
                         }
                         let adminActionsHtml = isUnlocked ? `
-                            <button class="action-btn-sm edit-btn" onclick='openEditModal(${JSON.stringify(item)}, "resources")'>Sửa</button>
-                            <button class="action-btn-sm delete-btn" onclick="deleteSupabaseItem(${item.id}, 'resources')">Xóa</button>
+                            <button class="action-btn-sm edit-btn" onclick='openEditModal(${JSON.stringify(item)}, "resources")'><i class="ri-edit-line"></i> Sửa</button>
+                            <button class="action-btn-sm delete-btn" onclick="deleteSupabaseItem(${item.id}, 'resources')"><i class="ri-delete-bin-line"></i> Xóa</button>
                         ` : '';
                         const fileLink = item.link || '#';
                         const displayTitle = item.title || 'Tài liệu học tập';
@@ -1532,14 +1594,65 @@ function confirmLogout() {
             if (typeof pendingAction === 'function') pendingAction();
             closeConfirmModal();
         });
-        function openLightbox(url) {
-            const lightbox = document.getElementById('lightbox-modal');
-            document.getElementById('lightbox-img').src = url;
-            lightbox.style.display = 'flex';
+let currentLightboxImages = [];
+let currentLightboxIndex = 0;
+function openLightbox(input) {
+    if (Array.isArray(input)) {
+        currentLightboxImages = input;
+    } else if (typeof input === 'string') {
+        try {
+            const parsed = JSON.parse(input);
+            currentLightboxImages = Array.isArray(parsed) ? parsed : [input];
+        } catch (e) {
+            currentLightboxImages = [input];
         }
-        function closeLightbox() {
-            document.getElementById('lightbox-modal').style.display = 'none';
+    } else {
+        currentLightboxImages = [''];
+    }
+    currentLightboxIndex = 0;
+    renderLightboxContent();
+    const lightbox = document.getElementById('lightbox-modal');
+    if (lightbox) lightbox.style.display = 'flex';
+}
+function renderLightboxContent() {
+    const imgElement = document.getElementById('lightbox-img');
+    const counterElement = document.getElementById('lightbox-counter');
+    if (imgElement && currentLightboxImages.length > 0) {
+        imgElement.src = currentLightboxImages[currentLightboxIndex];
+    }
+    if (counterElement) {
+        counterElement.innerText = `${currentLightboxIndex + 1} / ${currentLightboxImages.length}`;
+    }
+    const prevBtn = document.getElementById('lightbox-prev-btn');
+    const nextBtn = document.getElementById('lightbox-next-btn');
+    if (prevBtn && nextBtn) {
+        const show = currentLightboxImages.length > 1 ? 'block' : 'none';
+        prevBtn.style.display = show;
+        nextBtn.style.display = show;
+    }
+}
+function changeLightboxSlide(direction) {
+    if (currentLightboxImages.length <= 1) return;
+    currentLightboxIndex += direction;
+    if (currentLightboxIndex < 0) {
+        currentLightboxIndex = currentLightboxImages.length - 1; 
+    } else if (currentLightboxIndex >= currentLightboxImages.length) {
+        currentLightboxIndex = 0; 
+    }
+    renderLightboxContent();
+}
+const lightboxModalEl = document.getElementById('lightbox-modal');
+if (lightboxModalEl) {
+    lightboxModalEl.addEventListener('click', (e) => {
+        if (e.target.id === 'lightbox-modal') {
+            closeLightbox();
         }
+    });
+}
+function closeLightbox() {
+    const lightbox = document.getElementById('lightbox-modal');
+    if (lightbox) lightbox.style.display = 'none';
+}
         function escapeHtml(text) {
             return (text || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         }

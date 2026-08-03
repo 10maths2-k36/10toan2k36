@@ -1126,3 +1126,23 @@ body.light-mode .dynamic-doc-title {
 body.light-mode .dynamic-text-color {
     color: #000000 !important;
 }
+.gallery-info-top, .file-details-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 8px;
+    flex-wrap: nowrap; 
+}
+.gallery-title-wrapper, .file-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1; 
+}
+.action-btns, .resource-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0; 
+}
