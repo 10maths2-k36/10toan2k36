@@ -1114,3 +1114,15 @@ body.dark-mode input[type="text"]::placeholder,
     opacity: 1 !important;
     -webkit-text-fill-color: #475569 !important;
 }
+.dynamic-doc-title {
+    color: #ffffff !important;
+}
+body.light-mode .dynamic-doc-title {
+    color: #000000 !important;
+}
+.dynamic-text-color {
+    color: #ffffff !important;
+}
+body.light-mode .dynamic-text-color {
+    color: #000000 !important;
+}

@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>10 Toán 2 K36 - Trang Chủ</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>10 Toán 2 K36 - Trang Chủ</title><span id="live-clock" style="font-size: 0.85rem; color: var(--text-muted, #ccc); font-weight: 500; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 12px;"></span>
-<link href="css/style.css" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<style>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet"/>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0284c7">
+    <style>
         html, body {
             height: 100%;
             margin: 0;
@@ -160,10 +161,6 @@
         .footer-right-logos img:hover {
             transform: scale(1.08);
         }
-    </style>
-    <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0284c7">
-    <style>
         .clock-widget-trigger {
             display: inline-flex;
             align-items: center;
@@ -280,9 +277,9 @@
         <a href="feedback.html"><i class="ri-chat-settings-line"></i> Góp Ý</a>
         <a href="solver.html"><i class="ri-book-open-line"></i> Giải Bài Tập AI</a>
         <span class="nav-divider"></span>
-<button class="nav-action-btn theme-btn" id="theme-toggle"><i class="ri-palette-line"></i> Giao diện</button>
-<button class="nav-action-btn auth-nav-btn" id="auth-nav-btn" onclick="handleAuthNavAction()"><i class="ri-login-box-line"></i> Đăng nhập</button>
-<button class="nav-action-btn fx-menu-btn" id="fx-toggle-btn" onclick="toggleMathEffects()"><i class="ri-sparkles-line"></i> Hiệu ứng: Bật</button>
+        <button class="nav-action-btn theme-btn" id="theme-toggle"><i class="ri-palette-line"></i> Giao diện</button>
+        <button class="nav-action-btn auth-nav-btn" id="auth-nav-btn" onclick="handleAuthNavAction()"><i class="ri-login-box-line"></i> Đăng nhập</button>
+        <button class="nav-action-btn fx-menu-btn" id="fx-toggle-btn" onclick="toggleMathEffects()"><i class="ri-sparkles-line"></i> Hiệu ứng: Bật</button>
     </nav>
 </header>
 <div class="clock-widget-trigger" onclick="openClockCalendarModal()">
@@ -302,35 +299,46 @@
 <p><i class="ri-rocket-2-line" style="color: var(--accent); margin-right: 6px;"></i><strong>Sẵn Sàng Cho Những Chặng Đường Mới:</strong> Dù chặng đường phía trước vẫn còn nhiều thử thách và kỳ thi quan trọng đang chờ đón, với nền tảng vững chắc và sự đồng hành của những người bạn tri kỷ, chúng ta hoàn toàn tự tin bước tiếp. Hãy cứ bay cao với những ước mơ lớn, vì ở nơi đây, tập thể <strong>10 Toán 2</strong> luôn là hậu phương vững chắc nhất, sẵn sàng chia sẻ mọi buồn vui và cùng nhau viết tiếp câu chuyện thanh xuân rực rỡ nhất cuộc đời.</p>
 </section>
 <section class="card" style="margin-top: 20px;">
-    <h2 style="margin: 0 0 15px 0; font-weight: 700; font-size: 1.3rem; color: var(--text-color); display: flex; align-items: center; gap: 8px;">
-        <i class="ri-bar-chart-box-line" style="color: var(--accent);"></i> Thống Kê Hoạt Động 10 Ngày Qua
-    </h2>
-<div class="stats-cards-container" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px;">
-<div class="stat-card">
-    <div class="stat-title">
-        <i class="ri-eye-line" style="margin-right: 6px; color: #3b82f6;"></i> Phân Loại Lượt Xem
-    </div>
-    <div class="stat-value" id="view-stats">Khách: 0 | Thành viên: 0</div>
+<h2 class="section-title">Thống Kê Hoạt Động 10 Ngày Qua</h2>
+<div id="date-range" style="font-size: 0.85rem; color: var(--text-muted, #94a3b8); margin: 6px 0 12px 0; font-weight: 500;">
+    Từ ngày: <span style="color: var(--text-color); font-weight: 600;">--/--/---- đến --/--/----</span>
 </div>
-    <div class="stat-card">
-        <div class="stat-title">
-            <i class="ri-file-text-line" style="margin-right: 6px; color: #10b981;"></i> Thư Viện
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+    <div style="background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 14px; padding: 14px 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);">
+        <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted, #94a3b8); display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+            <i class="ri-eye-line" style="color: #38bdf8; font-size: 1rem;"></i> Phân Loại Lượt Xem
         </div>
-        <div class="stat-value" id="total-documents">0</div>
+        <div style="display: flex; gap: 12px; font-size: 0.9rem; font-weight: 700;">
+            <span style="color: #38bdf8; display: flex; align-items: center; gap: 4px;">
+                <i class="ri-user-shared-line"></i> Khách: <span id="stat-guest-views">0</span>
+            </span>
+            <span style="color: #34d399; display: flex; align-items: center; gap: 4px;">
+                <i class="ri-user-star-line"></i> Thành viên: <span id="stat-member-views">0</span>
+            </span>
+        </div>
     </div>
-    <div class="stat-card">
-        <div class="stat-title">
-            <i class="ri-trophy-line" style="margin-right: 6px; color: #f59e0b;"></i> Thành Tích
+    <div style="background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 14px; padding: 14px 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted, #94a3b8); display: flex; align-items: center; gap: 6px;">
+            <i class="ri-folder-open-line" style="color: #34d399; font-size: 1rem;"></i> Thư Viện
         </div>
-        <div class="stat-value" id="total-achievements">0</div>
+        <div style="font-size: 1.4rem; font-weight: 800; color: var(--text-color); margin-top: 4px;" id="total-documents">
+            2
+        </div>
+    </div>
+    <div style="background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 14px; padding: 14px 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted, #94a3b8); display: flex; align-items: center; gap: 6px;">
+            <i class="ri-trophy-line" style="color: #fbbf24; font-size: 1rem;"></i> Thành Tích
+        </div>
+        <div style="font-size: 1.4rem; font-weight: 800; color: var(--text-color); margin-top: 4px;" id="total-achievements">
+            0
+        </div>
     </div>
 </div>
     <div style="background: var(--glass-bg, rgba(255, 255, 255, 0.05)); border: 1px solid var(--border); padding: 16px; border-radius: 14px; margin-bottom: 20px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
             <span style="font-size: 0.95rem; font-weight: 700; color: var(--text-color); display: flex; align-items: center; gap: 6px;">
-                <i class="ri-file-list-3-line" style="color: #f59e0b;"></i> Tài liệu mới đăng gần đây
+               <i class="ri-history-line" style="color: #f59e0b;"></i> Hoạt động gần đây
             </span>
-            <a href="gallery.html#documents" style="font-size: 0.85rem; color: #38bdf8; text-decoration: none; font-weight: 600;">Xem tất cả &rarr;</a>
         </div>
         <div id="recentDocsPreview" style="display: flex; flex-direction: column; gap: 8px;">
             <div style="font-size: 0.85rem; color: var(--text-muted); text-align: center; padding: 10px;">Đang tải danh sách tài liệu...</div>
@@ -896,8 +904,8 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 </script>
 <script>
-        const SUPABASE_URL = 'https://mwyjcrpwxpghieizswfa.supabase.co';
-        const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_9Ow2Q57vi9ArOtQRPr3bfw_olVCoAfD';
+    const SUPABASE_URL = 'https://mwyjcrpwxpghieizswfa.supabase.co';
+    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_9Ow2Q57vi9ArOtQRPr3bfw_olVCoAfD';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 </script>
 <script src="js/charts.js"></script>

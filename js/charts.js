@@ -5,102 +5,56 @@ document.addEventListener('DOMContentLoaded', async function () {
     function getColors() {
         const isLight = document.body.classList.contains('light-mode');
         return {
-            textColor: isLight ? '#1f2937' : '#f3f4f6',
-            gridColor: isLight ? 'rgba(0, 0, 0, 0.08)' : 'rgba(255, 255, 255, 0.12)'
+            textColor: isLight ? '#1f2937' : '#f8fafc'
         };
     }
     let initialColors = getColors();
     const classActivityChart = new Chart(ctx, {
-        type: 'bar',
+        type: 'doughnut',
         data: {
-            labels: [],
-            datasets: [
-                {
-                    label: 'Lượt Xem',
-                    data: [],
-                    backgroundColor: function(context) {
-                        const chart = context.chart;
-                        const {ctx, chartArea} = chart;
-                        if (!chartArea) return '#0284c7';
-                        const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
-                        gradient.addColorStop(0, '#0369a1');
-                        gradient.addColorStop(1, '#38bdf8');
-                        return gradient;
-                    },
-                    borderColor: '#7dd3fc',
-                    borderWidth: 1.5,
-                    borderRadius: 12,
-                    barPercentage: 0.3,
-                    categoryPercentage: 0.7,
-                    yAxisID: 'y'
-                },
-                {
-                    label: 'Thư Viện',
-                    data: [],
-                    backgroundColor: function(context) {
-                        const chart = context.chart;
-                        const {ctx, chartArea} = chart;
-                        if (!chartArea) return '#059669';
-                        const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
-                        gradient.addColorStop(0, '#047857');
-                        gradient.addColorStop(1, '#34d399');
-                        return gradient;
-                    },
-                    borderColor: '#6ee7b7',
-                    borderWidth: 1.5,
-                    borderRadius: 12,
-                    barPercentage: 0.3,
-                    categoryPercentage: 0.7,
-                    yAxisID: 'y'
-                },
-                {
-                    label: 'Thành Tích',
-                    data: [],
-                    backgroundColor: function(context) {
-                        const chart = context.chart;
-                        const {ctx, chartArea} = chart;
-                        if (!chartArea) return '#d97706';
-                        const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
-                        gradient.addColorStop(0, '#b45309');
-                        gradient.addColorStop(1, '#fbbf24');
-                        return gradient;
-                    },
-                    borderColor: '#fde68a',
-                    borderWidth: 1.5,
-                    borderRadius: 12,
-                    barPercentage: 0.3,
-                    categoryPercentage: 0.7,
-                    yAxisID: 'y'
-                }
-            ]
+            labels: ['Lượt Khách', 'Lượt Thành Viên', 'Thư Viện', 'Thành Tích'],
+            datasets: [{
+                data: [0, 0, 0, 0],
+                backgroundColor: [
+                    'rgba(56, 189, 248, 0.85)',
+                    'rgba(14, 165, 233, 0.95)',
+                    'rgba(52, 211, 153, 0.85)',
+                    'rgba(251, 191, 36, 0.85)'
+                ],
+                borderColor: 'rgba(255, 255, 255, 0.15)',
+                borderWidth: 2,
+                hoverOffset: 8
+            }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            interaction: { mode: 'index', intersect: false },
+            cutout: '65%',
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            },
             plugins: {
                 legend: {
                     position: 'bottom',
                     labels: {
-                        boxWidth: 12, boxHeight: 12, borderRadius: 6,
-                        font: { family: 'inherit', size: 11, weight: '700' },
-                        color: initialColors.textColor, padding: 15
+                        boxWidth: 14, 
+                        boxHeight: 14, 
+                        borderRadius: 7,
+                        font: { family: 'inherit', size: 12, weight: '700' },
+                        color: initialColors.textColor, 
+                        padding: 20
                     }
                 },
                 tooltip: {
-                    backgroundColor: 'rgba(15, 23, 42, 0.95)',
-                    titleFont: { size: 13, weight: 'bold' },
-                    bodyFont: { size: 12, weight: '600' },
-                    padding: 12, cornerRadius: 10, displayColors: true,
-                    borderColor: 'rgba(255, 255, 255, 0.2)', borderWidth: 1
-                }
-            },
-            scales: {
-                x: { grid: { display: false }, ticks: { font: { size: 11, weight: '700' }, color: initialColors.textColor } },
-                y: {
-                    type: 'linear', display: true, position: 'left', beginAtZero: true,
-                    grid: { color: initialColors.gridColor },
-                    ticks: { font: { size: 10, weight: '600' }, color: initialColors.textColor, stepSize: 1, precision: 0 }
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                    titleFont: { size: 14, weight: 'bold' },
+                    bodyFont: { size: 13, weight: '600' },
+                    padding: 14, 
+                    cornerRadius: 12, 
+                    displayColors: true,
+                    borderColor: 'rgba(255, 255, 255, 0.15)', 
+                    borderWidth: 1
                 }
             }
         }
@@ -108,15 +62,44 @@ document.addEventListener('DOMContentLoaded', async function () {
     const observer = new MutationObserver(() => {
         const updatedColors = getColors();
         classActivityChart.options.plugins.legend.labels.color = updatedColors.textColor;
-        classActivityChart.options.scales.x.ticks.color = updatedColors.textColor;
-        classActivityChart.options.scales.y.ticks.color = updatedColors.textColor;
-        classActivityChart.options.scales.y.grid.color = updatedColors.gridColor;
         classActivityChart.update();
     });
     observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    if (!document.getElementById('svg-border-anim-style')) {
+        const styleEl = document.createElement('style');
+        styleEl.id = 'svg-border-anim-style';
+        styleEl.innerHTML = `
+            @keyframes svgPauseLoop {
+                0% { stroke-dashoffset: 300; }
+                80% { stroke-dashoffset: 0; }
+                100% { stroke-dashoffset: 0; }
+            }
+            .svg-btn-wrapper {
+                position: relative;
+                display: inline-block;
+                border-radius: 10px;
+                overflow: hidden;
+            }
+            .svg-btn-wrapper svg {
+                position: absolute;
+                top: 0; left: 0;
+                width: 100%; height: 100%;
+                pointer-events: none;
+                border-radius: 10px;
+            }
+            .svg-btn-wrapper .animated-path {
+                fill: none;
+                stroke-width: 2px;
+                stroke-dasharray: 60, 240;
+                stroke-linecap: round;
+                animation: svgPauseLoop 2.5s ease-in-out infinite;
+            }
+        `;
+        document.head.appendChild(styleEl);
+    }
     async function trackAndLoadData(shouldIncrement = false) {
         try {
-            const today = new Date().toISOString().split('T')[0];
+            const todayStr = new Date().toISOString().split('T')[0];
             const isMemberLoggedIn = localStorage.getItem('class_unlocked') === 'true';
             const [galleryRes, achievementsRes] = await Promise.all([
                 supabaseClient.from('gallery').select('*', { count: 'exact', head: true }),
@@ -124,17 +107,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             ]);
             const totalGallery = galleryRes.error ? 0 : (galleryRes.count || 0);
             const totalAchievements = achievementsRes.error ? 0 : (achievementsRes.count || 0);
-            const docEl = document.getElementById('total-documents');
-            if (docEl) docEl.textContent = totalGallery.toLocaleString();
-            const achEl = document.getElementById('total-achievements');
-            if (achEl) achEl.textContent = totalAchievements.toLocaleString();
-            let { data: rows, error: fetchError } = await supabaseClient
-                .from('class_activities')
-                .select('*')
-                .eq('date', today);
-            if (fetchError) {
-                console.warn("Lỗi truy vấn:", fetchError.message);
-            }
+            let { data: rows } = await supabaseClient.from('class_activities').select('*').eq('date', todayStr);
             let existingData = (rows && rows.length > 0) ? rows[0] : null;
             let guestViews = existingData ? (existingData.guest_views || 0) : 0;
             let memberViews = existingData ? (existingData.member_views || 0) : 0;
@@ -152,62 +125,164 @@ document.addEventListener('DOMContentLoaded', async function () {
                     }).eq('id', existingData.id);
                 } else {
                     await supabaseClient.from('class_activities').insert([{
-                        date: today,
+                        date: todayStr,
                         guest_views: guestViews,
                         member_views: memberViews,
                         documents: totalGallery
                     }]);
                 }
-            } else if (existingData) {
-                guestViews = existingData.guest_views || 0;
-                memberViews = existingData.member_views || 0;
             }
-const viewStatsEl = document.getElementById('view-stats');
+            const { data: chartRows } = await supabaseClient
+                .from('class_activities')
+                .select('*')
+                .order('date', { ascending: false })
+                .limit(10);
+            let totalGuestViews = 0;
+            let totalMemberViews = 0;
+            let oldestDate = '--/--/----';
+            let newestDate = '--/--/----';
+            if (chartRows && chartRows.length > 0) {
+                chartRows.forEach(item => {
+                    totalGuestViews += (item.guest_views || 0);
+                    totalMemberViews += (item.member_views || 0);
+                });
+                const sortedRows = chartRows.sort((a, b) => new Date(a.date) - new Date(b.date));
+                const formatDate = (dStr) => {
+                    if (!dStr) return '--/--/----';
+                    const parts = dStr.split('-');
+                    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+                };
+                oldestDate = formatDate(sortedRows[0].date);
+                newestDate = formatDate(sortedRows[sortedRows.length - 1].date);
+            }
+            const totalViews = totalGuestViews + totalMemberViews;
+            classActivityChart.data.datasets[0].data = [totalGuestViews, totalMemberViews, totalGallery, totalAchievements];
+            classActivityChart.update();
+            let dateRangeEl = document.getElementById('date-range');
+            if (!dateRangeEl) {
+                const titleEl = document.querySelector('h2, .section-title, [style*="Thống Kê"]');
+                if (titleEl) {
+                    dateRangeEl = document.createElement('div');
+                    dateRangeEl.id = 'date-range';
+                    dateRangeEl.style.cssText = 'font-size: 0.85rem; color: var(--text-muted, #94a3b8); margin: 6px 0 12px 0; font-weight: 500;';
+                    titleEl.parentNode.insertBefore(dateRangeEl, titleEl.nextSibling);
+                }
+            }
+            if (dateRangeEl) {
+                dateRangeEl.innerHTML = `Từ ngày: <span style="color: var(--text-color); font-weight: 600;">${oldestDate} đến ${newestDate}</span>`;
+            }
+            const guestEl = document.getElementById('stat-guest-views');
+            const memberEl = document.getElementById('stat-member-views');
+            if (guestEl) guestEl.innerText = totalGuestViews.toLocaleString();
+            if (memberEl) memberEl.innerText = totalMemberViews.toLocaleString();
+            const viewStatsEl = document.getElementById('view-stats');
             if (viewStatsEl) {
-                viewStatsEl.innerHTML = `
-                    <div style="display: flex; gap: 15px; font-size: 0.95rem; font-weight: 600; margin-top: 4px;">
-                        <span style="display: flex; align-items: center; color: #38bdf8;">
-                            <i class="ri-user-shared-line" style="margin-right: 5px; font-size: 1.1rem;"></i> Khách: ${guestViews.toLocaleString()}
-                        </span>
-                        <span style="display: flex; align-items: center; color: #34d399;">
-                            <i class="ri-user-star-line" style="margin-right: 5px; font-size: 1.1rem;"></i> Thành viên: ${memberViews.toLocaleString()}
-                        </span>
+                const viewTitleSpan = viewStatsEl.querySelector('.ri-eye-line');
+                if (viewTitleSpan && viewTitleSpan.parentNode) {
+                    viewTitleSpan.parentNode.innerHTML = `<i class="ri-eye-line" style="color: #38bdf8; font-size: 1rem;"></i> Phân Loại Lượt Xem (${totalViews.toLocaleString()})`;
+                }
+            }
+            const [docsDataRes, imagesDataRes, achievementsDataRes] = await Promise.all([
+                supabaseClient.from('gallery').select('title, link').is('image_url', null).order('id', { ascending: false }).limit(3),
+                supabaseClient.from('gallery').select('title, link').not('image_url', 'is', null).order('id', { ascending: false }).limit(3),
+                supabaseClient.from('achievements').select('title, student_name, link').order('id', { ascending: false }).limit(3)
+            ]);
+            const recentDocs = docsDataRes.data || [];
+            const recentImages = imagesDataRes.data || [];
+            const recentAchievements = achievementsDataRes.data || [];
+            const previewContainer = document.getElementById('recentDocsPreview');
+            if (previewContainer && recentDocs.length > 0) {
+                previewContainer.innerHTML = `
+                    <div style="background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 14px; padding: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); margin-top: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-color); display: flex; align-items: center; gap: 8px;">
+                                <i class="ri-file-text-line" style="color: #38bdf8; font-size: 1.1rem;"></i> Tài Liệu Mới
+                            </div>
+                            <a href="gallery.html#documents" class="dynamic-text-color" style="font-size: 0.82rem; text-decoration: none; font-weight: 600; opacity: 0.9;">Xem tất cả &rarr;</a>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            ${recentDocs.map(doc => `
+                                <a href="gallery.html#documents" class="doc-preview-item" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; text-decoration: none;">
+                                    <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%; display: flex; align-items: center; gap: 8px;">
+                                        <i class="ri-file-list-line" style="color: #38bdf8; font-size: 1rem;"></i> ${doc.title || 'Tài liệu học tập'}
+                                    </span>
+                                    <div class="svg-btn-wrapper">
+                                        <span style="display: inline-block; font-size: 0.78rem; color: #38bdf8; padding: 5px 14px; font-weight: 800;">Chi tiết &rarr;</span>
+                                        <svg viewBox="0 0 100 36" preserveAspectRatio="none">
+                                            <rect x="1" y="1" width="98" height="34" rx="8" class="animated-path" stroke="#38bdf8" />
+                                        </svg>
+                                    </div>
+                                </a>
+                            `).join('')}
+                        </div>
                     </div>
                 `;
             }
-            const { data: chartRows, error: chartRowsErr } = await supabaseClient
-                .from('class_activities')
-                .select('*')
-                .order('date', { ascending: true })
-                .limit(10);
-            if (!chartRowsErr && chartRows && chartRows.length > 0) {
-                classActivityChart.data.labels = chartRows.map(item => {
-                    if (!item.date) return '';
-                    const parts = item.date.split('-');
-                    return parts.length === 3 ? `${parts[2]}/${parts[1]}` : item.date;
-                });
-                classActivityChart.data.datasets[0].data = chartRows.map(item => (item.guest_views || 0) + (item.member_views || 0));
-                classActivityChart.data.datasets[1].data = chartRows.map(item => item.documents !== undefined ? item.documents : totalGallery);
-                classActivityChart.data.datasets[2].data = chartRows.map(() => totalAchievements);
-                classActivityChart.update();
+            let imagesContainer = document.getElementById('recentImagesPreview');
+            if (!imagesContainer && previewContainer) {
+                imagesContainer = document.createElement('div');
+                imagesContainer.id = 'recentImagesPreview';
+                previewContainer.parentNode.insertBefore(imagesContainer, previewContainer.nextSibling);
             }
-            const { data: recentDocs, error: recentErr } = await supabaseClient
-                .from('gallery')
-                .select('title, link')
-                .order('id', { ascending: false })
-                .limit(3);
-            const previewContainer = document.getElementById('recentDocsPreview');
-            if (previewContainer && !recentErr && recentDocs && recentDocs.length > 0) {
-                previewContainer.innerHTML = recentDocs.map(doc => `
-                    <a href="gallery.html#documents" class="doc-preview-item" style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: 8px; text-decoration: none;">
-                        <span style="font-size: 0.85rem; color: var(--text-color); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 75%;">
-                            <i class="ri-file-text-line" style="color: #38bdf8; margin-right: 6px;"></i> ${doc.title || 'Tài liệu lớp học'}
-                        </span>
-                        <span style="font-size: 0.75rem; color: #10b981; background: rgba(16, 185, 129, 0.1); padding: 2px 8px; border-radius: 4px;">Chi tiết &rarr;</span>
-                    </a>
-                `).join('');
-            } else if (previewContainer) {
-                previewContainer.innerHTML = `<div style="font-size: 0.85rem; color: var(--text-muted); text-align: center; padding: 8px;">Chưa có tài liệu nào được đăng.</div>`;
+            if (imagesContainer && recentImages.length > 0) {
+                imagesContainer.innerHTML = `
+                    <div style="background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 14px; padding: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); margin-top: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-color); display: flex; align-items: center; gap: 8px;">
+                                <i class="ri-image-line" style="color: #34d399; font-size: 1.1rem;"></i> Ảnh Mới
+                            </div>
+                            <a href="gallery.html#images" class="dynamic-text-color" style="font-size: 0.82rem; text-decoration: none; font-weight: 600; opacity: 0.9;">Xem tất cả &rarr;</a>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            ${recentImages.map(img => `
+                                <a href="gallery.html#images" class="doc-preview-item" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; text-decoration: none;">
+                                    <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%; display: flex; align-items: center; gap: 8px;">
+                                        <i class="ri-image-2-line" style="color: #34d399; font-size: 1rem;"></i> ${img.title || 'Khoảnh khắc kỷ niệm'}
+                                    </span>
+                                    <div class="svg-btn-wrapper">
+                                        <span style="display: inline-block; font-size: 0.78rem; color: #34d399; padding: 5px 14px; font-weight: 800;">Chi tiết &rarr;</span>
+                                        <svg viewBox="0 0 100 36" preserveAspectRatio="none">
+                                            <rect x="1" y="1" width="98" height="34" rx="8" class="animated-path" stroke="#34d399" />
+                                        </svg>
+                                    </div>
+                                </a>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            let achievementsContainer = document.getElementById('recentAchievementsPreview');
+            if (!achievementsContainer && imagesContainer) {
+                achievementsContainer = document.createElement('div');
+                achievementsContainer.id = 'recentAchievementsPreview';
+                imagesContainer.parentNode.insertBefore(achievementsContainer, imagesContainer.nextSibling);
+            }
+            if (achievementsContainer && recentAchievements.length > 0) {
+                achievementsContainer.innerHTML = `
+                    <div style="background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 14px; padding: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); margin-top: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-color); display: flex; align-items: center; gap: 8px;">
+                                <i class="ri-trophy-line" style="color: #fbbf24; font-size: 1.1rem;"></i> Thành Tích Mới
+                            </div>
+                            <a href="achievements.html" class="dynamic-text-color" style="font-size: 0.82rem; text-decoration: none; font-weight: 600; opacity: 0.9;">Xem tất cả &rarr;</a>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            ${recentAchievements.map(ach => `
+                                <a href="achievements.html" class="doc-preview-item" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; text-decoration: none;">
+                                    <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%; display: flex; align-items: center; gap: 8px;">
+                                        <i class="ri-award-line" style="color: #fbbf24; font-size: 1rem;"></i> ${ach.student_name ? `${ach.student_name} - ` : ''}${ach.title || 'Thành tích lớp học'}
+                                    </span>
+                                    <div class="svg-btn-wrapper">
+                                        <span style="display: inline-block; font-size: 0.78rem; color: #fbbf24; padding: 5px 14px; font-weight: 800;">Chi tiết &rarr;</span>
+                                        <svg viewBox="0 0 100 36" preserveAspectRatio="none">
+                                            <rect x="1" y="1" width="98" height="34" rx="8" class="animated-path" stroke="#fbbf24" />
+                                        </svg>
+                                    </div>
+                                </a>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
             }
         } catch (err) {
             console.error("Lỗi đồng bộ dữ liệu thống kê:", err);
