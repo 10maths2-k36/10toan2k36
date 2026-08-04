@@ -45,12 +45,6 @@
             background: #ef4444;
             color: #fff;
         }
-        .intro-container {
-            display: flex;
-            gap: 24px;
-            align-items: flex-start;
-            flex-wrap: wrap;
-        }
         .intro-logo {
             width: 120px;
             height: 120px;
@@ -70,30 +64,14 @@
         .intro-logo:hover {
             transform: scale(1.05);
         }
-        .intro-info {
-            flex: 1;
-            min-width: 250px;
-        }
-        .intro-info p {
-            margin: 8px 0;
-            line-height: 1.6;
-        }
-        .intro-info a {
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 500;
-        }
-        .intro-info a:hover {
-            text-decoration: underline;
-        }
         .video-frame-wrapper {
             position: relative;
             width: 100%;
-            max-width: 850px;
-            margin: 16px auto 0 auto;
+            max-width: 100%;
+            margin: 0;
             border-radius: 16px;
             overflow: hidden;
-            border: 2px solid var(--border);
+            border: 1px solid var(--border);
             background: #0b0f19;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
             aspect-ratio: 16 / 9; 
@@ -342,8 +320,8 @@
         <a href="achievements.html"><i class="ri-trophy-line"></i> Thành Tích</a>
         <a href="gallery.html"><i class="ri-image-line"></i> Thư Viện</a>
         <a href="about.html" class="active"><i class="ri-information-line"></i> Giới Thiệu</a>
-        <a href="feedback.html"><i class="ri-chat-settings-line"></i> Góp Ý</a>
         <a href="solver.html"><i class="ri-book-open-line"></i> Giải Bài Tập AI</a>
+        <a href="feedback.html"><i class="ri-chat-settings-line"></i> Góp Ý</a>
         <span class="nav-divider"></span>
 <button class="nav-action-btn theme-btn" id="theme-toggle"><i class="ri-palette-line"></i> Giao diện</button>
 <button class="nav-action-btn auth-nav-btn" id="auth-nav-btn" onclick="handleAuthNavAction()"><i class="ri-login-box-line"></i> Đăng nhập</button>
@@ -355,43 +333,76 @@
     <span id="trigger-clock-text">Đang tải đồng hồ...</span>
 </div>
 <main class="main-content">
-<section class="card animate-on-scroll">
-<h2><i class="ri-star-smile-line"></i> Về Tập Thể Lớp 10 Toán 2 K36</h2>
-<div class="intro-container">
-<img alt="Logo 10 Toán 2 K36" class="intro-logo" onclick="openLightbox('10_t2_logo.jpeg')" src="10_t2_logo.jpeg" title="Bấm để phóng to"/>
-<div class="intro-info">
-<p><strong><i class="ri-book-read-line"></i> Giới thiệu chung:</strong> Ngôi nhà chung của tập thể lớp 10 Toán 2 K36 dưới mái trường THPT Chuyên Bến Tre. Nơi hội tụ niềm đam mê toán học và những kỷ niệm tuổi trẻ rực rỡ.</p>
-<p><strong><i class="ri-user-settings-line"></i> Quản trị viên:</strong> Tập thể lớp 10 Toán 2</p>
-<p><strong><i class="ri-mail-line"></i> Gmail liên hệ:</strong> <a href="mailto:10toan2k36@gmail.com">10toan2k36@gmail.com</a> (Có thể liên hệ ở phần Góp Ý)</p>
-<p><strong><i class="ri-global-line"></i> Fanpage lớp:</strong> <a href="https://www.facebook.com/profile.php?id=61592307514906&amp;sk=directory_contact_info" target="_blank">10T2 K36 - Kings of Maths</a></p>
-<p><strong><i class="ri-tiktok-line"></i> TikTok lớp:</strong> <a href="https://www.tiktok.com/@t2.k36_cbt" target="_blank">@t2.k36_cbt</a></p>
-<p><strong><i class="ri-youtube-line"></i> YouTube lớp:</strong> <a href="https://www.youtube.com/@t2.k36_cbt" target="_blank">@t2.k36_cbt</a></p>
-</div>
-</div>
-</section>
-<section class="card animate-on-scroll">
-<h2><i class="ri-vidicon-line"></i> Video Giới Thiệu Lớp 10 Toán 2</h2>
-<p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 8px;">
-                Thước phim ngắn lưu giữ những khoảnh khắc và kỷ niệm đẹp của tập thể lớp chúng ta.
-            </p>
-<div class="video-frame-wrapper">
-<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" src="https://www.youtube.com/embed/HbXp9Q2y0oE" title="Video Giới Thiệu Lớp 10 Toán 2 K36 - THPT Chuyên Bến Tre">
-</iframe>
-</div>
-</section>
-<section class="card animate-on-scroll">
-<h2><i class="ri-school-line"></i> Về Trường THPT Chuyên Bến Tre</h2>
-<div class="intro-container">
-<img alt="Logo THPT Chuyên Bến Tre" class="intro-logo school-shape" onclick="openLightbox('logocbt.png')" src="logocbt.png" title="Bấm để phóng to"/>
-<div class="intro-info">
-<p><strong><i class="ri-building-2-line"></i></strong> Trường Trung Học Phổ Thông Chuyên Bến Tre</p>
-<p><strong><i class="ri-map-pin-line"></i></strong> Nơi chắp cánh ước mơ cho các thế hệ học sinh Chuyên Bến Tre, là cái nôi đào tạo nhiều nhân tài với bề dày truyền thống học tập xuất sắc, kỷ cương và sáng tạo, viết tiếp trang sử Vàng cho THPT Chuyên Bến Tre.</p>
-<p><strong><i class="ri-link"></i> Website Trường:</strong> <a href="https://thptchuyenbentre.edu.vn/" target="_blank">thptchuyenbentre.edu.vn</a></p>
-<p><strong><i class="ri-facebook-box-line"></i> Fanpage Trường:</strong> <a href="https://www.facebook.com/thptchuyenbentre" target="_blank">THPT Chuyên Bến Tre - BenTre High School for Gifted Students</a></p>
-<p><strong><i class="ri-mail-send-line"></i> Gmail liên hệ:</strong> <a href="mailto:fbchuyenbentre@gmail.com">fbchuyenbentre@gmail.com</a></p>
-</div>
-</div>
-</section>
+    <section class="card animate-on-scroll" style="padding: 28px;">
+        <h2 style="margin-bottom: 20px;"><i class="ri-dashboard-3-line"></i> Không Gian Giới Thiệu - 10 Toán 2 K36</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+            <div style="grid-column: span min(2, 100%); background: rgba(128,128,128,0.03); border: 1px solid var(--border); border-radius: 20px; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.08)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                <div>
+                    <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap; margin-bottom: 16px;">
+                        <img alt="Logo 10 Toán 2 K36" class="intro-logo" onclick="openLightbox('10_t2_logo.jpeg')" src="10_t2_logo.jpeg" title="Bấm để phóng to"/>
+                        <div>
+                            <h3 style="margin: 0 0 6px 0; color: var(--text-main); font-size: 1.25rem;"><i class="ri-star-smile-line" style="color: var(--accent);"></i> Tập Thể 10 Toán 2 K36</h3>
+                            <p style="margin: 0; color: var(--text-muted); font-size: 0.9rem;">Học không bằng ai - Chơi không ai bằng</p>
+                        </div>
+                    </div>
+                    <p style="margin: 0 0 16px 0; line-height: 1.6; color: var(--text-main); font-size: 0.95rem;">
+                        Ngôi nhà chung của tập thể lớp 10 Toán 2 K36 dưới mái trường THPT Chuyên Bến Tre. Nơi hội tụ niềm đam mê toán học và những kỷ niệm tuổi trẻ rực rỡ, đoàn kết cùng nhau chinh phục mọi thử thách.
+                    </p>
+                </div>
+                <div style="border-top: 1px solid var(--border); padding-top: 14px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; font-size: 0.85rem; color: var(--text-muted);">
+                    <span><i class="ri-user-settings-line" style="color: var(--accent);"></i> QTV: Tập thể lớp</span>
+                    <span>•</span>
+                    <span><i class="ri-mail-line" style="color: var(--accent);"></i> <a href="mailto:10toan2k36@gmail.com" style="color: var(--accent); text-decoration: none;">10toan2k36@gmail.com</a></span>
+                </div>
+            </div>
+            <div style="background: rgba(128,128,128,0.03); border: 1px solid var(--border); border-radius: 20px; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.08)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                <div>
+                    <h3 style="margin: 0 0 12px 0; color: var(--text-main); font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
+                        <i class="ri-share-line" style="color: var(--accent);"></i> Kênh Trực Tuyến
+                    </h3>
+                    <p style="margin: 0 0 16px 0; color: var(--text-muted); font-size: 0.9rem;">Kết nối với các hoạt động và thước phim của lớp qua các nền tảng:</p>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <a href="https://www.facebook.com/profile.php?id=61592307514906&sk=directory_contact_info" target="_blank" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; color: var(--text-main); text-decoration: none; font-weight: 500; font-size: 0.9rem; transition: all 0.2s;">
+                            <i class="ri-facebook-box-fill" style="font-size: 1.2rem; color: #1877f2;"></i> 10T2 K36 CBT
+                        </a>
+                        <a href="https://www.tiktok.com/@t2.k36_cbt" target="_blank" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; color: var(--text-main); text-decoration: none; font-weight: 500; font-size: 0.9rem; transition: all 0.2s;">
+                            <i class="ri-tiktok-fill" style="font-size: 1.2rem; color: var(--text-main);"></i> TikTok: @t2.k36_cbt
+                        </a>
+                        <a href="https://www.youtube.com/@t2.k36_cbt" target="_blank" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; color: var(--text-main); text-decoration: none; font-weight: 500; font-size: 0.9rem; transition: all 0.2s;">
+                            <i class="ri-youtube-fill" style="font-size: 1.2rem; color: #ff0000;"></i> YouTube: @t2.k36_cbt
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div style="grid-column: span min(2, 100%); background: rgba(128,128,128,0.03); border: 1px solid var(--border); border-radius: 20px; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.08)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                <div>
+                    <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap; margin-bottom: 16px;">
+                        <img alt="Logo THPT Chuyên Bến Tre" class="intro-logo school-shape" onclick="openLightbox('logocbt.png')" src="logocbt.png" title="Bấm để phóng to"/>
+                        <div>
+                            <h3 style="margin: 0 0 6px 0; color: var(--text-main); font-size: 1.25rem;"><i class="ri-school-line" style="color: var(--accent);"></i> Trường THPT Chuyên Bến Tre</h3>
+                            <p style="margin: 0; color: var(--text-muted); font-size: 0.9rem;">Cái nôi đào tạo nhân tài xứ dừa</p>
+                        </div>
+                    </div>
+                    <p style="margin: 0 0 16px 0; line-height: 1.6; color: var(--text-main); font-size: 0.95rem;">
+                        Nơi chắp cánh ước mơ cho các thế hệ học sinh Chuyên Bến Tre, với bề dày truyền thống học tập xuất sắc, kỷ cương và sáng tạo, viết tiếp trang sử Vàng tự hào của nhà trường.
+                    </p>
+                </div>
+                <div style="border-top: 1px solid var(--border); padding-top: 14px; display: flex; gap: 16px; flex-wrap: wrap; align-items: center; font-size: 0.85rem;">
+                    <a href="https://thptchuyenbentre.edu.vn/" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: 500;"><i class="ri-global-line"></i> Website Trường</a>
+                    <a href="https://www.facebook.com/thptchuyenbentre" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: 500;"><i class="ri-facebook-box-line"></i> Fanpage Trường</a>
+                    <a href="mailto:fbchuyenbentre@gmail.com" style="color: var(--accent); text-decoration: none; font-weight: 500;"><i class="ri-mail-send-line"></i> fbchuyenbentre@gmail.com</a>
+                </div>
+            </div>
+            <div style="grid-column: 1 / -1; background: rgba(128,128,128,0.03); border: 1px solid var(--border); border-radius: 20px; padding: 24px; transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.08)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                <h3 style="margin: 0 0 6px 0; color: var(--text-main); font-size: 1.15rem; display: flex; align-items: center; gap: 8px;">
+                    <i class="ri-vidicon-line" style="color: var(--accent);"></i> Video Giới Thiệu Lớp 10 Toán 2 K36
+                </h3>
+                <div class="video-frame-wrapper">
+                    <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" src="https://www.youtube.com/embed/HbXp9Q2y0oE" title="Video Giới Thiệu Lớp 10 Toán 2 K36 - THPT Chuyên Bến Tre"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
 </main>
 <footer class="site-footer">
 <div class="footer-left-content">
