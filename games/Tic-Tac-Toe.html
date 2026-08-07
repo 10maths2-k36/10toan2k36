@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Cờ Caro (XO) - 10 Toán 2 K36</title>
+    <link href="../css/style.css" rel="stylesheet"/>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .main-content {
+            flex: 1; 
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .card-header-box {
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        .card-header-box h2 {
+            margin: 0 0 2px 0;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+        .game-container {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 14px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 420px;
+            width: 100%;
+            position: relative;
+        }
+        .scoreboard {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            background: rgba(128, 128, 128, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 6px;
+            margin-bottom: 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+        .scoreboard span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .timer-container {
+            width: 100%;
+            height: 4px;
+            background: rgba(128, 128, 128, 0.1);
+            border-radius: 2px;
+            margin-bottom: 8px;
+            overflow: hidden;
+        }
+        .timer-bar {
+            height: 100%;
+            width: 100%;
+            background: var(--accent);
+            transition: width 0.1s linear;
+        }
+        .settings-panel {
+            display: none;
+        }
+        .custom-select-wrapper {
+            position: relative;
+            user-select: none;
+            width: 100%;
+        }
+        .custom-select {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            z-index: 2;
+        }
+        .custom-select:hover {
+            border-color: var(--accent);
+        }
+        .custom-select.open {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(var(--accent-rgb, 2, 132, 199), 0.15);
+        }
+        .custom-select i {
+            transition: transform 0.2s ease;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        .custom-select.open i {
+            transform: rotate(180deg);
+            color: var(--accent);
+        }
+        .custom-options {
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            right: 0;
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            overflow: hidden;
+            display: none;
+            z-index: 9999;
+            animation: fadeInDropdown 0.2s ease;
+        }
+        .custom-options.open {
+            display: block;
+        }
+        @keyframes fadeInDropdown {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .custom-option {
+            padding: 8px 10px;
+            font-size: 0.8rem;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+        .custom-option:hover {
+            background: rgba(128, 128, 128, 0.12);
+            color: var(--accent);
+        }
+        .custom-option.selected {
+            font-weight: 600;
+            color: var(--accent);
+            background: rgba(128, 128, 128, 0.08);
+        }
+        .player-names-box {
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .player-names-box input {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            outline: none;
+            width: 100%;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+        .player-names-box input:focus {
+            border-color: var(--accent);
+        }
+        .status-text {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        .board {
+            display: grid;
+            gap: 6px;
+            margin-bottom: 12px;
+            width: 100%;
+            max-width: 280px;
+        }
+        .cell {
+            aspect-ratio: 1;
+            background: rgba(128, 128, 128, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .cell:hover {
+            border-color: var(--accent);
+            background: rgba(128, 128, 128, 0.1);
+            transform: translateY(-2px);
+        }
+        .cell.winning-cell {
+            background: rgba(var(--accent-rgb, 2, 132, 199), 0.2);
+            border-color: var(--accent);
+            animation: pulseWin 0.6s infinite alternate;
+        }
+        @keyframes pulseWin {
+            from { transform: scale(1); }
+            to { transform: scale(1.05); }
+        }
+        .control-btns {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+            width: 100%;
+        }
+        .game-action-btn {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            font-size: 0.8rem;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+        .game-action-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        .back-btn {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border);
+        }
+        .back-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .reset-all-btn {
+            background: #ef4444;
+        }
+        .ios-switch {
+            position: relative;
+            display: inline-block;
+            width: 46px;
+            height: 26px;
+        }
+        .ios-switch input { 
+            opacity: 0; 
+            width: 0; 
+            height: 0; 
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #39393d;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: var(--accent);
+        }
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+            margin-top: 8px;
+        }
+        .leaderboard-table th, .leaderboard-table td {
+            padding: 6px 8px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-main);
+        }
+        .leaderboard-table th {
+            font-weight: 600;
+            color: var(--accent);
+        }
+    </style>
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#0284c7">
+</head>
+<body>
+<header class="header-nav">
+    <div class="logo">
+        <img alt="Logo 10 Toán 2 K36" class="header-logo-img" onclick="openLightbox('../10_t2_logo.jpeg')" src="../10_t2_logo.jpeg" title="Bấm để phóng to logo Lớp"/>
+        <h2>10 Toán 2 K36</h2>
+    </div>
+    <nav class="site-nav">
+        <a href="../index.html"><i class="ri-home-4-line"></i> Trang Chủ</a>
+        <a href="../members.html"><i class="ri-team-line"></i> Thành Viên</a>
+        <a href="../achievements.html"><i class="ri-trophy-line"></i> Thành Tích</a>
+        <a href="../gallery.html"><i class="ri-image-line"></i> Thư Viện</a>
+        <a href="../about.html"><i class="ri-information-line"></i> Giới Thiệu</a>
+        <a href="../solver.html"><i class="ri-book-open-line"></i> Giải Bài Tập AI</a>
+        <a href="../game.html" class="active"><i class="ri-gamepad-line"></i> Games</a>
+        <a href="../feedback.html"><i class="ri-chat-settings-line"></i> Góp Ý</a>
+        <span class="nav-divider"></span>
+        <button class="nav-action-btn theme-btn" id="theme-toggle"><i class="ri-palette-line"></i> Giao diện</button>
+        <button class="nav-action-btn fx-menu-btn" id="fx-toggle-btn" onclick="toggleMathEffects()"><i class="ri-sparkles-line"></i> Hiệu ứng: Bật</button>
+        <button class="nav-action-btn" id="fullscreen-btn" onclick="toggleFullScreen()" title="Toàn màn hình"><i class="ri-fullscreen-line"></i></button>
+    </nav>
+</header>
+<main class="main-content">
+    <div class="card-header-box">
+        <h2>Cờ Caro (Tic-Tac-Toe)</h2>
+        <p style="color: var(--text-muted); font-size: 0.8rem; margin: 0;">Thư giãn cùng bạn bè hoặc chiến đấu với AI các cấp độ!</p>
+    </div>
+    <div class="game-container">
+        <div class="scoreboard" id="scoreboard">
+            <span id="scoreWin">🏆 Thắng: 0</span>
+            <span id="scoreLose">❌ Thua: 0</span>
+            <span id="scoreDraw">🤝 Hòa: 0</span>
+        </div>
+        <div class="timer-container">
+            <div class="timer-bar" id="timerBar"></div>
+        </div>
+        <div class="player-names-box" id="playerNamesBox">
+            <input type="text" id="player1Name" placeholder="Tên Người 1 (X)" value="Bạn X">
+            <input type="text" id="player2Name" placeholder="Tên Người 2 (O)" value="Bạn O">
+        </div>
+        <div class="settings-panel">
+            <div class="custom-select-wrapper" data-id="modeSelect">
+                <div class="custom-select"><span class="selected-value">Người vs Máy</span></div>
+                <div class="custom-options">
+                    <div class="custom-option" data-value="pvp">Người vs Người</div>
+                    <div class="custom-option selected" data-value="pve">Người vs Máy</div>
+                </div>
+            </div>
+            <div class="custom-select-wrapper" data-id="playerSymbolSelect">
+                <div class="custom-select"><span class="selected-value">X (Đi trước)</span></div>
+                <div class="custom-options">
+                    <div class="custom-option selected" data-value="X">X (Đi trước)</div>
+                    <div class="custom-option" data-value="O">O (Đi sau)</div>
+                </div>
+            </div>
+            <div class="custom-select-wrapper" data-id="sizeSelect">
+                <div class="custom-select"><span class="selected-value">3x3</span></div>
+                <div class="custom-options">
+                    <div class="custom-option selected" data-value="3">3x3</div>
+                    <div class="custom-option" data-value="4">4x4</div>
+                    <div class="custom-option" data-value="5">5x5</div>
+                </div>
+            </div>
+            <div class="custom-select-wrapper" id="difficultyWrapper" data-id="difficultySelect">
+                <div class="custom-select"><span class="selected-value">Trung bình</span></div>
+                <div class="custom-options">
+                    <div class="custom-option" data-value="very-easy">Rất dễ</div>
+                    <div class="custom-option" data-value="easy">Dễ</div>
+                    <div class="custom-option selected" data-value="medium">Trung bình</div>
+                    <div class="custom-option" data-value="hard">Khó</div>
+                    <div class="custom-option" data-value="expert">Cực khó</div>
+                </div>
+            </div>
+            <div class="custom-select-wrapper" data-id="colorSelect">
+                <div class="custom-select"><span class="selected-value">blue-red</span></div>
+                <div class="custom-options">
+                    <div class="custom-option selected" data-value="blue-red">X: Xanh | O: Đỏ</div>
+                    <div class="custom-option" data-value="red-blue">X: Đỏ | O: Xanh</div>
+                    <div class="custom-option" data-value="purple-gold">X: Tím | O: Vàng</div>
+                    <div class="custom-option" data-value="pink-green">X: Hồng | O: Xanh lá</div>
+                </div>
+            </div>
+            <div class="custom-select-wrapper" data-id="soundSelect">
+                <div class="custom-select"><span class="selected-value">on</span></div>
+                <div class="custom-options">
+                    <div class="custom-option selected" data-value="on">Bật</div>
+                    <div class="custom-option" data-value="off">Tắt</div>
+                </div>
+            </div>
+        </div>
+        <div class="status-text" id="status">Lượt chơi: Quân X</div>
+        <div class="board" id="board"></div>
+        <div class="control-btns">
+            <button class="game-action-btn back-btn" onclick="location.href='../game.html'"><i class="ri-arrow-left-line"></i> Quay lại</button>
+            <button class="game-action-btn" id="undoBtn" onclick="undoMove()"><i class="ri-arrow-go-back-line"></i> Đi lại</button>
+            <button class="game-action-btn" id="pauseBtn" onclick="togglePause()"><i class="ri-pause-line"></i> Tạm dừng</button>
+            <button class="game-action-btn" onclick="resetGame()"><i class="ri-refresh-line"></i> Replay</button>
+            <button class="game-action-btn" style="grid-column: span 2; background: rgba(128,128,128,0.15); color: var(--text-main);" onclick="openSettingsModal()"><i class="ri-settings-3-line"></i> Cài đặt & Tùy chọn</button>
+            <button class="game-action-btn" style="grid-column: span 2; background: var(--accent);" onclick="openLeaderboardModal()"><i class="ri-trophy-line"></i> Bảng Xếp Hạng Trực Tuyến</button>
+        </div>
+    </div>
+</main>
+<div id="settings-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 10000; align-items: center; justify-content: center;">
+    <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 20px; width: 90%; max-width: 360px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h3 style="margin: 0; font-size: 1rem; color: var(--text-main);"><i class="ri-settings-3-line"></i> Cài đặt & Tùy chọn</h3>
+            <button onclick="closeSettingsModal()" style="background: none; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer;"><i class="ri-close-line"></i></button>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text-main);">
+                <span><i class="ri-volume-up-line"></i> Âm thanh</span>
+                <label class="ios-switch">
+                    <input type="checkbox" id="soundToggle" checked onchange="syncSoundSetting(this.checked)">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <hr style="border: none; border-top: 1px solid var(--border); margin: 2px 0;">
+            <div style="display: flex; flex-direction: column; gap: 4px; font-size: 0.85rem; color: var(--text-main);">
+                <span style="font-weight: 600;"><i class="ri-gamepad-line"></i> Chế độ chơi</span>
+                <div class="custom-select-wrapper" data-modal-sync="modeSelect">
+                    <div class="custom-select" onclick="toggleCustomSelect(this)">
+                        <span class="selected-value">Người vs Máy</span>
+                        <i class="ri-arrow-down-s-line"></i>
+                    </div>
+                    <div class="custom-options">
+                        <div class="custom-option" data-value="pvp">Người vs Người</div>
+                        <div class="custom-option selected" data-value="pve">Người vs Máy</div>
+                    </div>
+                </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 4px; font-size: 0.85rem; color: var(--text-main);" id="modalSymbolGroup">
+                <span style="font-weight: 600;"><i class="ri-sword-line"></i> Quân chơi</span>
+                <div class="custom-select-wrapper" data-modal-sync="playerSymbolSelect">
+                    <div class="custom-select" onclick="toggleCustomSelect(this)">
+                        <span class="selected-value">Quân chơi: X (Đi trước)</span>
+                        <i class="ri-arrow-down-s-line"></i>
+                    </div>
+                    <div class="custom-options">
+                        <div class="custom-option selected" data-value="X">Quân chơi: X (Đi trước)</div>
+                        <div class="custom-option" data-value="O">Quân chơi: O (Đi sau)</div>
+                    </div>
+                </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 4px; font-size: 0.85rem; color: var(--text-main);">
+                <span style="font-weight: 600;"><i class="ri-ruler-line"></i> Kích thước bàn cờ</span>
+                <div class="custom-select-wrapper" data-modal-sync="sizeSelect">
+                    <div class="custom-select" onclick="toggleCustomSelect(this)">
+                        <span class="selected-value">Bàn cờ 3x3</span>
+                        <i class="ri-arrow-down-s-line"></i>
+                    </div>
+                    <div class="custom-options">
+                        <div class="custom-option selected" data-value="3">Bàn cờ 3x3</div>
+                        <div class="custom-option" data-value="4">Bàn cờ 4x4</div>
+                        <div class="custom-option" data-value="5">Bàn cờ 5x5</div>
+                    </div>
+                </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 4px; font-size: 0.85rem; color: var(--text-main);" id="modalDiffGroup">
+                <span style="font-weight: 600;"><i class="ri-robot-line"></i> Cấp độ máy</span>
+                <div class="custom-select-wrapper" data-modal-sync="difficultySelect">
+                    <div class="custom-select" onclick="toggleCustomSelect(this)">
+                        <span class="selected-value">Cấp: Trung bình</span>
+                        <i class="ri-arrow-down-s-line"></i>
+                    </div>
+                    <div class="custom-options">
+                        <div class="custom-option" data-value="very-easy">Cấp: Rất dễ</div>
+                        <div class="custom-option" data-value="easy">Cấp: Dễ</div>
+                        <div class="custom-option selected" data-value="medium">Cấp: Trung bình</div>
+                        <div class="custom-option" data-value="hard">Cấp: Khó</div>
+                        <div class="custom-option" data-value="expert">Cấp: Cực khó</div>
+                    </div>
+                </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 4px; font-size: 0.85rem; color: var(--text-main);">
+                <span style="font-weight: 600;"><i class="ri-palette-line"></i> Màu sắc quân cờ</span>
+                <div class="custom-select-wrapper" data-modal-sync="colorSelect">
+                    <div class="custom-select" onclick="toggleCustomSelect(this)">
+                        <span class="selected-value">X: Xanh | O: Đỏ</span>
+                        <i class="ri-arrow-down-s-line"></i>
+                    </div>
+                    <div class="custom-options">
+                        <div class="custom-option selected" data-value="blue-red">X: Xanh | O: Đỏ</div>
+                        <div class="custom-option" data-value="red-blue">X: Đỏ | O: Xanh</div>
+                        <div class="custom-option" data-value="purple-gold">X: Tím | O: Vàng</div>
+                        <div class="custom-option" data-value="pink-green">X: Hồng | O: Xanh lá</div>
+                    </div>
+                </div>
+            </div>
+            <hr style="border: none; border-top: 1px solid var(--border); margin: 2px 0;">
+            <button class="game-action-btn" onclick="closeSettingsModal();" style="width: 100%; padding: 8px;">
+                <i class="ri-play-line"></i> Lưu & Bắt đầu chơi
+            </button>
+            <button class="game-action-btn reset-all-btn" onclick="resetAllScores(); closeSettingsModal();" style="width: 100%; padding: 8px;">
+                <i class="ri-delete-bin-line"></i> Reset Toàn Bộ Điểm Số
+            </button>
+        </div>
+    </div>
+</div>
+<div id="leaderboard-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 10001; align-items: center; justify-content: center;">
+    <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 20px; width: 90%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <h3 style="margin: 0; font-size: 1rem; color: var(--text-main);"><i class="ri-trophy-line"></i> Bảng Xếp Hạng Cao Thủ</h3>
+            <button onclick="closeLeaderboardModal()" style="background: none; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer;"><i class="ri-close-line"></i></button>
+        </div>
+        <div style="margin-bottom: 12px; display: flex; gap: 6px;">
+            <input type="text" id="lbPlayerName" placeholder="Nhập tên của bạn..." style="flex: 1; background-color: #ffffff !important; color: #000000 !important; border: 1px solid var(--border); padding: 8px 10px; border-radius: 8px; font-size: 0.85rem; outline: none; font-weight: 600;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+            <button class="game-action-btn" onclick="submitCurrentScore()"><i class="ri-send-plane-line"></i> Gửi điểm</button>
+        </div>
+        <div id="leaderboardContent" style="min-height: 120px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.85rem;">
+            Đang tải dữ liệu...
+        </div>
+    </div>
+</div>
+<div id="custom-confirm-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 20002; align-items: center; justify-content: center;">
+    <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 20px; width: 90%; max-width: 340px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); text-align: center;">
+        <div style="font-size: 2rem; color: #ef4444; margin-bottom: 8px;"><i class="ri-error-warning-line"></i></div>
+        <h3 style="margin: 0 0 10px 0; font-size: 1.05rem; color: var(--text-main);">Xác nhận thao tác</h3>
+        <p id="custom-confirm-message" style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 16px 0; line-height: 1.4;"></p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <button id="custom-confirm-cancel" class="game-action-btn back-btn" style="width: 100%;">Hủy</button>
+            <button id="custom-confirm-ok" class="game-action-btn reset-all-btn" style="width: 100%;">Đồng ý</button>
+        </div>
+    </div>
+</div>
+<div id="lightbox-modal" onclick="closeLightbox()">
+    <img alt="Phóng to ảnh" id="lightbox-img" src="" onclick="event.stopPropagation()"/>
+</div>
+<script>
+        const SUPABASE_URL = 'https://mwyjcrpwxpghieizswfa.supabase.co';
+        const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_9Ow2Q57vi9ArOtQRPr3bfw_olVCoAfD';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+    const boardElement = document.getElementById('board');
+    const statusElement = document.getElementById('status');
+    const timerBar = document.getElementById('timerBar');
+    let boardSize = 3;
+    let board = [];
+    let moveHistory = [];
+    let currentPlayer = 'X';
+    let userSymbol = 'X';
+    let aiSymbol = 'O';
+    let isGameActive = false;
+    let isPaused = false;
+    let wasPlayingBeforeModal = false;
+    let wins = 0, loses = 0, draws = 0;
+    let pvpScoreX = 0, pvpScoreO = 0, pvpDraws = 0;
+    let turnTimer = null;
+    let timeLeft = 10;
+    function showCustomConfirm(message) {
+        return new Promise((resolve) => {
+            playSound('click');
+            const modal = document.getElementById('custom-confirm-modal');
+            const msgEl = document.getElementById('custom-confirm-message');
+            const btnOk = document.getElementById('custom-confirm-ok');
+            const btnCancel = document.getElementById('custom-confirm-cancel');
+            msgEl.innerText = message;
+            modal.style.display = 'flex';
+            const handleOk = () => {
+                cleanup();
+                resolve(true);
+            };
+            const handleCancel = () => {
+                cleanup();
+                resolve(false);
+            };
+            const cleanup = () => {
+                playSound('click');
+                modal.style.display = 'none';
+                btnOk.removeEventListener('click', handleOk);
+                btnCancel.removeEventListener('click', handleCancel);
+            };
+            btnOk.addEventListener('click', handleOk);
+            btnCancel.addEventListener('click', handleCancel);
+        });
+    }
+    function getSelectedValue(id) {
+        const wrapper = document.querySelector(`[data-id="${id}"]`);
+        if (!wrapper) return '';
+        const selectedOpt = wrapper.querySelector('.custom-option.selected');
+        return selectedOpt ? selectedOpt.dataset.value : '';
+    }
+    function toggleCustomSelect(element) {
+        const wrapper = element.parentElement;
+        const isOpen = wrapper.querySelector('.custom-options').classList.contains('open');
+        document.querySelectorAll('.custom-options.open').forEach(opt => {
+            opt.classList.remove('open');
+            opt.parentElement.querySelector('.custom-select').classList.remove('open');
+        });
+        if (!isOpen) {
+            playSound('click');
+            wrapper.querySelector('.custom-options').classList.add('open');
+            element.classList.add('open');
+        }
+    }
+    window.addEventListener('click', (e) => {
+        if (!e.target.closest('.custom-select-wrapper')) {
+            document.querySelectorAll('.custom-options.open').forEach(opt => {
+                opt.classList.remove('open');
+                opt.parentElement.querySelector('.custom-select').classList.remove('open');
+            });
+        }
+    });
+    document.querySelectorAll('.custom-select-wrapper').forEach(wrapper => {
+        const selectId = wrapper.dataset.id || wrapper.dataset.modalSync;
+        wrapper.querySelectorAll('.custom-option').forEach(option => {
+            option.addEventListener('click', () => {
+                playSound('click');
+                const val = option.dataset.value;
+                const text = option.innerText;
+                document.querySelectorAll(`[data-id="${selectId}"], [data-modal-sync="${selectId}"]`).forEach(targetWrapper => {
+                    targetWrapper.querySelectorAll('.custom-option').forEach(opt => {
+                        if (opt.dataset.value === val) opt.classList.add('selected');
+                        else opt.classList.remove('selected');
+                    });
+                    const valEl = targetWrapper.querySelector('.selected-value');
+                    if (valEl) valEl.innerText = text;
+                });
+                const customOpts = wrapper.querySelector('.custom-options');
+                const customSel = wrapper.querySelector('.custom-select');
+                if (customOpts) customOpts.classList.remove('open');
+                if (customSel) customSel.classList.remove('open');
+                if (selectId === 'modeSelect') {
+                    toggleModeSettings();
+                    resetGame();
+                } else if (selectId === 'sizeSelect') {
+                    changeBoardSize();
+                } else if (selectId === 'colorSelect') {
+                    updateColors();
+                } else if (selectId === 'playerSymbolSelect') {
+                    resetGame();
+                }
+            });
+        });
+    });
+    function toggleFullScreen() {
+        playSound('click');
+        const fsBtn = document.getElementById('fullscreen-btn');
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(err => {
+                alert(`Lỗi khi bật chế độ toàn màn hình: ${err.message}`);
+            });
+            if (fsBtn) fsBtn.innerHTML = '<i class="ri-fullscreen-exit-line"></i>';
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+            if (fsBtn) fsBtn.innerHTML = '<i class="ri-fullscreen-line"></i>';
+        }
+    }
+    document.addEventListener('fullscreenchange', () => {
+        const fsBtn = document.getElementById('fullscreen-btn');
+        if (fsBtn) {
+            fsBtn.innerHTML = document.fullscreenElement ? '<i class="ri-fullscreen-exit-line"></i>' : '<i class="ri-fullscreen-line"></i>';
+        }
+    });
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(type) {
+        if (getSelectedValue('soundSelect') === 'off') return;
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const now = audioCtx.currentTime;
+        if (type === 'click') {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.frequency.setValueAtTime(600, now);
+            gain.gain.setValueAtTime(0.05, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+            osc.start(now);
+            osc.stop(now + 0.05);
+        } else if (type === 'tick') {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.frequency.setValueAtTime(800, now);
+            gain.gain.setValueAtTime(0.08, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+            osc.start(now);
+            osc.stop(now + 0.06);
+        } else if (type === 'move') {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.frequency.setValueAtTime(400, now);
+            osc.frequency.exponentialRampToValueAtTime(600, now + 0.1);
+            gain.gain.setValueAtTime(0.1, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+            osc.start(now);
+            osc.stop(now + 0.1);
+        } else if (type === 'win') {
+            const notes = [523.25, 659.25, 783.99, 1046.50];
+            notes.forEach((freq, idx) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.frequency.setValueAtTime(freq, now + idx * 0.1);
+                gain.gain.setValueAtTime(0.12, now + idx * 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.1 + 0.25);
+                osc.start(now + idx * 0.1);
+                osc.stop(now + idx * 0.1 + 0.25);
+            });
+        } else if (type === 'lose') {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.frequency.setValueAtTime(300, now);
+            osc.frequency.exponentialRampToValueAtTime(150, now + 0.3);
+            gain.gain.setValueAtTime(0.15, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+            osc.start(now);
+            osc.stop(now + 0.3);
+        }
+    }
+    const colorThemes = {
+        'blue-red': { x: '#0284c7', o: '#ef4444' },
+        'red-blue': { x: '#ef4444', o: '#0284c7' },
+        'purple-gold': { x: '#a855f7', o: '#eab308' },
+        'pink-green': { x: '#ec4899', o: '#22c55e' }
+    };
+    function updateColors() {
+        const theme = colorThemes[getSelectedValue('colorSelect')];
+        document.querySelectorAll('.cell').forEach(cell => {
+            if (cell.innerText === 'X') cell.style.color = theme.x;
+            if (cell.innerText === 'O') cell.style.color = theme.o;
+        });
+    }
+    function toggleModeSettings() {
+        const mode = getSelectedValue('modeSelect');
+        const diffGroup = document.getElementById('modalDiffGroup');
+        const symbolGroup = document.getElementById('modalSymbolGroup');
+        const namesBox = document.getElementById('playerNamesBox');
+        if (mode === 'pvp') {
+            if (diffGroup) diffGroup.style.display = 'none';
+            if (symbolGroup) symbolGroup.style.display = 'none';
+            if (namesBox) namesBox.style.display = 'grid';
+        } else {
+            if (diffGroup) diffGroup.style.display = 'flex';
+            if (symbolGroup) symbolGroup.style.display = 'flex';
+            if (namesBox) namesBox.style.display = 'none';
+        }
+        updateScoreboard();
+    }
+    function changeBoardSize() {
+        boardSize = parseInt(getSelectedValue('sizeSelect'));
+        resetGame();
+    }
+    function resetGame() {
+        clearInterval(turnTimer);
+        board = Array(boardSize * boardSize).fill('');
+        moveHistory = [];
+        isGameActive = true;
+        isPaused = false;
+        currentPlayer = 'X';
+        const mode = getSelectedValue('modeSelect');
+        if (mode === 'pve') {
+            userSymbol = getSelectedValue('playerSymbolSelect') || 'X';
+            aiSymbol = userSymbol === 'X' ? 'O' : 'X';
+        }
+        updateStatusText();
+        document.getElementById('pauseBtn').innerHTML = '<i class="ri-pause-line"></i> Tạm dừng';
+        boardElement.style.gridTemplateColumns = `repeat(${boardSize}, 1fr)`;
+        boardElement.innerHTML = '';
+        for (let i = 0; i < boardSize * boardSize; i++) {
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            cell.dataset.index = i;
+            cell.addEventListener('click', handleCellClick);
+            boardElement.appendChild(cell);
+        }
+        startTimer();
+        if (mode === 'pve' && currentPlayer !== userSymbol) {
+            setTimeout(aiMove, 400);
+        }
+    }
+    function showToast(message) {
+        let existingToast = document.getElementById('custom-toast');
+        if (existingToast) existingToast.remove();
+        const toast = document.createElement('div');
+        toast.id = 'custom-toast';
+        toast.innerText = message;
+        toast.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 20000;
+            animation: fadeInToast 0.3s ease, fadeOutToast 0.3s ease 1.7s;
+        `;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2000);
+    }
+    async function resetAllScores() {
+        playSound('click');
+        const confirmed = await showCustomConfirm('Bạn có chắc chắn muốn xóa toàn bộ điểm số trên hệ thống Supabase không?');
+        if (!confirmed) {
+            return;
+        }
+        try {
+            const { error } = await _supabase
+                .from('caro_leaderboard')
+                .delete()
+                .neq('id', 0);
+            if (error) throw error;
+            wins = 0;
+            loses = 0;
+            draws = 0;
+            pvpScoreX = 0;
+            pvpScoreO = 0;
+            pvpDraws = 0;
+            updateScoreboard();
+            resetGame();
+            await fetchAndDisplayLeaderboard();
+            showToast('Đã xóa và đặt lại toàn bộ điểm số trên Supabase thành công!');
+        } catch (err) {
+            console.error('Lỗi khi xóa dữ liệu trên Supabase:', err);
+            alert('Không thể xóa dữ liệu trên Supabase. Vui lòng kiểm tra lại quyền RLS hoặc kết nối mạng.');
+        }
+    }
+    function openSettingsModal() {
+        playSound('click');
+        if (isGameActive && !isPaused) {
+            wasPlayingBeforeModal = true;
+            togglePause();
+        } else {
+            wasPlayingBeforeModal = false;
+        }
+        document.getElementById('settings-modal').style.display = 'flex';
+    }
+    function closeSettingsModal() {
+        playSound('click');
+        document.getElementById('settings-modal').style.display = 'none';
+        if (wasPlayingBeforeModal && isPaused) {
+            togglePause();
+        }
+        wasPlayingBeforeModal = false;
+        if (!isGameActive && board.length === 0) {
+            resetGame();
+        }
+    }
+    async function openLeaderboardModal() {
+        playSound('click');
+        if (isGameActive && !isPaused) {
+            togglePause();
+        }
+        document.getElementById('leaderboard-modal').style.display = 'flex';
+        await fetchAndDisplayLeaderboard();
+    }
+    function closeLeaderboardModal() {
+        playSound('click');
+        document.getElementById('leaderboard-modal').style.display = 'none';
+    }
+    async function fetchAndDisplayLeaderboard() {
+        const container = document.getElementById('leaderboardContent');
+        container.innerHTML = 'Đang tải dữ liệu...';
+        try {
+            let { data, error } = await _supabase
+                .from('caro_leaderboard')
+                .select('*')
+                .order('score_win', { ascending: false })
+                .limit(10);
+            if (error) throw error;
+            if (!data || data.length === 0) {
+                container.innerHTML = 'Chưa có dữ liệu bảng xếp hạng.';
+                return;
+            }
+            let html = `
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>Hạng</th>
+                            <th>Tên</th>
+                            <th>Thắng</th>
+                            <th>Thua</th>
+                            <th>Hòa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            data.forEach((row, index) => {
+                html += `
+                    <tr>
+                        <td>#${index + 1}</td>
+                        <td>${row.player_name}</td>
+                        <td>${row.score_win}</td>
+                        <td>${row.score_lose}</td>
+                        <td>${row.score_draw}</td>
+                    </tr>
+                `;
+            });
+            html += `</tbody></table>`;
+            container.innerHTML = html;
+        } catch (err) {
+            console.error('Lỗi tải bảng xếp hạng:', err);
+            container.innerHTML = 'Lỗi kết nối hoặc bảng chưa được tạo trên Supabase.';
+        }
+    }
+    async function submitCurrentScore() {
+        playSound('click');
+        const nameInput = document.getElementById('lbPlayerName').value.trim();
+        if (!nameInput) {
+            alert('Vui lòng nhập tên của bạn trước khi gửi điểm!');
+            return;
+        }
+        try {
+            const { error } = await _supabase
+                .from('caro_leaderboard')
+                .insert([
+                    { player_name: nameInput, score_win: wins, score_lose: loses, score_draw: draws }
+                ]);
+            if (error) throw error;
+            showToast('Gửi điểm lên hệ thống thành công!');
+            await fetchAndDisplayLeaderboard();
+        } catch (err) {
+            console.error('Lỗi gửi điểm:', err);
+            alert('Không thể gửi điểm lên Supabase. Vui lòng kiểm tra lại cấu hình bảng SQL.');
+        }
+    }
+    function syncSoundSetting(isChecked) {
+        playSound('click');
+        const val = isChecked ? 'on' : 'off';
+        document.querySelectorAll('[data-id="soundSelect"], [data-modal-sync="soundSelect"]').forEach(wrapper => {
+            wrapper.querySelectorAll('.custom-option').forEach(opt => {
+                if (opt.dataset.value === val) opt.click();
+            });
+        });
+    }
+    function updateStatusText() {
+        const mode = getSelectedValue('modeSelect');
+        if (mode === 'pvp') {
+            let p1 = document.getElementById('player1Name').value || 'Bạn X';
+            let p2 = document.getElementById('player2Name').value || 'Bạn O';
+            let currentName = (currentPlayer === 'X') ? p1 : p2;
+            statusElement.innerText = `Lượt chơi: ${currentName} (${currentPlayer})`;
+        } else {
+            statusElement.innerText = `Lượt chơi: Quân ${currentPlayer}`;
+        }
+    }
+    function startTimer() {
+        clearInterval(turnTimer);
+        if (!isGameActive || isPaused) return;
+        timeLeft = 10;
+        timerBar.style.width = '100%';
+        let lastPlayedSecond = 10;
+        turnTimer = setInterval(() => {
+            if (isPaused || !isGameActive) return;
+            timeLeft -= 0.1;
+            let percent = (timeLeft / 10) * 100;
+            timerBar.style.width = `${percent}%`;
+            let currentSecInt = Math.ceil(timeLeft);
+            if (currentSecInt <= 3 && currentSecInt > 0 && currentSecInt !== lastPlayedSecond) {
+                playSound('tick');
+                lastPlayedSecond = currentSecInt;
+            }
+            if (timeLeft <= 0) {
+                clearInterval(turnTimer);
+                handleTimeout();
+            }
+        }, 100);
+    }
+    function handleTimeout() {
+        if (!isGameActive) return;
+        const mode = getSelectedValue('modeSelect');
+        isGameActive = false;
+        playSound('lose');
+        if (mode === 'pve') {
+            statusElement.innerText = `Hết giờ! Quân ${currentPlayer} thua cuộc ⏰`;
+            if (currentPlayer === userSymbol) loses++;
+            else wins++;
+        } else {
+            let p1 = document.getElementById('player1Name').value || 'Bạn X';
+            let p2 = document.getElementById('player2Name').value || 'Bạn O';
+            let loserName = (currentPlayer === 'X') ? p1 : p2;
+            let winnerName = (currentPlayer === 'X') ? p2 : p1;
+            statusElement.innerText = `Hết giờ! ${loserName} thua cuộc, ${winnerName} chiến thắng! ⏰`;
+            if (currentPlayer === 'X') { pvpScoreO++; } else { pvpScoreX++; }
+        }
+        updateScoreboard();
+        setTimeout(resetGame, 1500);
+    }
+    function togglePause() {
+        if (!isGameActive) return;
+        playSound('click');
+        isPaused = !isPaused;
+        const btn = document.getElementById('pauseBtn');
+        if (isPaused) {
+            clearInterval(turnTimer);
+            btn.innerHTML = '<i class="ri-play-line"></i> Tiếp tục';
+            statusElement.innerText = 'Trận đấu đang tạm dừng';
+        } else {
+            btn.innerHTML = '<i class="ri-pause-line"></i> Tạm dừng';
+            updateStatusText();
+            startTimer();
+        }
+    }
+    function handleCellClick(e) {
+        if (!isGameActive || isPaused) return;
+        const mode = getSelectedValue('modeSelect');
+        if (mode === 'pve' && currentPlayer !== userSymbol) return;
+        const index = parseInt(e.target.dataset.index);
+        if (board[index] !== '') return;
+        makeMove(index, currentPlayer);
+        moveHistory.push(index);
+        let winLine = checkWin(currentPlayer, board);
+        if (winLine) {
+            clearInterval(turnTimer);
+            highlightWinningCells(winLine);
+            if (mode === 'pve') {
+                if (currentPlayer === userSymbol) { wins++; } 
+                else { loses++; }
+                statusElement.innerText = (currentPlayer === userSymbol) ? `Bạn đã chiến thắng! 🎉` : `Quân ${currentPlayer} (Máy) chiến thắng! 🤖`;
+                playSound(currentPlayer === userSymbol ? 'win' : 'lose');
+            } else {
+                let p1 = document.getElementById('player1Name').value || 'Bạn X';
+                let p2 = document.getElementById('player2Name').value || 'Bạn O';
+                let winnerName = (currentPlayer === 'X') ? p1 : p2;
+                if (currentPlayer === 'X') pvpScoreX++; else pvpScoreO++;
+                statusElement.innerText = `${winnerName} (${currentPlayer}) chiến thắng! 🎉`;
+                playSound('win');
+            }
+            updateScoreboard();
+            isGameActive = false;
+            setTimeout(resetGame, 1500);
+            return;
+        }
+        if (board.every(cell => cell !== '')) {
+            clearInterval(turnTimer);
+            if (mode === 'pve') { draws++; } else { pvpDraws++; }
+            updateScoreboard();
+            statusElement.innerText = `Trận đấu hòa! 🤝`;
+            isGameActive = false;
+            playSound('lose');
+            setTimeout(resetGame, 1500);
+            return;
+        }
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+        updateStatusText();
+        startTimer();
+        if (mode === 'pve' && currentPlayer === aiSymbol && isGameActive) {
+            setTimeout(aiMove, 400);
+        }
+    }
+    function undoMove() {
+        if (!isGameActive || isPaused || moveHistory.length === 0) return;
+        playSound('click');
+        const mode = getSelectedValue('modeSelect');
+        let stepsToUndo = (mode === 'pve' && moveHistory.length >= 2 && currentPlayer === userSymbol) ? 2 : 1;
+        for (let i = 0; i < stepsToUndo; i++) {
+            if (moveHistory.length === 0) break;
+            const lastIdx = moveHistory.pop();
+            board[lastIdx] = '';
+            const cell = boardElement.children[lastIdx];
+            cell.innerText = '';
+            cell.classList.remove('winning-cell');
+        }
+        if (mode === 'pve') {
+            currentPlayer = userSymbol;
+        } else {
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+        }
+        updateStatusText();
+        startTimer();
+    }
+    function makeMove(index, player) {
+        board[index] = player;
+        const cell = boardElement.children[index];
+        cell.innerText = player;
+        const theme = colorThemes[getSelectedValue('colorSelect')];
+        cell.style.color = player === 'X' ? theme.x : theme.o;
+        playSound('move');
+    }
+    function aiMove() {
+        if (!isGameActive || isPaused) return;
+        const difficulty = getSelectedValue('difficultySelect');
+        let emptyCells = board.map((val, idx) => val === '' ? idx : null).filter(val => val !== null);
+        if (emptyCells.length === 0) return;
+        let chosenCell = null;
+        if (difficulty === 'very-easy') {
+            chosenCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+        } 
+        else if (difficulty === 'easy') {
+            if (Math.random() < 0.5) {
+                chosenCell = findBestMove(aiSymbol, userSymbol, 0.3);
+            } else {
+                chosenCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+            }
+        } 
+        else if (difficulty === 'medium') {
+            chosenCell = findBestMove(aiSymbol, userSymbol, 0.8);
+        } 
+        else if (difficulty === 'hard' || difficulty === 'expert') {
+            chosenCell = findBestMove(aiSymbol, userSymbol, 1.0);
+        }
+        if (chosenCell === null || board[chosenCell] !== '') {
+            chosenCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+        }
+        makeMove(chosenCell, aiSymbol);
+        moveHistory.push(chosenCell);
+        let winLine = checkWin(aiSymbol, board);
+        if (winLine) {
+            clearInterval(turnTimer);
+            highlightWinningCells(winLine);
+            loses++;
+            updateScoreboard();
+            statusElement.innerText = `Quân ${aiSymbol} (Máy) chiến thắng! 🤖`;
+            isGameActive = false;
+            playSound('lose');
+            setTimeout(resetGame, 1500);
+            return;
+        }
+        if (board.every(cell => cell !== '')) {
+            clearInterval(turnTimer);
+            draws++;
+            updateScoreboard();
+            statusElement.innerText = `Trận đấu hòa! 🤝`;
+            isGameActive = false;
+            setTimeout(resetGame, 1500);
+            return;
+        }
+        currentPlayer = userSymbol;
+        updateStatusText();
+        startTimer();
+    }
+    function findBestMove(aiPlayer, humanPlayer, intelligenceLevel) {
+        let emptyCells = board.map((val, idx) => val === '' ? idx : null).filter(val => val !== null);
+        for (let idx of emptyCells) {
+            board[idx] = aiPlayer;
+            if (checkWin(aiPlayer, board)) {
+                board[idx] = '';
+                return idx;
+            }
+            board[idx] = '';
+        }
+        if (Math.random() < intelligenceLevel) {
+            for (let idx of emptyCells) {
+                board[idx] = humanPlayer;
+                if (checkWin(humanPlayer, board)) {
+                    board[idx] = '';
+                    return idx;
+                }
+                board[idx] = '';
+            }
+        }
+        const center = Math.floor((boardSize * boardSize) / 2);
+        if (boardSize === 3 && board[center] === '' && Math.random() < intelligenceLevel) {
+            return center;
+        }
+        return emptyCells[Math.floor(Math.random() * emptyCells.length)];
+    }
+    function checkWin(player, currentBoard) {
+        for (let r = 0; r < boardSize; r++) {
+            let line = [];
+            let win = true;
+            for (let c = 0; c < boardSize; c++) {
+                let idx = r * boardSize + c;
+                line.push(idx);
+                if (currentBoard[idx] !== player) { win = false; break; }
+            }
+            if (win) return line;
+        }
+        for (let c = 0; c < boardSize; c++) {
+            let line = [];
+            let win = true;
+            for (let r = 0; r < boardSize; r++) {
+                let idx = r * boardSize + c;
+                line.push(idx);
+                if (currentBoard[idx] !== player) { win = false; break; }
+            }
+            if (win) return line;
+        }
+        let lineDiag1 = [];
+        let winDiag1 = true;
+        for (let i = 0; i < boardSize; i++) {
+            let idx = i * boardSize + i;
+            lineDiag1.push(idx);
+            if (currentBoard[idx] !== player) { winDiag1 = false; break; }
+        }
+        if (winDiag1) return lineDiag1;
+        let lineDiag2 = [];
+        let winDiag2 = true;
+        for (let i = 0; i < boardSize; i++) {
+            let idx = i * boardSize + (boardSize - 1 - i);
+            lineDiag2.push(idx);
+            if (currentBoard[idx] !== player) { winDiag2 = false; break; }
+        }
+        if (winDiag2) return lineDiag2;
+        return null;
+    }
+    function highlightWinningCells(indices) {
+        indices.forEach(idx => {
+            boardElement.children[idx].classList.add('winning-cell');
+        });
+    }
+    function updateScoreboard() {
+        const mode = getSelectedValue('modeSelect');
+        if (mode === 'pvp') {
+            let p1 = document.getElementById('player1Name').value || 'Bạn X';
+            let p2 = document.getElementById('player2Name').value || 'Bạn O';
+            document.getElementById('scoreWin').innerText = `🏆 ${p1}: ${pvpScoreX}`;
+            document.getElementById('scoreLose').innerText = `❌ ${p2}: ${pvpScoreO}`;
+            document.getElementById('scoreDraw').innerText = `🤝 Hòa: ${pvpDraws}`;
+        } else {
+            document.getElementById('scoreWin').innerText = `🏆 Thắng: ${wins}`;
+            document.getElementById('scoreLose').innerText = `❌ Thua: ${loses}`;
+            document.getElementById('scoreDraw').innerText = `🤝 Hòa: ${draws}`;
+        }
+    }
+    document.getElementById('player1Name').addEventListener('input', updateScoreboard);
+    document.getElementById('player2Name').addEventListener('input', updateScoreboard);
+    toggleModeSettings();
+    document.getElementById('board').style.gridTemplateColumns = `repeat(${boardSize}, 1fr)`;
+    for (let i = 0; i < boardSize * boardSize; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        cell.dataset.index = i;
+        boardElement.appendChild(cell);
+    }
+    statusElement.innerText = 'Vui lòng thiết lập cấu hình để bắt đầu!';
+    document.getElementById('settings-modal').style.display = 'flex';
+    window.addEventListener('DOMContentLoaded', () => {
+        const savedAccent = localStorage.getItem('site_accent_color');
+        if (savedAccent) document.documentElement.style.setProperty('--accent', savedAccent);
+    });
+    function openLightbox(src) {
+        const modal = document.getElementById('lightbox-modal');
+        const img = document.getElementById('lightbox-img');
+        if (modal && img) { img.src = src; modal.style.display = 'flex'; }
+    }
+    function closeLightbox() { document.getElementById('lightbox-modal').style.display = 'none'; }
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const body = document.body;
+    function updateThemeIcon(isLight) {
+        if (themeToggleBtn) {
+            themeToggleBtn.innerHTML = isLight ? '<i class="ri-sun-line"></i> Giao diện' : '<i class="ri-moon-line"></i> Giao diện';
+        }
+    }
+    if (localStorage.getItem('theme') === 'light') {
+        body.classList.add('light-mode');
+        updateThemeIcon(true);
+    } else {
+        updateThemeIcon(false);
+    }
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+            playSound('click');
+            body.classList.toggle('light-mode');
+            const isLight = body.classList.contains('light-mode');
+            updateThemeIcon(isLight);
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        });
+    }
+</script>
+<script src="../js/animation.js"></script>
+<script src="../time.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const symbols = ['π', '∫', '∑', 'Δ', '√', 'α', 'β', 'θ', '∞', 'f(x)', 'lim', 'φ', '∂', '∇', '∏', 'µ', 'σ', 'Ω'];
+        const container = document.createElement('div');
+        container.className = 'math-bg-animation';
+        document.body.appendChild(container);
+        for (let i = 0; i < 18; i++) {
+            const span = document.createElement('span');
+            span.className = 'math-symbol';
+            span.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+            span.style.left = Math.random() * 100 + 'vw';
+            span.style.fontSize = (Math.random() * 1.5 + 1) + 'rem';
+            span.style.animationDuration = (Math.random() * 10 + 10) + 's'; 
+            span.style.animationDelay = (Math.random() * 10) + 's';
+            container.appendChild(span);
+        }
+    });
+</script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const dot = document.createElement('div'); dot.className = 'math-ray-dot';
+        const ring = document.createElement('div'); ring.className = 'math-ray-ring';
+        const pulse = document.createElement('div'); pulse.className = 'math-ray-pulse';
+        document.body.appendChild(dot); document.body.appendChild(ring); document.body.appendChild(pulse);
+        let mouseX = 0, mouseY = 0, currentX = 0, currentY = 0;
+        window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+        function renderRayCursor() {
+            currentX += (mouseX - currentX) * 0.25;
+            currentY += (mouseY - currentY) * 0.25;
+            dot.style.left = currentX + 'px'; dot.style.top = currentY + 'px';
+            ring.style.left = currentX + 'px'; ring.style.top = currentY + 'px';
+            pulse.style.left = currentX + 'px'; pulse.style.top = currentY + 'px';
+            requestAnimationFrame(renderRayCursor);
+        }
+        renderRayCursor();
+    });
+</script>
+<script>
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            if (isGameActive && !isPaused) {
+                togglePause();
+                showToast('Trận đấu đã tạm dừng vì bạn rời khỏi màn hình!');
+            }
+        }
+    });
+    function toggleMathEffects() {
+        const isCurrentlyDisabled = document.body.classList.contains('fx-disabled');
+        const fxBtn = document.getElementById('fx-toggle-btn');
+        if (isCurrentlyDisabled) {
+            document.body.classList.remove('fx-disabled');
+            if (fxBtn) fxBtn.innerHTML = '<i class="ri-sparkles-line"></i> Hiệu ứng: Bật';
+            localStorage.setItem('math_fx_enabled', 'true');
+        } else {
+            document.body.classList.add('fx-disabled');
+            if (fxBtn) fxBtn.innerHTML = '<i class="ri-sparkles-off-line"></i> Hiệu ứng: Tắt';
+            localStorage.setItem('math_fx_enabled', 'false');
+        }
+    }
+    window.addEventListener('DOMContentLoaded', () => {
+        const fxEnabled = localStorage.getItem('math_fx_enabled') !== 'false';
+        const fxBtn = document.getElementById('fx-toggle-btn');
+        if (!fxEnabled) {
+            document.body.classList.add('fx-disabled');
+            if (fxBtn) fxBtn.innerHTML = '<i class="ri-sparkles-off-line"></i> Hiệu ứng: Tắt';
+        }
+    });
+</script>
+</body>
+</html>
