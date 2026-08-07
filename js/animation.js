@@ -49,24 +49,6 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     }
-    const links = document.querySelectorAll("a");
-    links.forEach(link => {
-        link.addEventListener("click", e => {
-            const targetUrl = link.getAttribute("href");
-            if (
-                targetUrl &&
-                !targetUrl.startsWith("http") &&
-                !targetUrl.startsWith("#") &&
-                link.getAttribute("target") !== "_blank"
-            ) {
-                e.preventDefault();
-                document.body.classList.add("fade-out");
-                setTimeout(() => {
-                    window.location.href = targetUrl;
-                }, 200);
-            }
-        });
-    });
     const navContainers = document.querySelectorAll('.site-nav, .menu');
     navContainers.forEach((container) => {
         let indicator = container.querySelector('.nav-indicator');
@@ -162,7 +144,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     if (part.trim().length > 0) {
                         const span = document.createElement('span');
                         span.className = 'hover-word';
-                        span.textContent = part;
+                        span.innerHTML = part;
                         span.addEventListener("mouseenter", () => {
                             updateGlassTheme();
                             if (textGlassBox.parentNode !== p) {
@@ -195,5 +177,10 @@ document.addEventListener("DOMContentLoaded", function() {
         themeBtn.addEventListener('click', () => {
             textGlassBox.style.opacity = "0";
         });
+    }
+});
+window.addEventListener('pageshow', function (event) {
+    if (event.persisted) {
+        window.location.reload();
     }
 });

@@ -456,7 +456,7 @@
         for (let i = 0; i < symbolCount; i++) {
             const span = document.createElement('span');
             span.className = 'math-symbol';
-            span.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+            span.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
             span.style.left = Math.random() * 100 + 'vw';
             span.style.fontSize = (Math.random() * 1.5 + 1) + 'rem';
             span.style.animationDuration = (Math.random() * 10 + 10) + 's'; 
@@ -508,7 +508,7 @@
         for (let i = 0; i < particleCount; i++) {
             const span = document.createElement('span');
             span.className = 'math-click-particle';
-            span.textContent = mathChars[Math.floor(Math.random() * mathChars.length)];
+            span.innerHTML = mathChars[Math.floor(Math.random() * mathChars.length)];
             span.style.left = e.clientX + 'px';
             span.style.top = e.clientY + 'px';
             const angle = Math.random() * Math.PI * 2;
@@ -561,6 +561,21 @@
         .catch(err => console.log('Đăng ký Service Worker thất bại:', err));
     });
   }
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('contextmenu', event => event.preventDefault()); 
+    document.addEventListener('keydown', event => {
+        if (
+            event.key === 'F12' || 
+            (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J' || event.key === 'C')) || 
+            (event.ctrlKey && event.key === 'U')
+        ) {
+            event.preventDefault();
+            return false;
+        }
+    });
+});
 </script>
 </body>
 </html>

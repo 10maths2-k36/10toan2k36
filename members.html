@@ -427,35 +427,6 @@ body.dark-mode .member-table th,
             opacity: 1;
             transform: translateX(-50%) translateY(0);
         }
-        .auth-nav-btn {
-            background: var(--card-bg);
-            color: var(--text-main);
-            border: 1px solid var(--border);
-            padding: 6px 14px;
-            border-radius: 99px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 0.9rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-        }
-        .auth-nav-btn:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-            transform: translateY(-1px);
-        }
-        .auth-nav-btn.logout-state {
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
-            border-color: rgba(239, 68, 68, 0.3);
-        }
-        .auth-nav-btn.logout-state:hover {
-            background: #ef4444;
-            color: #fff;
-        }
         .custom-modal-overlay {
             display: none;
             position: fixed;
@@ -824,7 +795,6 @@ body.dark-mode .member-table th,
         <a href="feedback.html"><i class="ri-chat-settings-line"></i> Góp Ý</a>
         <span class="nav-divider"></span>
         <button class="nav-action-btn theme-btn" id="theme-toggle"><i class="ri-palette-line"></i> Giao diện</button>
-        <button class="nav-action-btn auth-nav-btn" id="auth-nav-btn" onclick="handleAuthNavAction()"><i class="ri-login-box-line"></i> Đăng nhập</button>
         <button class="nav-action-btn fx-menu-btn" id="fx-toggle-btn" onclick="toggleMathEffects()"><i class="ri-sparkles-line"></i> Hiệu ứng: Bật</button>
     </nav>
 </header>
@@ -1029,66 +999,12 @@ body.dark-mode .member-table th,
         <button onclick="closeZodiacModalDirect()" style="width: 100%; background: var(--accent); color: #fff; border: none; padding: 8px; border-radius: 8px; font-weight: 600; cursor: pointer;">Đã hiểu</button>
     </div>
 </div>
-<div class="custom-modal-overlay" id="terms-modal">
-<div class="custom-modal-box" style="max-width: 520px; text-align: left;">
-<div style="font-size: 1.5rem; text-align: center; margin-bottom: 5px;">📜</div>
-<h3 style="color: var(--text-main); margin: 0 0 5px 0; font-size: 1.15rem; text-align: center;">Điều khoản và Quy định sử dụng</h3>
-<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center; margin-bottom: 12px;">Vui lòng cuộn xuống dưới cùng để mở khóa nút đồng ý.</p>
-<div id="index-terms-scroll" onscroll="checkTermsScroll()" style="height: 200px; overflow-y: auto; border: 1px solid var(--border); padding: 12px; border-radius: 8px; background: var(--bg-main, #f9f9f9); font-size: 0.83rem; line-height: 1.45; color: var(--text-main); margin-bottom: 15px;">
-<p><b>ĐIỀU KHOẢN VÀ QUY ĐỊNH ĐĂNG TẢI NỘI DUNG</b></p>
-<p>Khi truy cập, sử dụng và đăng tải nội dung vào khu vực nội bộ của website 10 Toán 2 K36, thành viên đồng ý tuân thủ tuyệt đối các quy định về an toàn thông tin và văn hóa ứng xử trực tuyến. Cụ thể, các hành vi sau đây <b>bị nghiêm cấm tuyệt đối</b>:</p>
-<br/>
-<p><b>1. Đăng tải nội dung trái pháp luật và thuần phong mỹ tục:</b> Phát tán, chia sẻ hoặc lưu trữ hình ảnh, video, tài liệu có nội dung bạo lực, đồi trụy, phản động, xuyên tạc lịch sử, vi phạm pháp luật nước Cộng hòa Xã hội Chủ nghĩa Việt Nam hoặc trái với đạo đức xã hội và thuần phong mỹ tục của người Việt Nam.</p>
-<p><b>2. Xâm phạm quyền riêng tư và danh dự cá nhân:</b> Đăng tải hình ảnh, thông tin cá nhân, bài viết hoặc bình luận mang tính chất xúc phạm, lăng mạ, bôi nhọ danh dự, nhân phẩm của các thành viên trong lớp, thầy cô giáo hoặc bất kỳ cá nhân, tổ chức nào khác (bao gồm cả việc cố ý chia sẻ hình ảnh riêng tư khi chưa có sự đồng ý).</p>
-<p><b>3. Vi phạm bản quyền sở hữu trí tuệ:</b> Đăng tải các tài liệu học tập, sách, đề thi, phần mềm hoặc các sản phẩm sáng tạo thuộc bản quyền của tác giả, tổ chức khác mà chưa có sự cho phép hoặc trích nguồn rõ ràng, gây ảnh hưởng tiêu cực đến bản quyền tác giả.</p>
-<p><b>4. Phá hoại hệ thống và bảo mật website:</b> Cố ý thực hiện các hành vi xâm nhập trái phép, phá hoại mã nguồn, phát tán mã độc (virus, spyware), can thiệp vào cơ sở dữ liệu chung, hoặc lợi dụng quyền hạn sau khi đăng nhập để xóa, chỉnh sửa, làm sai lệch dữ liệu học tập và hình ảnh kỷ niệm của tập thể lớp.</p>
-<p><b>5. Đăng tải thông tin sai lệch (Fake News):</b> Cố tình tạo ra, phát tán hoặc chia sẻ các thông tin giả mạo, sai sự thật liên quan đến hoạt động của lớp học, nhà trường hoặc cá nhân các thành viên nhằm mục đích gây hoang mang, hiểu lầm hoặc mất đoàn kết nội bộ.</p>
-<p><b>6. Lạm dụng không gian chung:</b> Đăng tải các nội dung rác, spam quảng cáo thương mại, nội dung không liên quan đến mục đích học tập và lưu trữ kỷ niệm chung của tập thể 10 Toán 2.</p>
-<br/>
-<p><b>Hình thức xử lý:</b> Bất kỳ thành viên nào vi phạm các điều khoản trên sẽ bị thu hồi quyền truy cập khu vực nội bộ ngay lập tức, gỡ bỏ toàn bộ nội dung vi phạm, đồng thời chịu hoàn toàn trách nhiệm trước tập thể lớp và nhà trường tùy theo mức độ vi phạm.</p>
-</div>
-<div style="display: flex; gap: 10px;">
-<button onclick="closeTermsModal()" style="flex: 1; background: transparent; color: var(--text-main); border: 1px solid var(--border); padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Hủy</button>
-<button disabled="" id="index-agree-btn" onclick="acceptIndexTerms()" style="flex: 1; background: #ccc; color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: 600; cursor: not-allowed;">Tôi đã đọc và Đồng ý</button>
-</div>
-</div>
-</div>
-<div class="custom-modal-overlay" id="login-modal">
-<div class="custom-modal-box">
-<div style="font-size: 2rem; margin-bottom: 8px;">🔐</div>
-<h3 style="color: var(--text-main); margin: 0 0 6px 0; font-size: 1.15rem;">Khu vực nội bộ lớp</h3>
-<p style="color: var(--text-muted); font-size: 0.85rem; margin: 0 0 16px 0;">Nhập mật khẩu để tiếp tục truy cập</p>
-<input id="modal-pass-input" onkeydown="if(event.key === 'Enter') submitLogin()" placeholder="Mật khẩu lớp..." style="width: 100%; background: var(--card-bg); border: 1px solid var(--border); padding: 10px 12px; border-radius: 10px; color: var(--text-main); outline: none; font-size: 0.95rem; box-sizing: border-box; margin-bottom: 12px;" type="password"/>
-<div id="modal-err" style="color: #ef4444; font-size: 0.8rem; margin-bottom: 12px; display: none;">Sai mật khẩu rồi bạn ơi!</div>
-<div style="display: flex; gap: 10px;">
-<button onclick="backToTermsModal()" style="flex: 1; background: transparent; color: var(--text-main); border: 1px solid var(--border); padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Quay lại</button>
-<button onclick="submitLogin()" style="flex: 1; background: var(--accent); color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Xác nhận</button>
-</div>
-</div>
-</div>
-<div class="custom-modal-overlay" id="logout-modal">
-<div class="custom-modal-box">
-<div style="font-size: 2rem; margin-bottom: 8px;">⚠️</div>
-<h3 style="color: var(--text-main); margin: 0 0 8px 0; font-size: 1.15rem;">Xác nhận đăng xuất</h3>
-<p style="color: var(--text-muted); font-size: 0.9rem; margin: 0 0 20px 0;">Bạn có chắc chắn muốn đăng xuất khỏi khu vực nội bộ không?</p>
-<div style="display: flex; gap: 10px;">
-<button onclick="closeLogoutModal()" style="flex: 1; background: transparent; color: var(--text-main); border: 1px solid var(--border); padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Hủy</button>
-<button onclick="confirmLogout()" style="flex: 1; background: #ef4444; color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Đăng xuất</button>
-</div>
-</div>
-</div>
 <div id="lightbox-modal" onclick="closeLightbox()">
 <img alt="Phóng to ảnh" id="lightbox-img" src=""/>
 </div>
 <script>
-        const CORRECT_PASS = "10toan2k36";
         let calendarViewDate = new Date();
         window.addEventListener('DOMContentLoaded', () => {
-            if (localStorage.getItem('class_unlocked') === 'true') {
-                updateAuthButtonState(true);
-            } else {
-                updateAuthButtonState(false);
-            }
             initFilterDropdowns();
             initBirthdayCountdown();
             applyFilterAndSort();
@@ -1099,7 +1015,7 @@ body.dark-mode .member-table th,
                 const picker = document.getElementById('accent-color-picker');
                 const label = document.getElementById('accent-color-label');
                 if (picker) picker.value = savedAccent;
-                if (label) label.textContent = savedAccent;
+                if (label) label.innerHTML = savedAccent;
             }
         });
         window.addEventListener('click', (e) => {
@@ -1111,7 +1027,7 @@ body.dark-mode .member-table th,
             applyAccentColor(colorHex);
             localStorage.setItem('site_accent_color', colorHex);
             const label = document.getElementById('accent-color-label');
-            if (label) label.textContent = colorHex;
+            if (label) label.innerHTML = colorHex;
         }
         function applyAccentColor(colorHex) {
             document.documentElement.style.setProperty('--accent', colorHex);
@@ -1127,11 +1043,11 @@ body.dark-mode .member-table th,
                 const sStr = String(seconds).padStart(2, '0');
                 const triggerText = document.getElementById('trigger-clock-text');
                 if (triggerText) {
-                    triggerText.textContent = `${hStr}:${mStr}:${sStr} - ${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()}`;
+                    triggerText.innerHTML = `${hStr}:${mStr}:${sStr} - ${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()}`;
                 }
                 const modalDig = document.getElementById('modal-digital-text');
                 if (modalDig) {
-                    modalDig.textContent = `${hStr}:${mStr}:${sStr} (${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()})`;
+                    modalDig.innerHTML = `${hStr}:${mStr}:${sStr} (${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()})`;
                 }
                 const secondDeg = (seconds / 60) * 360;
                 const minuteDeg = ((minutes + seconds / 60) / 60) * 360;
@@ -1178,7 +1094,7 @@ body.dark-mode .member-table th,
                 prevBtn.disabled = false;
             }
             const monthNames = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"];
-            document.getElementById('calendar-month-title').textContent = `${monthNames[month]} năm ${year}`;
+            document.getElementById('calendar-month-title').innerHTML = `${monthNames[month]} năm ${year}`;
             const birthdaysInThisMonth = {};
             members.forEach(m => {
                 const parts = m.birthday.split('/');
@@ -1231,7 +1147,7 @@ body.dark-mode .member-table th,
             }
         }
         function openBirthdayPicker(day, month, year, matchedMembers) {
-            document.getElementById('bday-picker-title').textContent = `Sinh nhật ngày ${day}/${month}/${year}`;
+            document.getElementById('bday-picker-title').innerHTML = `Sinh nhật ngày ${day}/${month}/${year}`;
             const listContainer = document.getElementById('bday-picker-list');
             listContainer.innerHTML = '';
             matchedMembers.forEach(m => {
@@ -1268,7 +1184,7 @@ body.dark-mode .member-table th,
         let selectedGenderVal = '';
         function selectDay(val, text) {
             selectedDayVal = val;
-            document.getElementById('selected-day-text').textContent = text;
+            document.getElementById('selected-day-text').innerHTML = text;
             document.getElementById('dropdown-day').classList.remove('open');
             const menu = document.getElementById('menu-day');
             menu.querySelectorAll('.custom-dropdown-item').forEach(item => {
@@ -1278,7 +1194,7 @@ body.dark-mode .member-table th,
         }
         function selectMonth(val, text) {
             selectedMonthVal = val;
-            document.getElementById('selected-month-text').textContent = text;
+            document.getElementById('selected-month-text').innerHTML = text;
             document.getElementById('dropdown-month').classList.remove('open');
             const menu = document.getElementById('menu-month');
             menu.querySelectorAll('.custom-dropdown-item').forEach(item => {
@@ -1288,85 +1204,13 @@ body.dark-mode .member-table th,
         }
         function selectGender(val, text) {
             selectedGenderVal = val;
-            document.getElementById('selected-gender-text').textContent = text;
+            document.getElementById('selected-gender-text').innerHTML = text;
             document.getElementById('dropdown-gender').classList.remove('open');
             const menu = document.getElementById('menu-gender');
             menu.querySelectorAll('.custom-dropdown-item').forEach(item => {
                 item.classList.toggle('selected', item.getAttribute('data-value') === val);
             });
             applyFilterAndSort();
-        }
-        function handleAuthNavAction() {
-            if (localStorage.getItem('class_unlocked') === 'true') {
-                document.getElementById('logout-modal').style.display = 'flex';
-            } else {
-                const scrollBox = document.getElementById('index-terms-scroll');
-                scrollBox.scrollTop = 0;
-                const agreeBtn = document.getElementById('index-agree-btn');
-                agreeBtn.disabled = true;
-                agreeBtn.style.background = '#ccc';
-                agreeBtn.style.cursor = 'not-allowed';
-                document.getElementById('terms-modal').style.display = 'flex';
-            }
-        }
-        function checkTermsScroll() {
-            const scrollBox = document.getElementById('index-terms-scroll');
-            const agreeBtn = document.getElementById('index-agree-btn');
-            if (scrollBox.scrollTop + scrollBox.clientHeight >= scrollBox.scrollHeight - 10) {
-                agreeBtn.disabled = false;
-                agreeBtn.style.background = 'var(--accent)';
-                agreeBtn.style.cursor = 'pointer';
-            }
-        }
-        function closeTermsModal() {
-            document.getElementById('terms-modal').style.display = 'none';
-        }
-        function acceptIndexTerms() {
-            const agreeBtn = document.getElementById('index-agree-btn');
-            if (!agreeBtn.disabled) {
-                closeTermsModal();
-                document.getElementById('modal-pass-input').value = '';
-                document.getElementById('modal-err').style.display = 'none';
-                document.getElementById('login-modal').style.display = 'flex';
-                setTimeout(() => document.getElementById('modal-pass-input').focus(), 100);
-            }
-        }
-        function backToTermsModal() {
-            document.getElementById('login-modal').style.display = 'none';
-            document.getElementById('terms-modal').style.display = 'flex';
-        }
-        function closeLoginModal() {
-            document.getElementById('login-modal').style.display = 'none';
-        }
-        function submitLogin() {
-            const passVal = document.getElementById('modal-pass-input').value;
-            if (passVal === CORRECT_PASS) {
-                localStorage.setItem('class_unlocked', 'true');
-                closeLoginModal();
-                updateAuthButtonState(true);
-                location.reload();
-            } else {
-                document.getElementById('modal-err').style.display = 'block';
-            }
-        }
-        function closeLogoutModal() {
-            document.getElementById('logout-modal').style.display = 'none';
-        }
-        function confirmLogout() {
-            localStorage.removeItem('class_unlocked');
-            updateAuthButtonState(false);
-            location.reload();
-        }
-        function updateAuthButtonState(isLoggedIn) {
-            const btn = document.getElementById('auth-nav-btn');
-            if (!btn) return;
-            if (isLoggedIn) {
-                btn.innerHTML = '<i class="ri-logout-box-r-line"></i> Đăng xuất';
-                btn.className = 'auth-nav-btn logout-state';
-            } else {
-                btn.innerHTML = '<i class="ri-login-box-line"></i> Đăng nhập';
-                btn.className = 'auth-nav-btn';
-            }
         }
         function openLightbox(url) {
             document.getElementById('lightbox-img').src = url;
@@ -1407,13 +1251,13 @@ body.dark-mode .member-table th,
         }
         function openZodiacInfo(e) {
             e.stopPropagation();
-            const zodiacTextFull = document.getElementById('modal-member-zodiac').textContent;
+            const zodiacTextFull = document.getElementById('modal-member-zodiac').innerHTML;
             const cleanName = zodiacTextFull.replace(/[♒♓♈♉♊♋♌♍♎♐♑]/g, '').trim();
             const info = zodiacDetails[cleanName] || { date: "Không rõ", icon: "✨", desc: "Chưa có thông tin mô tả cho cung này." };
-            document.getElementById('zodiac-modal-title').textContent = cleanName + " " + info.icon;
-            document.getElementById('zodiac-modal-icon').textContent = info.icon;
-            document.getElementById('zodiac-modal-date').textContent = "Thời gian: " + info.date;
-            document.getElementById('zodiac-modal-desc').textContent = info.desc;
+            document.getElementById('zodiac-modal-title').innerHTML = cleanName + " " + info.icon;
+            document.getElementById('zodiac-modal-icon').innerHTML = info.icon;
+            document.getElementById('zodiac-modal-date').innerHTML = "Thời gian: " + info.date;
+            document.getElementById('zodiac-modal-desc').innerHTML = info.desc;
             document.getElementById('zodiac-info-modal').style.display = 'flex';
         }
         function closeZodiacModal(e) {
@@ -1423,15 +1267,15 @@ body.dark-mode .member-table th,
             document.getElementById('zodiac-info-modal').style.display = 'none';
         }
         function openMemberCard(name, gender, birthday, stt) {
-            document.getElementById('modal-member-name').textContent = name;
-            document.getElementById('modal-member-gender').textContent = gender;
-            document.getElementById('modal-member-birthday').textContent = birthday;
-            document.getElementById('modal-member-stt').textContent = stt;
+            document.getElementById('modal-member-name').innerHTML = name;
+            document.getElementById('modal-member-gender').innerHTML = gender;
+            document.getElementById('modal-member-birthday').innerHTML = birthday;
+            document.getElementById('modal-member-stt').innerHTML = stt;
             const parts = birthday.split('/');
             if (parts.length >= 2) {
                 const zName = getZodiacSign(parts[0], parts[1]);
                 const info = zodiacDetails[zName] || { icon: "✨" };
-                document.getElementById('modal-member-zodiac').textContent = zName + " " + info.icon;
+                document.getElementById('modal-member-zodiac').innerHTML = zName + " " + info.icon;
             }
             const avatarBox = document.getElementById('modal-member-avatar');
             const avatarIcon = document.getElementById('modal-member-avatar-icon');
@@ -1451,11 +1295,11 @@ body.dark-mode .member-table th,
             document.getElementById('member-card-modal').style.display = 'none';
         }
         function copyMemberInfo() {
-            const name = document.getElementById('modal-member-name').textContent;
-            const stt = document.getElementById('modal-member-stt').textContent;
-            const gender = document.getElementById('modal-member-gender').textContent;
-            const birthday = document.getElementById('modal-member-birthday').textContent;
-            const zodiac = document.getElementById('modal-member-zodiac').textContent;
+            const name = document.getElementById('modal-member-name').innerHTML;
+            const stt = document.getElementById('modal-member-stt').innerHTML;
+            const gender = document.getElementById('modal-member-gender').innerHTML;
+            const birthday = document.getElementById('modal-member-birthday').innerHTML;
+            const zodiac = document.getElementById('modal-member-zodiac').innerHTML;
             const textToCopy = `--- THÔNG TIN THÀNH VIÊN 10 TOÁN 2 K36 ---\n` +
                                `• Họ và tên: ${name}\n` +
                                `• Số thứ tự: ${stt}\n` +
@@ -1546,7 +1390,7 @@ body.dark-mode .member-table th,
                 const item = document.createElement('div');
                 item.className = 'custom-dropdown-item';
                 item.setAttribute('data-value', d);
-                item.textContent = `Ngày ${d}`;
+                item.innerHTML = `Ngày ${d}`;
                 item.onclick = () => selectDay(d, `Ngày ${d}`);
                 dayMenu.appendChild(item);
             });
@@ -1554,7 +1398,7 @@ body.dark-mode .member-table th,
                 const item = document.createElement('div');
                 item.className = 'custom-dropdown-item';
                 item.setAttribute('data-value', m);
-                item.textContent = `Tháng ${m}`;
+                item.innerHTML = `Tháng ${m}`;
                 item.onclick = () => selectMonth(m, `Tháng ${m}`);
                 monthMenu.appendChild(item);
             });
@@ -1689,7 +1533,7 @@ body.dark-mode .member-table th,
                 `;
                 tbody.appendChild(tr);
             });
-            document.getElementById('member-count-text').textContent = `${filtered.length} thành viên`;
+            document.getElementById('member-count-text').innerHTML = `${filtered.length} thành viên`;
         }
         const themeToggleBtn = document.getElementById('theme-toggle');
         const body = document.body;
@@ -1728,7 +1572,7 @@ body.dark-mode .member-table th,
             for (let i = 0; i < symbolCount; i++) {
                 const span = document.createElement('span');
                 span.className = 'math-symbol';
-                span.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                span.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
                 span.style.left = Math.random() * 100 + 'vw';
                 span.style.fontSize = (Math.random() * 1.5 + 1) + 'rem';
                 span.style.animationDuration = (Math.random() * 10 + 10) + 's'; 
@@ -1776,7 +1620,7 @@ body.dark-mode .member-table th,
             for (let i = 0; i < particleCount; i++) {
                 const span = document.createElement('span');
                 span.className = 'math-click-particle';
-                span.textContent = mathChars[Math.floor(Math.random() * mathChars.length)];
+                span.innerHTML = mathChars[Math.floor(Math.random() * mathChars.length)];
                 span.style.left = e.clientX + 'px';
                 span.style.top = e.clientY + 'px';
                 const angle = Math.random() * Math.PI * 2;
@@ -1855,6 +1699,21 @@ window.addEventListener('DOMContentLoaded', () => {
             toast.style.opacity = '0';
         }, 3000);
     }
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('contextmenu', event => event.preventDefault()); 
+    document.addEventListener('keydown', event => {
+        if (
+            event.key === 'F12' || 
+            (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J' || event.key === 'C')) || 
+            (event.ctrlKey && event.key === 'U')
+        ) {
+            event.preventDefault();
+            return false;
+        }
+    });
+});
 </script>
 </body>
 </html>

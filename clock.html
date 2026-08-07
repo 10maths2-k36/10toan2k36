@@ -71,13 +71,13 @@
             let hours = String(now.getHours()).padStart(2, '0');
             let minutes = String(now.getMinutes()).padStart(2, '0');
             let seconds = String(now.getSeconds()).padStart(2, '0');
-            document.getElementById('clockTime').textContent = `${hours}:${minutes}:${seconds}`;
+            document.getElementById('clockTime').innerHTML = `${hours}:${minutes}:${seconds}`;
             const daysOfWeek = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
             let dayName = daysOfWeek[now.getDay()];
             let day = now.getDate();
             let month = now.getMonth() + 1;
             let year = now.getFullYear();
-            document.getElementById('clockDate').textContent = `${dayName}, ${day} thg ${month}, ${year}`;
+            document.getElementById('clockDate').innerHTML = `${dayName}, ${day} thg ${month}, ${year}`;
         }
         updateClock();
         setInterval(updateClock, 1000);

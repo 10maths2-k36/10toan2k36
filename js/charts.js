@@ -1,4 +1,11 @@
 document.addEventListener('DOMContentLoaded', async function () {
+const tenDaysAgo = new Date();
+tenDaysAgo.setDate(tenDaysAgo.getDate() - 10);
+const cutoffDateStr = tenDaysAgo.toISOString().split('T')[0];
+await supabaseClient
+    .from('class_activities')
+    .delete()
+    .lt('date', cutoffDateStr);
     const canvas = document.getElementById('classActivityChart');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -61,19 +68,40 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
     function animateValue(element, start, end, duration) {
         if (!element) return;
-        let startTimestamp = null;
-        const step = (timestamp) => {
-            if (!startTimestamp) startTimestamp = timestamp;
-            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-            const currentVal = Math.floor(progress * (end - start) + start);
-            element.innerText = currentVal.toLocaleString();
-            if (progress < 1) {
-                window.requestAnimationFrame(step);
-            } else {
-                element.innerText = end.toLocaleString();
+        const innerSpan = element.querySelector('.slot-number');
+        if (!innerSpan) {
+            element.innerText = end.toLocaleString();
+            return;
+        }
+        let current = start;
+        innerSpan.innerText = current.toLocaleString();
+        if (start === end) return;
+        const stepTime = Math.max(Math.min(duration / Math.abs(end - start), 150), 30);
+        function step() {
+            if (current < end) {
+                let increment = (current === 9 && end >= 10) ? 2 : 1;
+                let nextVal = Math.min(current + increment, end);
+                innerSpan.style.transition = 'transform 0.25s ease, opacity 0.25s ease';
+                innerSpan.style.transform = 'translateY(100%)';
+                innerSpan.style.opacity = '0';
+                setTimeout(() => {
+                    current = nextVal;
+                    innerSpan.innerText = current.toLocaleString();
+                    innerSpan.style.transition = 'none';
+                    innerSpan.style.transform = 'translateY(-100%)';
+                    innerSpan.style.opacity = '0';
+                    setTimeout(() => {
+                        innerSpan.style.transition = 'transform 0.25s ease, opacity 0.25s ease';
+                        innerSpan.style.transform = 'translateY(0)';
+                        innerSpan.style.opacity = '1';
+                    }, 20);
+                    if (current < end) {
+                        setTimeout(step, stepTime);
+                    }
+                }, 250);
             }
-        };
-        window.requestAnimationFrame(step);
+        }
+        setTimeout(step, 200);
     }
     const observer = new MutationObserver(() => {
         const updatedColors = getColors();
@@ -116,7 +144,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     async function trackAndLoadData(shouldIncrement = false) {
         try {
             const todayStr = new Date().toISOString().split('T')[0];
-            const isMemberLoggedIn = localStorage.getItem('class_unlocked') === 'true';
+            const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+            const isMemberLoggedIn = !authError && user !== null;
             const [galleryRes, achievementsRes] = await Promise.all([
                 supabaseClient.from('gallery').select('*', { count: 'exact', head: true }),
                 supabaseClient.from('achievements').select('*', { count: 'exact', head: true })
@@ -195,13 +224,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             if (memberEl) animateValue(memberEl, 0, totalMemberViews, 1000);
             if (libEl) animateValue(libEl, 0, totalGallery, 1000);
             if (achEl) animateValue(achEl, 0, totalAchievements, 1000);
-            const viewStatsEl = document.getElementById('view-stats');
-            if (viewStatsEl) {
-                const viewTitleSpan = viewStatsEl.querySelector('.ri-eye-line');
-                if (viewTitleSpan && viewTitleSpan.parentNode) {
-                    viewTitleSpan.parentNode.innerHTML = `<i class="ri-eye-line" style="color: #38bdf8; font-size: 1rem;"></i> Phân Loại Lượt Xem (${totalViews.toLocaleString()})`;
-                }
-            }
             const [docsDataRes, imagesDataRes, achievementsDataRes] = await Promise.all([
                 supabaseClient.from('gallery').select('title, link').is('image_url', null).order('id', { ascending: false }).limit(3),
                 supabaseClient.from('gallery').select('title, link').not('image_url', 'is', null).order('id', { ascending: false }).limit(3),
@@ -230,72 +252,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                                         <span style="display: inline-block; font-size: 0.78rem; color: #38bdf8; padding: 5px 14px; font-weight: 800;">Chi tiết &rarr;</span>
                                         <svg viewBox="0 0 100 36" preserveAspectRatio="none">
                                             <rect x="1" y="1" width="98" height="34" rx="8" class="animated-path" stroke="#38bdf8" />
-                                        </svg>
-                                    </div>
-                                </a>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            }
-            let imagesContainer = document.getElementById('recentImagesPreview');
-            if (!imagesContainer && previewContainer) {
-                imagesContainer = document.createElement('div');
-                imagesContainer.id = 'recentImagesPreview';
-                previewContainer.parentNode.insertBefore(imagesContainer, previewContainer.nextSibling);
-            }
-            if (imagesContainer && recentImages.length > 0) {
-                imagesContainer.innerHTML = `
-                    <div style="background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 14px; padding: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); margin-top: 15px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                            <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-color); display: flex; align-items: center; gap: 8px;">
-                                <i class="ri-image-line" style="color: #34d399; font-size: 1.1rem;"></i> Ảnh Mới
-                            </div>
-                            <a href="gallery.html#images" class="dynamic-text-color" style="font-size: 0.82rem; text-decoration: none; font-weight: 600; opacity: 0.9;">Xem tất cả &rarr;</a>
-                        </div>
-                        <div style="display: flex; flex-direction: column; gap: 8px;">
-                            ${recentImages.map(img => `
-                                <a href="gallery.html#images" class="doc-preview-item" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; text-decoration: none;">
-                                    <span class="dynamic-text-color" style="font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%; display: flex; align-items: center; gap: 8px;">
-                                        <i class="ri-image-2-line" style="color: #34d399; font-size: 1rem;"></i> ${img.title || 'Khoảnh khắc kỷ niệm'}
-                                    </span>
-                                    <div class="svg-btn-wrapper">
-                                        <span style="display: inline-block; font-size: 0.78rem; color: #34d399; padding: 5px 14px; font-weight: 800;">Chi tiết &rarr;</span>
-                                        <svg viewBox="0 0 100 36" preserveAspectRatio="none">
-                                            <rect x="1" y="1" width="98" height="34" rx="8" class="animated-path" stroke="#34d399" />
-                                        </svg>
-                                    </div>
-                                </a>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            }
-            let achievementsContainer = document.getElementById('recentAchievementsPreview');
-            if (!achievementsContainer && imagesContainer) {
-                achievementsContainer = document.createElement('div');
-                achievementsContainer.id = 'recentAchievementsPreview';
-                imagesContainer.parentNode.insertBefore(achievementsContainer, imagesContainer.nextSibling);
-            }
-            if (achievementsContainer && recentAchievements.length > 0) {
-                achievementsContainer.innerHTML = `
-                    <div style="background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 14px; padding: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); margin-top: 15px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                            <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-color); display: flex; align-items: center; gap: 8px;">
-                                <i class="ri-trophy-line" style="color: #fbbf24; font-size: 1.1rem;"></i> Thành Tích Mới
-                            </div>
-                            <a href="achievements.html" class="dynamic-text-color" style="font-size: 0.82rem; text-decoration: none; font-weight: 600; opacity: 0.9;">Xem tất cả &rarr;</a>
-                        </div>
-                        <div style="display: flex; flex-direction: column; gap: 8px;">
-                            ${recentAchievements.map(ach => `
-                                <a href="achievements.html" class="doc-preview-item" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; text-decoration: none;">
-                                    <span class="dynamic-text-color" style="font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%; display: flex; align-items: center; gap: 8px;">
-                                        <i class="ri-award-line" style="color: #fbbf24; font-size: 1rem;"></i> ${ach.student_name ? `${ach.student_name} - ` : ''}${ach.title || 'Thành tích lớp học'}
-                                    </span>
-                                    <div class="svg-btn-wrapper">
-                                        <span style="display: inline-block; font-size: 0.78rem; color: #fbbf24; padding: 5px 14px; font-weight: 800;">Chi tiết &rarr;</span>
-                                        <svg viewBox="0 0 100 36" preserveAspectRatio="none">
-                                            <rect x="1" y="1" width="98" height="34" rx="8" class="animated-path" stroke="#fbbf24" />
                                         </svg>
                                     </div>
                                 </a>

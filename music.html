@@ -184,7 +184,7 @@
             popup.style.display = 'block';
             btn.classList.add('active');
             icon.className = 'ri-disc-fill disc-icon';
-            text.textContent = 'Đang mở';
+            text.innerHTML = 'Đang mở';
             if (!ytIframe.src || ytIframe.src === window.location.href) {
                 ytIframe.src = `https://www.youtube.com/embed/${currentVideoId}?autoplay=1`;
             }
@@ -194,7 +194,7 @@
             popup.style.display = 'none';
             btn.classList.remove('active');
             icon.className = 'ri-disc-line disc-icon';
-            text.textContent = 'Phát nhạc';
+            text.innerHTML = 'Phát nhạc';
             ytIframe.src = "";
         }
         function extractYouTubeID(urlOrId) {
