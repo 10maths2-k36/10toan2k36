@@ -504,33 +504,35 @@
     let timeLeft = 30;
     const timerBar = document.getElementById('timerBar');
     const statusElement = document.getElementById('status');
-    function applyAccentColor(hex, rgb) {
-        document.documentElement.style.setProperty('--accent', hex);
-        if (rgb) {
-            document.documentElement.style.setProperty('--accent-rgb', rgb);
-        }
-        localStorage.setItem('saved_accent_hex', hex);
-        if (rgb) localStorage.setItem('saved_accent_rgb', rgb);
+function applyAccentColor(hex, rgb) {
+    document.documentElement.style.setProperty('--accent', hex);
+    if (rgb) {
+        document.documentElement.style.setProperty('--accent-rgb', rgb);
     }
-    function loadSavedAccent() {
-        const savedHex = localStorage.getItem('saved_accent_hex');
-        const savedRgb = localStorage.getItem('saved_accent_rgb');
-        if (savedHex) {
-            document.documentElement.style.setProperty('--accent', savedHex);
-            if (savedRgb) document.documentElement.style.setProperty('--accent-rgb', savedRgb);
-            const wrapper = document.querySelector('[data-id="accentColorSelect"]');
-            if (wrapper) {
-                wrapper.querySelectorAll('.custom-option').forEach(opt => {
-                    if (opt.dataset.value === savedHex) {
-                        opt.classList.add('selected');
-                        wrapper.querySelector('.selected-value').innerText = opt.innerText;
-                    } else {
-                        opt.classList.remove('selected');
-                    }
-                });
-            }
+    localStorage.setItem('site_accent_color', hex);
+    if (rgb) localStorage.setItem('site_accent_rgb', rgb);
+}
+function loadSavedAccent() {
+    const savedHex = localStorage.getItem('site_accent_color');
+    const savedRgb = localStorage.getItem('site_accent_rgb');
+    if (savedHex) {
+        document.documentElement.style.setProperty('--accent', savedHex);
+        if (savedRgb) {
+            document.documentElement.style.setProperty('--accent-rgb', savedRgb);
+        }
+        const wrapper = document.querySelector('[data-id="accentColorSelect"]');
+        if (wrapper) {
+            wrapper.querySelectorAll('.custom-option').forEach(opt => {
+                if (opt.dataset.value === savedHex) {
+                    opt.classList.add('selected');
+                    wrapper.querySelector('.selected-value').innerText = opt.innerText;
+                } else {
+                    opt.classList.remove('selected');
+                }
+            });
         }
     }
+}
     function showCustomConfirm(message) {
         return new Promise((resolve) => {
             playSound('click');
@@ -968,19 +970,19 @@ function confirmPlayerSetup() {
             if (document.exitFullscreen) document.exitFullscreen();
         }
     }
-    window.addEventListener('DOMContentLoaded', () => {
-        loadSavedAccent();
-        board = Chessboard('board', {
-            draggable: true,
-            position: 'start',
-            pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
-            onDragStart: onDragStart,
-            onDrop: onDrop,
-            onSnapEnd: () => board.position(game.fen())
-        });
-        toggleModeSettings();
-        promptPlayerNamesAndReset();
+window.addEventListener('DOMContentLoaded', () => {
+    loadSavedAccent(); 
+    board = Chessboard('board', {
+        draggable: true,
+        position: 'start',
+        pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
+        onDragStart: onDragStart,
+        onDrop: onDrop,
+        onSnapEnd: () => board.position(game.fen())
     });
+    toggleModeSettings();
+    promptPlayerNamesAndReset();
+});
     const themeToggleBtn = document.getElementById('theme-toggle');
     if (themeToggleBtn) {
         themeToggleBtn.addEventListener('click', () => {
