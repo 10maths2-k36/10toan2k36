@@ -800,6 +800,21 @@
         </div>
     </div>
 </div>
+<div id="member-verify-modal" class="custom-modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 10000; align-items: center; justify-content: center;">
+    <div class="custom-modal-box">
+        <div style="font-size: 2rem; margin-bottom: 8px;"><i class="ri-user-shared-line" style="color: var(--accent);"></i></div>
+        <h3 style="margin-bottom: 8px; font-size: 1.2rem; font-weight: 600;">Xác thực thành viên lớp</h3>
+        <p style="font-size: 0.88rem; margin-bottom: 16px; color: var(--text-muted, #64748b);">Vui lòng nhập họ và tên đầy đủ của bạn để hoàn tất xác thực:</p>
+        <div style="text-align: left; margin-bottom: 12px;">
+            <input type="text" id="verify-name-input" placeholder="Ví dụ: Lê Nhựt An..." style="width: 100%; padding: 10px 12px; border-radius: 8px; font-size: 0.95rem; border: 1px solid var(--border); background: var(--card-bg); color: var(--text-main); box-sizing: border-box;" />
+        </div>
+        <div id="verify-modal-err" style="color: #ef4444; font-size: 0.85rem; margin-bottom: 12px; display: none;"></div>
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+            <button type="button" onclick="cancelMemberVerification()" style="padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border); background: transparent; cursor: pointer; color: inherit;">Bỏ qua</button>
+            <button type="button" onclick="submitMemberVerification()" style="padding: 8px 16px; border-radius: 8px; border: none; background: var(--accent, #3b82f6); color: white; cursor: pointer; font-weight: 500;">Xác nhận</button>
+        </div>
+    </div>
+</div>
 <div class="custom-modal-overlay" id="logout-modal">
 <div class="custom-modal-box">
 <div style="font-size: 2rem; margin-bottom: 8px;"><i class="ri-error-warning-line" style="color: #ef4444;"></i></div>
@@ -907,9 +922,195 @@
 </div>
 </footer>
 <script>
+    function applyLocalStorageConfig() {
+        const savedAccent = localStorage.getItem('site_accent_color');
+        if (savedAccent) {
+            document.documentElement.style.setProperty('--accent', savedAccent);
+        }
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            document.body.classList.add('light-mode');
+            updateThemeIcon(true);
+        } else {
+            document.body.classList.remove('light-mode');
+            updateThemeIcon(false);
+        }
+    }
+    function updateLiveClockWidget() {
+        const clockElement = document.getElementById('trigger-clock-text');
+        const headerClock = document.getElementById('live-clock');
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const dateString = now.toLocaleDateString('vi-VN', { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' });
+        const fullText = `${timeString} - ${dateString}`;
+        if (clockElement) clockElement.innerText = fullText;
+        if (headerClock) headerClock.innerText = timeString;
+    }
+    function openClockCalendarModal() {
+        let existingModal = document.getElementById('clock-calendar-overlay');
+        if (existingModal) {
+            existingModal.style.display = 'flex';
+            return;
+        }
+        const overlay = document.createElement('div');
+        overlay.id = 'clock-calendar-overlay';
+        overlay.className = 'custom-modal-overlay';
+        overlay.style.display = 'flex';
+        overlay.innerHTML = `
+            <div class="clock-calendar-card">
+                <button onclick="document.getElementById('clock-calendar-overlay').style.display='none'" style="position: absolute; top: 14px; right: 14px; background: transparent; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-main);"><i class="ri-close-line"></i></button>
+                <div class="analog-clock">
+                    <div class="clock-center-dot"></div>
+                    <div class="clock-hand hour-hand" id="modal-hour-hand"></div>
+                    <div class="clock-hand minute-hand" id="modal-minute-hand"></div>
+                    <div class="clock-hand second-hand" id="modal-second-hand"></div>
+                </div>
+                <div id="modal-digital-clock" style="font-weight: 700; font-size: 1.1rem; color: var(--text-main); margin-bottom: 15px;"></div>
+                <div class="calendar-container">
+                    <div class="calendar-nav-bar">
+                        <button class="calendar-nav-btn" onclick="changeCalendarMonth(-1)"><i class="ri-arrow-left-s-line"></i></button>
+                        <div class="calendar-header-title" id="calendar-title">Tháng ... năm ...</div>
+                        <button class="calendar-nav-btn" onclick="changeCalendarMonth(1)"><i class="ri-arrow-right-s-line"></i></button>
+                    </div>
+                    <div class="calendar-grid" id="calendar-grid-box">
+                        <div class="calendar-dow">T2</div><div class="calendar-dow">T3</div><div class="calendar-dow">T4</div><div class="calendar-dow">T5</div><div class="calendar-dow">T6</div><div class="calendar-dow">T7</div><div class="calendar-dow">CN</div>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+        overlay.addEventListener('click', (e) => {
+            if (e.target.id === 'clock-calendar-overlay') {
+                overlay.style.display = 'none';
+            }
+        });
+        initCalendarData();
+        startModalClockInterval();
+    }
+    let calYear = new Date().getFullYear();
+    let calMonth = new Date().getMonth();
+    function initCalendarData() {
+        const titleEl = document.getElementById('calendar-title');
+        const gridBox = document.getElementById('calendar-grid-box');
+        if (!titleEl || !gridBox) return;
+        titleEl.innerText = `Tháng ${calMonth + 1} / ${calYear}`;
+        while (gridBox.children.length > 7) {
+            gridBox.removeChild(gridBox.lastChild);
+        }
+        const firstDayIndex = new Date(calYear, calMonth, 1).getDay();
+        const adjustedFirstDay = firstDayIndex === 0 ? 6 : firstDayIndex - 1; 
+        const totalDays = new Date(calYear, calMonth + 1, 0).getDate();
+        const today = new Date();
+        for (let i = 0; i < adjustedFirstDay; i++) {
+            const emptyCell = document.createElement('div');
+            emptyCell.className = 'calendar-day';
+            emptyCell.style.opacity = '0.3';
+            gridBox.appendChild(emptyCell);
+        }
+        for (let day = 1; day <= totalDays; day++) {
+            const cell = document.createElement('div');
+            cell.className = 'calendar-day';
+            const isToday = (day === today.getDate() && calMonth === today.getMonth() && calYear === today.getFullYear());
+            if (isToday) cell.classList.add('today');
+            const formattedDayStr = String(day).padStart(2, '0') + '/' + String(calMonth + 1).padStart(2, '0');
+            const matchingMembers = classMembersList.filter(m => m.birthday && m.birthday.startsWith(formattedDayStr));
+            if (matchingMembers.length > 0) {
+                cell.classList.add('has-birthday');
+                cell.title = `Sinh nhật: ${matchingMembers.map(m => m.name).join(', ')}`;
+                cell.innerHTML = `<span>${day}</span><span class="bday-icon">🎂</span>`;
+            } else {
+                cell.innerHTML = `<span>${day}</span>`;
+            }
+            gridBox.appendChild(cell);
+        }
+    }
+    function changeCalendarMonth(direction) {
+        calMonth += direction;
+        if (calMonth > 11) {
+            calMonth = 0;
+            calYear++;
+        } else if (calMonth < 0) {
+            calMonth = 11;
+            calYear--;
+        }
+        initCalendarData();
+    }
+    function startModalClockInterval() {
+        setInterval(() => {
+            const now = new Date();
+            const sDeg = now.getSeconds() * 6;
+            const mDeg = now.getMinutes() * 6 + now.getSeconds() * 0.1;
+            const hDeg = (now.getHours() % 12) * 30 + now.getMinutes() * 0.5;
+            const sHand = document.getElementById('modal-second-hand');
+            const mHand = document.getElementById('modal-minute-hand');
+            const hHand = document.getElementById('modal-hour-hand');
+            const digClock = document.getElementById('modal-digital-clock');
+            if (sHand) sHand.style.transform = `translateX(-50%) rotate(${sDeg}deg)`;
+            if (mHand) mHand.style.transform = `translateX(-50%) rotate(${mDeg}deg)`;
+            if (hHand) hHand.style.transform = `translateX(-50%) rotate(${hDeg}deg)`;
+            if (digClock) digClock.innerText = now.toLocaleTimeString('vi-VN');
+        }, 1000);
+    }
+    window.addEventListener('DOMContentLoaded', () => {
+        applyLocalStorageConfig();
+        setInterval(updateLiveClockWidget, 1000);
+        updateLiveClockWidget();
+    });
     const SUPABASE_URL = 'https://mwyjcrpwxpghieizswfa.supabase.co';
     const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_9Ow2Q57vi9ArOtQRPr3bfw_olVCoAfD';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+    const classMembersList = [
+        { "stt": 1, "name": "Nguyễn Thị Phúc An", "gender": "Nữ", "birthday": "18/08/2011" },
+        { "stt": 2, "name": "Lê Nhựt An", "gender": "Nam", "birthday": "17/12/2011" },
+        { "stt": 3, "name": "Nguyễn Thị Thùy Dương", "gender": "Nữ", "birthday": "09/04/2011" },
+        { "stt": 4, "name": "Nguyễn Thùy Dương", "gender": "Nữ", "birthday": "22/07/2011" },
+        { "stt": 5, "name": "Hồ Ngọc Mỹ Duyên", "gender": "Nữ", "birthday": "09/03/2011" },
+        { "stt": 6, "name": "Lâm Gia Hưng", "gender": "Nam", "birthday": "13/10/2011" },
+        { "stt": 7, "name": "Ngô Minh Hùng", "gender": "Nam", "birthday": "24/12/2011" },
+        { "stt": 8, "name": "Nguyễn Ngọc Mai Hương", "gender": "Nữ", "birthday": "12/02/2011" },
+        { "stt": 9, "name": "Đoàn Nguyễn Vĩnh Khang", "gender": "Nam", "birthday": "19/12/2011" },
+        { "stt": 10, "name": "Huỳnh Nam Khang", "gender": "Nam", "birthday": "16/08/2011" },
+        { "stt": 11, "name": "Nguyễn Phúc Khang", "gender": "Nam", "birthday": "02/06/2011" },
+        { "stt": 12, "name": "Phạm Phúc Khang", "gender": "Nam", "birthday": "29/07/2011" },
+        { "stt": 13, "name": "Huỳnh Tuấn Kiệt", "gender": "Nam", "birthday": "19/10/2011" },
+        { "stt": 14, "name": "Nguyễn Hoàng Minh", "gender": "Nam", "birthday": "27/01/2011" },
+        { "stt": 15, "name": "Trịnh Quang Minh", "gender": "Nam", "birthday": "21/02/2011" },
+        { "stt": 16, "name": "Trần Khánh Nghi", "gender": "Nữ", "birthday": "29/04/2011" },
+        { "stt": 17, "name": "Nguyễn Thị Bảo Ngân", "gender": "Nữ", "birthday": "02/04/2011" },
+        { "stt": 18, "name": "Đỗ Mai Ngân", "gender": "Nữ", "birthday": "11/06/2011" },
+        { "stt": 19, "name": "Lê Thị Kim Ngân", "gender": "Nữ", "birthday": "14/05/2011" },
+        { "stt": 20, "name": "Trần Ngọc Kim Ngân", "gender": "Nữ", "birthday": "08/11/2011" },
+        { "stt": 21, "name": "Võ Thanh Hồng Ngọc", "gender": "Nữ", "birthday": "27/01/2011" },
+        { "stt": 22, "name": "Châu Thanh Kim Nguyên", "gender": "Nữ", "birthday": "16/04/2011" },
+        { "stt": 23, "name": "Nguyễn Nhựt Thái Nguyên", "gender": "Nam", "birthday": "22/11/2011" },
+        { "stt": 24, "name": "Trần Huỳnh Như", "gender": "Nữ", "birthday": "27/05/2011" },
+        { "stt": 25, "name": "Đặng Nhật Phú", "gender": "Nam", "birthday": "04/09/2011" },
+        { "stt": 26, "name": "Huỳnh Thiên Phú", "gender": "Nam", "birthday": "25/05/2011" },
+        { "stt": 27, "name": "Nguyễn Gia Phúc", "gender": "Nam", "birthday": "26/11/2011" },
+        { "stt": 28, "name": "Phạm Trọng Thạch", "gender": "Nam", "birthday": "26/09/2011" },
+        { "stt": 29, "name": "Phạm Quang Thắng", "gender": "Nam", "birthday": "05/08/2011" },
+        { "stt": 30, "name": "Nguyễn Chí Thiện", "gender": "Nam", "birthday": "02/10/2011" },
+        { "stt": 31, "name": "Nguyễn Hoàng An Thuyên", "gender": "Nam", "birthday": "24/10/2011" },
+        { "stt": 32, "name": "Phan Nguyễn Bách Tùng", "gender": "Nam", "birthday": "07/12/2011" },
+        { "stt": 33, "name": "Nguyễn Đặng Tường Vy", "gender": "Nữ", "birthday": "26/02/2011" },
+        { "stt": 34, "name": "Tô Quang Vinh", "gender": "Nam", "birthday": "06/04/2011" },
+        { "stt": 35, "name": "Lê Nguyễn Đức Trí", "gender": "Nam", "birthday": "20/02/2011" }
+    ];
+    function normalizeName(str) {
+        if (!str) return '';
+        return str
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '') 
+            .replace(/đ/g, 'd')              
+            .replace(/\s+/g, ' ')            
+            .trim();
+    }
+    function verifyUserFullName(inputName) {
+        const cleanInput = normalizeName(inputName);
+        if (!cleanInput) return false;
+        return classMembersList.some(member => normalizeName(member.name) === cleanInput);
+    }
     let currentActiveTab = 'gallery';
     let selectedFilesArray = [];
     let isSelectModeGallery = false;
@@ -1032,12 +1233,43 @@ async function submitLogin() {
         errDiv.style.display = 'block';
         errDiv.innerText = "Sai tài khoản hoặc mật khẩu!";
     } else {
-        localStorage.setItem('class_unlocked', 'true');
         closeLoginModal();
+        openMemberVerificationModal();
+    }
+}
+function openMemberVerificationModal() {
+    document.getElementById('verify-name-input').value = '';
+    document.getElementById('verify-modal-err').style.display = 'none';
+    document.getElementById('member-verify-modal').style.display = 'flex';
+    setTimeout(() => document.getElementById('verify-name-input').focus(), 100);
+}
+function cancelMemberVerification() {
+    document.getElementById('member-verify-modal').style.display = 'none';
+    localStorage.setItem('class_unlocked', 'true');
+    updateAuthButtonState(true);
+    loadGalleryFromStorage();
+    loadResourcesFromStorage();
+    showToast('Đăng nhập thành công!');
+}
+function submitMemberVerification() {
+    const nameVal = document.getElementById('verify-name-input').value.trim();
+    const errDiv = document.getElementById('verify-modal-err');
+    if (!nameVal) {
+        errDiv.style.display = 'block';
+        errDiv.innerText = "Vui lòng nhập họ và tên của bạn!";
+        return;
+    }
+    if (verifyUserFullName(nameVal)) {
+        document.getElementById('member-verify-modal').style.display = 'none';
+        localStorage.setItem('class_unlocked', 'true');
+        localStorage.setItem('user_verified_name', nameVal);
         updateAuthButtonState(true);
         loadGalleryFromStorage();
         loadResourcesFromStorage();
-        showToast('Đăng nhập thành công!');
+        showToast('Xác thực thành viên thành công!');
+    } else {
+        errDiv.style.display = 'block';
+        errDiv.innerText = "Họ tên không khớp với danh sách 35 thành viên lớp 10 Toán 2!";
     }
 }
     function closeLogoutModal() {
@@ -1046,6 +1278,7 @@ async function submitLogin() {
 async function confirmLogout() {
     await _supabase.auth.signOut();
     localStorage.removeItem('class_unlocked');
+    localStorage.removeItem('user_verified_name');
     closeLogoutModal();
     updateAuthButtonState(false);
     loadGalleryFromStorage();
@@ -1149,7 +1382,8 @@ async function confirmLogout() {
                 title.innerHTML = '<i class="ri-upload-cloud-line"></i> Đăng Tài Liệu Học Tập';
                 if (subjectWrapper) subjectWrapper.style.display = 'block';
             }
-            document.getElementById('file-author').value = '';
+            const verifiedName = localStorage.getItem('user_verified_name');
+            document.getElementById('file-author').value = verifiedName ? verifiedName : '';
             document.getElementById('file-title-input').value = '';
             document.getElementById('file-caption').value = '';
             setCustomDropdownValue('visibility', 'public', '<i class="ri-earth-line"></i> Công Khai (Mọi người đều xem được)');
@@ -1868,207 +2102,21 @@ if (themeToggleBtn) {
         const fxBtn = document.getElementById('fx-toggle-btn');
         if (isCurrentlyDisabled) {
             document.body.classList.remove('fx-disabled');
-            if (fxBtn) fxBtn.innerHTML = '✨ Hiệu ứng: Bật';
-            localStorage.setItem('math_fx_enabled', 'true');
+            if (fxBtn) fxBtn.innerHTML = '<i class="ri-sparkles-line"></i> Hiệu ứng: Bật';
+            localStorage.setItem('fx_disabled', 'false');
         } else {
             document.body.classList.add('fx-disabled');
-            if (fxBtn) fxBtn.innerHTML = '✨ Hiệu ứng: Tắt';
-            localStorage.setItem('math_fx_enabled', 'false');
+            if (fxBtn) fxBtn.innerHTML = '<i class="ri-sparkles-line"></i> Hiệu ứng: Tắt';
+            localStorage.setItem('fx_disabled', 'true');
         }
     }
     window.addEventListener('DOMContentLoaded', () => {
-        const fxEnabled = localStorage.getItem('math_fx_enabled') !== 'false';
-        const fxBtn = document.getElementById('fx-toggle-btn');
-        if (!fxEnabled) {
+        if (localStorage.getItem('fx_disabled') === 'true') {
             document.body.classList.add('fx-disabled');
-            if (fxBtn) fxBtn.innerHTML = '✨ Hiệu ứng: Tắt';
-        } else {
-            document.body.classList.remove('fx-disabled');
-            if (fxBtn) fxBtn.innerHTML = '✨ Hiệu ứng: Bật';
+            const fxBtn = document.getElementById('fx-toggle-btn');
+            if (fxBtn) fxBtn.innerHTML = '<i class="ri-sparkles-line"></i> Hiệu ứng: Tắt';
         }
     });
-</script>
-<script src="time.js"></script>
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
-        .then(reg => console.log('Service Worker đăng ký thành công:', reg.scope))
-        .catch(err => console.log('Đăng ký Service Worker thất bại:', err));
-    });
-  }
-</script>
-<div class="custom-modal-overlay" id="clock-calendar-modal" onclick="closeClockCalendarModal(event)">
-    <div class="clock-calendar-card" onclick="event.stopPropagation()">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <h3 style="margin: 0; font-size: 1rem; color: var(--text-main); font-weight: 700;"><i class="ri-calendar-event-line" style="color: var(--accent);"></i> Time & Calendar</h3>
-            <button onclick="closeClockCalendarModalDirect()" style="background: transparent; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted);"><i class="ri-close-line"></i></button>
-        </div>
-        <div class="analog-clock" id="analog-clock-face">
-            <div class="clock-center-dot"></div>
-            <div class="clock-hand hour-hand" id="modal-hour-hand"></div>
-            <div class="clock-hand minute-hand" id="modal-minute-hand"></div>
-            <div class="clock-hand second-hand" id="modal-second-hand"></div>
-            <div class="clock-number" style="top: 2px; left: 52px;">12</div>
-            <div class="clock-number" style="top: 48px; right: 2px;">3</div>
-            <div class="clock-number" style="bottom: 2px; left: 52px;">6</div>
-            <div class="clock-number" style="top: 48px; left: 2px;">9</div>
-        </div>
-        <div id="modal-digital-text" style="font-weight: 600; font-size: 0.9rem; color: var(--accent); margin-bottom: 8px;">--:--:--</div>
-        <div class="calendar-container">
-            <div class="calendar-nav-bar">
-                <button class="calendar-nav-btn" id="cal-prev-btn" onclick="changeCalendarMonth(-1)" title="Tháng trước"><i class="ri-arrow-left-s-line"></i></button>
-                <div class="calendar-header-title" id="calendar-month-title">Tháng -- năm ----</div>
-                <button class="calendar-nav-btn" id="cal-next-btn" onclick="changeCalendarMonth(1)" title="Tháng sau"><i class="ri-arrow-right-s-line"></i></button>
-            </div>
-            <div class="calendar-grid">
-                <div class="calendar-dow">T2</div>
-                <div class="calendar-dow">T3</div>
-                <div class="calendar-dow">T4</div>
-                <div class="calendar-dow">T5</div>
-                <div class="calendar-dow">T6</div>
-                <div class="calendar-dow">T7</div>
-                <div class="calendar-dow">CN</div>
-            </div>
-            <div class="calendar-grid" id="calendar-days-grid" style="margin-top: 4px;"></div>
-        </div>
-        <button onclick="closeClockCalendarModalDirect()" style="width: 100%; margin-top: 14px; background: var(--accent); color: #fff; border: none; padding: 9px; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 0.9rem;">Đóng</button>
-    </div>
-</div>
-<div class="custom-modal-overlay" id="birthday-picker-modal" onclick="closeBirthdayPickerModal(event)" style="z-index: 10020;">
-    <div class="custom-modal-box" onclick="event.stopPropagation()" style="max-width: 320px; text-align: center;">
-        <div style="font-size: 1.8rem; margin-bottom: 6px;"><i class="ri-cake-2-line" style="color: var(--accent);"></i></div>
-        <h3 id="bday-picker-title" style="color: var(--text-main); margin: 0 0 4px 0; font-size: 1rem;">Sinh nhật ngày...</h3>
-        <p style="color: var(--text-muted); font-size: 0.8rem; margin: 0 0 14px 0;">Chọn thành viên để xem thẻ thông tin chi tiết:</p>
-        <div id="bday-picker-list" style="display: flex; flex-direction: column; gap: 8px; max-height: 180px; overflow-y: auto; margin-bottom: 14px;"></div>
-        <button onclick="closeBirthdayPickerModalDirect()" style="width: 100%; background: var(--border); color: var(--text-main); border: none; padding: 8px; border-radius: 8px; font-weight: 600; cursor: pointer;">Đóng</button>
-    </div>
-</div>
-<script>
-    let calendarViewDate = new Date();
-    window.addEventListener('DOMContentLoaded', () => {
-        startLiveClockWidget();
-        const savedAccent = localStorage.getItem('site_accent_color');
-        if (savedAccent) {
-            applyAccentColor(savedAccent);
-            const picker = document.getElementById('accent-color-picker');
-            const label = document.getElementById('accent-color-label');
-            if (picker) picker.value = savedAccent;
-            if (label) label.innerHTML = savedAccent;
-        }
-    });
-    function changeAccentColor(colorHex) {
-        applyAccentColor(colorHex);
-        localStorage.setItem('site_accent_color', colorHex);
-        const label = document.getElementById('accent-color-label');
-        if (label) label.innerHTML = colorHex;
-    }
-    function applyAccentColor(colorHex) {
-        document.documentElement.style.setProperty('--accent', colorHex);
-    }
-    function startLiveClockWidget() {
-        setInterval(() => {
-            const now = new Date();
-            const hours = now.getHours(), minutes = now.getMinutes(), seconds = now.getSeconds();
-            const hStr = String(hours).padStart(2, '0');
-            const mStr = String(minutes).padStart(2, '0');
-            const sStr = String(seconds).padStart(2, '0');
-            const triggerText = document.getElementById('trigger-clock-text');
-            if (triggerText) {
-                triggerText.innerHTML = `${hStr}:${mStr}:${sStr} - ${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()}`;
-            }
-            const modalDig = document.getElementById('modal-digital-text');
-            if (modalDig) {
-                modalDig.innerHTML = `${hStr}:${mStr}:${sStr} (${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()})`;
-            }
-            const secondDeg = (seconds / 60) * 360;
-            const minuteDeg = ((minutes + seconds / 60) / 60) * 360;
-            const hourDeg = (((hours % 12) + minutes / 60) / 12) * 360;
-            const sHand = document.getElementById('modal-second-hand');
-            const mHand = document.getElementById('modal-minute-hand');
-            const hHand = document.getElementById('modal-hour-hand');
-            if (sHand) sHand.style.transform = `translateX(-50%) rotate(${secondDeg}deg)`;
-            if (mHand) mHand.style.transform = `translateX(-50%) rotate(${minuteDeg}deg)`;
-            if (hHand) hHand.style.transform = `translateX(-50%) rotate(${hourDeg}deg)`;
-        }, 1000);
-    }
-    function openClockCalendarModal() {
-        calendarViewDate = new Date();
-        renderCurrentCalendar();
-        document.getElementById('clock-calendar-modal').style.display = 'flex';
-    }
-    function closeClockCalendarModal(e) { document.getElementById('clock-calendar-modal').style.display = 'none'; }
-    function closeClockCalendarModalDirect() { document.getElementById('clock-calendar-modal').style.display = 'none'; }
-    function changeCalendarMonth(delta) {
-        calendarViewDate.setMonth(calendarViewDate.getMonth() + delta);
-        renderCurrentCalendar();
-    }
-    function renderCurrentCalendar() {
-        const year = calendarViewDate.getFullYear();
-        const month = calendarViewDate.getMonth();
-        const currentMonthNum = month + 1;
-        const now = new Date();
-        const monthNames = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"];
-        const titleEl = document.getElementById('calendar-month-title');
-        if (titleEl) titleEl.innerHTML = `${monthNames[month]} năm ${year}`;
-        const listMembers = typeof members !== 'undefined' ? members : [];
-        const birthdaysInThisMonth = {};
-        listMembers.forEach(m => {
-            const parts = m.birthday.split('/');
-            if (parts.length === 3 && parseInt(parts[1], 10) === currentMonthNum) {
-                const bDay = parseInt(parts[0], 10);
-                if (!birthdaysInThisMonth[bDay]) birthdaysInThisMonth[bDay] = [];
-                birthdaysInThisMonth[bDay].push(m);
-            }
-        });
-        const firstDayIndex = (new Date(year, month, 1).getDay() + 6) % 7; 
-        const totalDaysInMonth = new Date(year, month + 1, 0).getDate();
-        const grid = document.getElementById('calendar-days-grid');
-        if (!grid) return;
-        grid.innerHTML = '';
-        for (let i = 0; i < firstDayIndex; i++) {
-            const emptyCell = document.createElement('div');
-            emptyCell.className = 'calendar-day empty';
-            grid.appendChild(emptyCell);
-        }
-        for (let d = 1; d <= totalDaysInMonth; d++) {
-            const dayCell = document.createElement('div');
-            dayCell.className = 'calendar-day';
-            let contentHTML = `<span>${d}</span>`;
-            if (d === now.getDate() && month === now.getMonth() && year === now.getFullYear()) {
-                dayCell.classList.add('today');
-            }
-            const matchedMembers = birthdaysInThisMonth[d];
-            if (matchedMembers) {
-                dayCell.classList.add('has-birthday');
-                contentHTML += `<span class="bday-icon"><i class="ri-cake-2-line"></i></span>`;
-                dayCell.onclick = (e) => {
-                    e.stopPropagation();
-                    if (typeof openMemberCard === 'function' && matchedMembers.length === 1) {
-                        closeClockCalendarModalDirect();
-                        openMemberCard(matchedMembers[0].name, matchedMembers[0].gender, matchedMembers[0].birthday, matchedMembers[0].stt);
-                    }
-                };
-            }
-            dayCell.innerHTML = contentHTML;
-            grid.appendChild(dayCell);
-        }
-    }
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    document.addEventListener('contextmenu', event => event.preventDefault()); 
-    document.addEventListener('keydown', event => {
-        if (
-            event.key === 'F12' || 
-            (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J' || event.key === 'C')) || 
-            (event.ctrlKey && event.key === 'U')
-        ) {
-            event.preventDefault();
-            return false;
-        }
-    });
-});
 </script>
 </body>
 </html>
